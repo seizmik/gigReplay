@@ -148,7 +148,7 @@
         
         NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=1 WHERE id=%i", fileDetails.entryNumber];
         while (![dbObject updateDatabase:strQuery]) {
-            NSLog(@"Retrying...");
+            NSLog(@"Retrying");
         }
         
         //Then, refresh the table
