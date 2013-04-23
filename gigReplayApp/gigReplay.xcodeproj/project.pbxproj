@@ -1,0 +1,730 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2A13AD891712AB0E0009ACAE /* video_camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A13AD871712AB0E0009ACAE /* video_camera.png */; };
+		2A13AD8A1712AB0E0009ACAE /* mic.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A13AD881712AB0E0009ACAE /* mic.png */; };
+		2A13AD8C1712B0C10009ACAE /* BackButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A13AD8B1712B0C10009ACAE /* BackButton.png */; };
+		2A13AD8E1712D33A0009ACAE /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A13AD8D1712D33A0009ACAE /* MediaPlayer.framework */; };
+		2A13AD901712D3420009ACAE /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A13AD8F1712D3420009ACAE /* AssetsLibrary.framework */; };
+		2A13AD9A1713E41E0009ACAE /* thesmos.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 2A13AD991713E41E0009ACAE /* thesmos.rdb */; };
+		2A52445D1701738C004CBA2F /* lipsync.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A52445C1701738C004CBA2F /* lipsync.png */; };
+		2A52445F17017E60004CBA2F /* slate.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A52445E17017E60004CBA2F /* slate.png */; };
+		2ACC740E171BE896003CBF38 /* tick.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ACC740D171BE896003CBF38 /* tick.png */; };
+		2ACD83571701A93B00287DDC /* img-new-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ACD83561701A93B00287DDC /* img-new-1.png */; };
+		2ACD83591701AF4E00287DDC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD83581701AF4E00287DDC /* AdSupport.framework */; };
+		2ACD835B1701AF5600287DDC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD835A1701AF5600287DDC /* Social.framework */; };
+		2ACD83611701B18600287DDC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD83601701B18600287DDC /* Accounts.framework */; };
+		2AD2DBE31706DCA100E00478 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DBE11706DCA100E00478 /* libsqlite3.0.dylib */; };
+		2AD2DBE41706DCA100E00478 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DBE21706DCA100E00478 /* libsqlite3.dylib */; };
+		2AD2DC12170948C600E00478 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DC11170948C600E00478 /* CFNetwork.framework */; };
+		2AD2DC14170948D900E00478 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DC13170948D900E00478 /* MobileCoreServices.framework */; };
+		2AD2DC161709490400E00478 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DC151709490400E00478 /* libz.dylib */; };
+		2AD2DC181709490E00E00478 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD2DC171709490E00E00478 /* SystemConfiguration.framework */; };
+		2AE35C54170020BF000993E6 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE35C53170020BF000993E6 /* UIKit.framework */; };
+		2AE35C56170020BF000993E6 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE35C55170020BF000993E6 /* Foundation.framework */; };
+		2AE35C58170020BF000993E6 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE35C57170020BF000993E6 /* CoreGraphics.framework */; };
+		2AE35C5E170020BF000993E6 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C5C170020BF000993E6 /* InfoPlist.strings */; };
+		2AE35C60170020BF000993E6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AE35C5F170020BF000993E6 /* main.m */; };
+		2AE35C64170020BF000993E6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AE35C63170020BF000993E6 /* AppDelegate.m */; };
+		2AE35C66170020BF000993E6 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C65170020BF000993E6 /* Default.png */; };
+		2AE35C68170020BF000993E6 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C67170020BF000993E6 /* Default@2x.png */; };
+		2AE35C6A170020BF000993E6 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C69170020BF000993E6 /* Default-568h@2x.png */; };
+		2AE35C6D170020BF000993E6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AE35C6C170020BF000993E6 /* ViewController.m */; };
+		2AE35C70170020BF000993E6 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C6E170020BF000993E6 /* ViewController.xib */; };
+		2AE35C931700469F000993E6 /* img-join-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C8E1700469F000993E6 /* img-join-1.png */; };
+		2AE35C941700469F000993E6 /* img-open-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C8F1700469F000993E6 /* img-open-1.png */; };
+		2AE35C951700469F000993E6 /* img-settings-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C901700469F000993E6 /* img-settings-1.png */; };
+		2AE35C961700469F000993E6 /* img-upload-1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35C911700469F000993E6 /* img-upload-1.png */; };
+		2AE35CA2170059A2000993E6 /* FacebookSDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35CA0170059A2000993E6 /* FacebookSDKResources.bundle */; };
+		2AE35CA3170059A2000993E6 /* FBUserSettingsViewResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35CA1170059A2000993E6 /* FBUserSettingsViewResources.bundle */; };
+		2AE35CA517005D7F000993E6 /* facebook_login.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AE35CA417005D7F000993E6 /* facebook_login.png */; };
+		2AF711D8171525D400A89BC5 /* mik.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AF711D7171525D400A89BC5 /* mik.png */; };
+		2AF711DA1715438E00A89BC5 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AF711D91715438E00A89BC5 /* search.png */; };
+		CE4856F6171FA7B400837B88 /* CreateSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4856F4171FA7B400837B88 /* CreateSessionViewController.m */; };
+		CE4856F7171FA7B400837B88 /* CreateSessionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4856F5171FA7B400837B88 /* CreateSessionViewController.xib */; };
+		CE485704171FA7D300837B88 /* JoinSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4856F9171FA7D300837B88 /* JoinSessionViewController.m */; };
+		CE485705171FA7D300837B88 /* JoinSessionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4856FA171FA7D300837B88 /* JoinSessionViewController.xib */; };
+		CE485706171FA7D300837B88 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4856FC171FA7D300837B88 /* LoginViewController.m */; };
+		CE485707171FA7D300837B88 /* LoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4856FD171FA7D300837B88 /* LoginViewController.xib */; };
+		CE485708171FA7D300837B88 /* MediaRecordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE4856FF171FA7D300837B88 /* MediaRecordViewController.m */; };
+		CE485709171FA7D300837B88 /* MediaRecordViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE485700171FA7D300837B88 /* MediaRecordViewController.xib */; };
+		CE48570A171FA7D300837B88 /* OpenSessionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485702171FA7D300837B88 /* OpenSessionViewController.m */; };
+		CE48570B171FA7D300837B88 /* OpenSessionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE485703171FA7D300837B88 /* OpenSessionViewController.xib */; };
+		CE485712171FA7EB00837B88 /* UploadTab.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48570D171FA7EB00837B88 /* UploadTab.m */; };
+		CE485713171FA7EB00837B88 /* UploadTab.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE48570E171FA7EB00837B88 /* UploadTab.xib */; };
+		CE485718171FA86800837B88 /* ApiObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485717171FA86800837B88 /* ApiObject.m */; };
+		CE48571C171FA89D00837B88 /* AudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48571A171FA89D00837B88 /* AudioViewController.m */; };
+		CE48571D171FA89D00837B88 /* AudioViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE48571B171FA89D00837B88 /* AudioViewController.xib */; };
+		CE485721171FA8C600837B88 /* CustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48571F171FA8C600837B88 /* CustomCell.m */; };
+		CE485722171FA8C600837B88 /* CustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE485720171FA8C600837B88 /* CustomCell.xib */; };
+		CE485725171FA8F200837B88 /* UploadObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485724171FA8F200837B88 /* UploadObject.m */; };
+		CE48572A171FA91300837B88 /* ConnectToDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485727171FA91300837B88 /* ConnectToDatabase.m */; };
+		CE48572B171FA91300837B88 /* SQLdatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485729171FA91300837B88 /* SQLdatabase.m */; };
+		CE48572F171FA92A00837B88 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48572D171FA92A00837B88 /* SettingsViewController.m */; };
+		CE485730171FA92A00837B88 /* SettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE48572E171FA92A00837B88 /* SettingsViewController.xib */; };
+		CE485747171FA96400837B88 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485732171FA96400837B88 /* ASIAuthenticationDialog.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE485748171FA96400837B88 /* ASIDataCompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485735171FA96400837B88 /* ASIDataCompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE485749171FA96400837B88 /* ASIDataDecompressor.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485737171FA96400837B88 /* ASIDataDecompressor.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574A171FA96400837B88 /* ASIDownloadCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485739171FA96400837B88 /* ASIDownloadCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574B171FA96400837B88 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48573B171FA96400837B88 /* ASIFormDataRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574C171FA96400837B88 /* ASIHTTPRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = CE48573D171FA96400837B88 /* ASIHTTPRequest.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574D171FA96400837B88 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485741171FA96400837B88 /* ASIInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574E171FA96400837B88 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485743171FA96400837B88 /* ASINetworkQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE48574F171FA96400837B88 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485746171FA96400837B88 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE868454171FFBE100B82638 /* record-button.png in Resources */ = {isa = PBXBuildFile; fileRef = CE868453171FFBE100B82638 /* record-button.png */; };
+		CED49A88171EACCA00AF0B00 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */; };
+		CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */; };
+		CED49AB0171EAEAB00AF0B00 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */; };
+		CED49AB2171EAEBA00AF0B00 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */; };
+		CED49AB4171EC00100AF0B00 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		2A13AD871712AB0E0009ACAE /* video_camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = video_camera.png; sourceTree = "<group>"; };
+		2A13AD881712AB0E0009ACAE /* mic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mic.png; sourceTree = "<group>"; };
+		2A13AD8B1712B0C10009ACAE /* BackButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BackButton.png; sourceTree = "<group>"; };
+		2A13AD8D1712D33A0009ACAE /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		2A13AD8F1712D3420009ACAE /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		2A13AD991713E41E0009ACAE /* thesmos.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; name = thesmos.rdb; path = ../thesmos.rdb; sourceTree = "<group>"; };
+		2A52445C1701738C004CBA2F /* lipsync.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lipsync.png; sourceTree = "<group>"; };
+		2A52445E17017E60004CBA2F /* slate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = slate.png; sourceTree = "<group>"; };
+		2ACC740D171BE896003CBF38 /* tick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tick.png; sourceTree = "<group>"; };
+		2ACD83561701A93B00287DDC /* img-new-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-new-1.png"; sourceTree = "<group>"; };
+		2ACD83581701AF4E00287DDC /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
+		2ACD835A1701AF5600287DDC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		2ACD83601701B18600287DDC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		2AD2DBDF1706CF8900E00478 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		2AD2DBE11706DCA100E00478 /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		2AD2DBE21706DCA100E00478 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		2AD2DC11170948C600E00478 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		2AD2DC13170948D900E00478 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		2AD2DC151709490400E00478 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		2AD2DC171709490E00E00478 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		2AE35C50170020BF000993E6 /* gigReplay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gigReplay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2AE35C53170020BF000993E6 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		2AE35C55170020BF000993E6 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		2AE35C57170020BF000993E6 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		2AE35C5B170020BF000993E6 /* gigReplay-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "gigReplay-Info.plist"; sourceTree = "<group>"; };
+		2AE35C5D170020BF000993E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		2AE35C5F170020BF000993E6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2AE35C61170020BF000993E6 /* gigReplay-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "gigReplay-Prefix.pch"; sourceTree = "<group>"; };
+		2AE35C62170020BF000993E6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		2AE35C63170020BF000993E6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		2AE35C65170020BF000993E6 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		2AE35C67170020BF000993E6 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		2AE35C69170020BF000993E6 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		2AE35C6B170020BF000993E6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		2AE35C6C170020BF000993E6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		2AE35C6F170020BF000993E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController.xib; sourceTree = "<group>"; };
+		2AE35C8E1700469F000993E6 /* img-join-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-join-1.png"; sourceTree = "<group>"; };
+		2AE35C8F1700469F000993E6 /* img-open-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-open-1.png"; sourceTree = "<group>"; };
+		2AE35C901700469F000993E6 /* img-settings-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-settings-1.png"; sourceTree = "<group>"; };
+		2AE35C911700469F000993E6 /* img-upload-1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "img-upload-1.png"; sourceTree = "<group>"; };
+		2AE35CA0170059A2000993E6 /* FacebookSDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FacebookSDKResources.bundle; sourceTree = "<group>"; };
+		2AE35CA1170059A2000993E6 /* FBUserSettingsViewResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = FBUserSettingsViewResources.bundle; sourceTree = "<group>"; };
+		2AE35CA417005D7F000993E6 /* facebook_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook_login.png; sourceTree = "<group>"; };
+		2AF711D417140A6C00A89BC5 /* lipsync app icon white.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = "lipsync app icon white.psd"; sourceTree = "<group>"; };
+		2AF711D7171525D400A89BC5 /* mik.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mik.png; sourceTree = "<group>"; };
+		2AF711D91715438E00A89BC5 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		CE4856F3171FA7B400837B88 /* CreateSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CreateSessionViewController.h; path = gigReplay/CreateSessionViewController.h; sourceTree = "<group>"; };
+		CE4856F4171FA7B400837B88 /* CreateSessionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CreateSessionViewController.m; path = gigReplay/CreateSessionViewController.m; sourceTree = "<group>"; };
+		CE4856F5171FA7B400837B88 /* CreateSessionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CreateSessionViewController.xib; path = gigReplay/CreateSessionViewController.xib; sourceTree = "<group>"; };
+		CE4856F8171FA7D300837B88 /* JoinSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JoinSessionViewController.h; path = gigReplay/JoinSessionViewController.h; sourceTree = "<group>"; };
+		CE4856F9171FA7D300837B88 /* JoinSessionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JoinSessionViewController.m; path = gigReplay/JoinSessionViewController.m; sourceTree = "<group>"; };
+		CE4856FA171FA7D300837B88 /* JoinSessionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = JoinSessionViewController.xib; path = gigReplay/JoinSessionViewController.xib; sourceTree = "<group>"; };
+		CE4856FB171FA7D300837B88 /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LoginViewController.h; path = gigReplay/LoginViewController.h; sourceTree = "<group>"; };
+		CE4856FC171FA7D300837B88 /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = LoginViewController.m; path = gigReplay/LoginViewController.m; sourceTree = "<group>"; };
+		CE4856FD171FA7D300837B88 /* LoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = LoginViewController.xib; path = gigReplay/LoginViewController.xib; sourceTree = "<group>"; };
+		CE4856FE171FA7D300837B88 /* MediaRecordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaRecordViewController.h; path = gigReplay/MediaRecordViewController.h; sourceTree = "<group>"; };
+		CE4856FF171FA7D300837B88 /* MediaRecordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaRecordViewController.m; path = gigReplay/MediaRecordViewController.m; sourceTree = "<group>"; };
+		CE485700171FA7D300837B88 /* MediaRecordViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MediaRecordViewController.xib; path = gigReplay/MediaRecordViewController.xib; sourceTree = "<group>"; };
+		CE485701171FA7D300837B88 /* OpenSessionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenSessionViewController.h; path = gigReplay/OpenSessionViewController.h; sourceTree = "<group>"; };
+		CE485702171FA7D300837B88 /* OpenSessionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenSessionViewController.m; path = gigReplay/OpenSessionViewController.m; sourceTree = "<group>"; };
+		CE485703171FA7D300837B88 /* OpenSessionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OpenSessionViewController.xib; path = gigReplay/OpenSessionViewController.xib; sourceTree = "<group>"; };
+		CE48570C171FA7EB00837B88 /* UploadTab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploadTab.h; path = gigReplay/UploadTab.h; sourceTree = "<group>"; };
+		CE48570D171FA7EB00837B88 /* UploadTab.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploadTab.m; path = gigReplay/UploadTab.m; sourceTree = "<group>"; };
+		CE48570E171FA7EB00837B88 /* UploadTab.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = UploadTab.xib; path = gigReplay/UploadTab.xib; sourceTree = "<group>"; };
+		CE485716171FA86800837B88 /* ApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ApiObject.h; path = gigReplay/ApiObject.h; sourceTree = "<group>"; };
+		CE485717171FA86800837B88 /* ApiObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ApiObject.m; path = gigReplay/ApiObject.m; sourceTree = "<group>"; };
+		CE485719171FA89D00837B88 /* AudioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AudioViewController.h; path = gigReplay/AudioViewController.h; sourceTree = "<group>"; };
+		CE48571A171FA89D00837B88 /* AudioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AudioViewController.m; path = gigReplay/AudioViewController.m; sourceTree = "<group>"; };
+		CE48571B171FA89D00837B88 /* AudioViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = AudioViewController.xib; path = gigReplay/AudioViewController.xib; sourceTree = "<group>"; };
+		CE48571E171FA8C600837B88 /* CustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomCell.h; path = gigReplay/CustomCell.h; sourceTree = "<group>"; };
+		CE48571F171FA8C600837B88 /* CustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomCell.m; path = gigReplay/CustomCell.m; sourceTree = "<group>"; };
+		CE485720171FA8C600837B88 /* CustomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = CustomCell.xib; path = gigReplay/CustomCell.xib; sourceTree = "<group>"; };
+		CE485723171FA8F200837B88 /* UploadObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UploadObject.h; path = gigReplay/UploadObject.h; sourceTree = "<group>"; };
+		CE485724171FA8F200837B88 /* UploadObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UploadObject.m; path = gigReplay/UploadObject.m; sourceTree = "<group>"; };
+		CE485726171FA91300837B88 /* ConnectToDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConnectToDatabase.h; path = gigReplay/ConnectToDatabase.h; sourceTree = "<group>"; };
+		CE485727171FA91300837B88 /* ConnectToDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConnectToDatabase.m; path = gigReplay/ConnectToDatabase.m; sourceTree = "<group>"; };
+		CE485728171FA91300837B88 /* SQLdatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SQLdatabase.h; path = gigReplay/SQLdatabase.h; sourceTree = "<group>"; };
+		CE485729171FA91300837B88 /* SQLdatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SQLdatabase.m; path = gigReplay/SQLdatabase.m; sourceTree = "<group>"; };
+		CE48572C171FA92A00837B88 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = gigReplay/SettingsViewController.h; sourceTree = "<group>"; };
+		CE48572D171FA92A00837B88 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = gigReplay/SettingsViewController.m; sourceTree = "<group>"; };
+		CE48572E171FA92A00837B88 /* SettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = SettingsViewController.xib; path = gigReplay/SettingsViewController.xib; sourceTree = "<group>"; };
+		CE485731171FA96400837B88 /* ASIAuthenticationDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIAuthenticationDialog.h; path = gigReplay/ASIAuthenticationDialog.h; sourceTree = "<group>"; };
+		CE485732171FA96400837B88 /* ASIAuthenticationDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIAuthenticationDialog.m; path = gigReplay/ASIAuthenticationDialog.m; sourceTree = "<group>"; };
+		CE485733171FA96400837B88 /* ASICacheDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASICacheDelegate.h; path = gigReplay/ASICacheDelegate.h; sourceTree = "<group>"; };
+		CE485734171FA96400837B88 /* ASIDataCompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIDataCompressor.h; path = gigReplay/ASIDataCompressor.h; sourceTree = "<group>"; };
+		CE485735171FA96400837B88 /* ASIDataCompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIDataCompressor.m; path = gigReplay/ASIDataCompressor.m; sourceTree = "<group>"; };
+		CE485736171FA96400837B88 /* ASIDataDecompressor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIDataDecompressor.h; path = gigReplay/ASIDataDecompressor.h; sourceTree = "<group>"; };
+		CE485737171FA96400837B88 /* ASIDataDecompressor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIDataDecompressor.m; path = gigReplay/ASIDataDecompressor.m; sourceTree = "<group>"; };
+		CE485738171FA96400837B88 /* ASIDownloadCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIDownloadCache.h; path = gigReplay/ASIDownloadCache.h; sourceTree = "<group>"; };
+		CE485739171FA96400837B88 /* ASIDownloadCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIDownloadCache.m; path = gigReplay/ASIDownloadCache.m; sourceTree = "<group>"; };
+		CE48573A171FA96400837B88 /* ASIFormDataRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIFormDataRequest.h; path = gigReplay/ASIFormDataRequest.h; sourceTree = "<group>"; };
+		CE48573B171FA96400837B88 /* ASIFormDataRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIFormDataRequest.m; path = gigReplay/ASIFormDataRequest.m; sourceTree = "<group>"; };
+		CE48573C171FA96400837B88 /* ASIHTTPRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequest.h; path = gigReplay/ASIHTTPRequest.h; sourceTree = "<group>"; };
+		CE48573D171FA96400837B88 /* ASIHTTPRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIHTTPRequest.m; path = gigReplay/ASIHTTPRequest.m; sourceTree = "<group>"; };
+		CE48573E171FA96400837B88 /* ASIHTTPRequestConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequestConfig.h; path = gigReplay/ASIHTTPRequestConfig.h; sourceTree = "<group>"; };
+		CE48573F171FA96400837B88 /* ASIHTTPRequestDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIHTTPRequestDelegate.h; path = gigReplay/ASIHTTPRequestDelegate.h; sourceTree = "<group>"; };
+		CE485740171FA96400837B88 /* ASIInputStream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIInputStream.h; path = gigReplay/ASIInputStream.h; sourceTree = "<group>"; };
+		CE485741171FA96400837B88 /* ASIInputStream.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIInputStream.m; path = gigReplay/ASIInputStream.m; sourceTree = "<group>"; };
+		CE485742171FA96400837B88 /* ASINetworkQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASINetworkQueue.h; path = gigReplay/ASINetworkQueue.h; sourceTree = "<group>"; };
+		CE485743171FA96400837B88 /* ASINetworkQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASINetworkQueue.m; path = gigReplay/ASINetworkQueue.m; sourceTree = "<group>"; };
+		CE485744171FA96400837B88 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIProgressDelegate.h; path = gigReplay/ASIProgressDelegate.h; sourceTree = "<group>"; };
+		CE485745171FA96400837B88 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = gigReplay/Reachability.h; sourceTree = "<group>"; };
+		CE485746171FA96400837B88 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = gigReplay/Reachability.m; sourceTree = "<group>"; };
+		CE868453171FFBE100B82638 /* record-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record-button.png"; sourceTree = "<group>"; };
+		CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
+		CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2AE35C4D170020BF000993E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AD2DC12170948C600E00478 /* CFNetwork.framework in Frameworks */,
+				2AD2DC14170948D900E00478 /* MobileCoreServices.framework in Frameworks */,
+				CED49AB2171EAEBA00AF0B00 /* CoreMedia.framework in Frameworks */,
+				CED49AB0171EAEAB00AF0B00 /* QuartzCore.framework in Frameworks */,
+				CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */,
+				2A13AD901712D3420009ACAE /* AssetsLibrary.framework in Frameworks */,
+				2A13AD8E1712D33A0009ACAE /* MediaPlayer.framework in Frameworks */,
+				2AD2DC181709490E00E00478 /* SystemConfiguration.framework in Frameworks */,
+				2AD2DC161709490400E00478 /* libz.dylib in Frameworks */,
+				2AD2DBE31706DCA100E00478 /* libsqlite3.0.dylib in Frameworks */,
+				2AD2DBE41706DCA100E00478 /* libsqlite3.dylib in Frameworks */,
+				2ACD83611701B18600287DDC /* Accounts.framework in Frameworks */,
+				2ACD835B1701AF5600287DDC /* Social.framework in Frameworks */,
+				2ACD83591701AF4E00287DDC /* AdSupport.framework in Frameworks */,
+				2AE35C54170020BF000993E6 /* UIKit.framework in Frameworks */,
+				2AE35C56170020BF000993E6 /* Foundation.framework in Frameworks */,
+				2AE35C58170020BF000993E6 /* CoreGraphics.framework in Frameworks */,
+				CED49A88171EACCA00AF0B00 /* FacebookSDK.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2A13AD811712A5E50009ACAE /* MediaRecording */ = {
+			isa = PBXGroup;
+			children = (
+				CE4856FE171FA7D300837B88 /* MediaRecordViewController.h */,
+				CE4856FF171FA7D300837B88 /* MediaRecordViewController.m */,
+				CE485700171FA7D300837B88 /* MediaRecordViewController.xib */,
+				CED49AC1171ED9B900AF0B00 /* AudioRecorder */,
+				2A13AD911712D3550009ACAE /* VideoCaptureOverlay */,
+			);
+			name = MediaRecording;
+			sourceTree = "<group>";
+		};
+		2A13AD911712D3550009ACAE /* VideoCaptureOverlay */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = VideoCaptureOverlay;
+			sourceTree = "<group>";
+		};
+		2AD2DBE51706DD8000E00478 /* SQL Database(local) */ = {
+			isa = PBXGroup;
+			children = (
+				CED49ABB171EC11D00AF0B00 /* UploadModel */,
+				CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */,
+				CE485726171FA91300837B88 /* ConnectToDatabase.h */,
+				CE485727171FA91300837B88 /* ConnectToDatabase.m */,
+				CE485728171FA91300837B88 /* SQLdatabase.h */,
+				CE485729171FA91300837B88 /* SQLdatabase.m */,
+			);
+			name = "SQL Database(local)";
+			sourceTree = "<group>";
+		};
+		2AD2DBEC17088E0000E00478 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				2AD2DBE51706DD8000E00478 /* SQL Database(local) */,
+				CE485716171FA86800837B88 /* ApiObject.h */,
+				CE485717171FA86800837B88 /* ApiObject.m */,
+			);
+			name = APIs;
+			sourceTree = "<group>";
+		};
+		2AD2DC1A170C28D400E00478 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				CE48571E171FA8C600837B88 /* CustomCell.h */,
+				CE48571F171FA8C600837B88 /* CustomCell.m */,
+				CE485720171FA8C600837B88 /* CustomCell.xib */,
+			);
+			name = TableViewCells;
+			sourceTree = "<group>";
+		};
+		2AE35C47170020BF000993E6 = {
+			isa = PBXGroup;
+			children = (
+				2AF711D417140A6C00A89BC5 /* lipsync app icon white.psd */,
+				2A13AD811712A5E50009ACAE /* MediaRecording */,
+				2AD2DBEC17088E0000E00478 /* APIs */,
+				2AE35C9817005773000993E6 /* Facebook LoginView */,
+				2AE35C76170020CC000993E6 /* TabBarControllers */,
+				2AE35C59170020BF000993E6 /* gigReplay */,
+				2AE35C52170020BF000993E6 /* Frameworks */,
+				2AE35C51170020BF000993E6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		2AE35C51170020BF000993E6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2AE35C50170020BF000993E6 /* gigReplay.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2AE35C52170020BF000993E6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */,
+				CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */,
+				CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */,
+				CED49A8D171EADED00AF0B00 /* ASIHTTPRequest */,
+				2A13AD8F1712D3420009ACAE /* AssetsLibrary.framework */,
+				2A13AD8D1712D33A0009ACAE /* MediaPlayer.framework */,
+				2AD2DC171709490E00E00478 /* SystemConfiguration.framework */,
+				2AD2DC151709490400E00478 /* libz.dylib */,
+				2AD2DC13170948D900E00478 /* MobileCoreServices.framework */,
+				2AD2DC11170948C600E00478 /* CFNetwork.framework */,
+				2AD2DBE11706DCA100E00478 /* libsqlite3.0.dylib */,
+				2AD2DBE21706DCA100E00478 /* libsqlite3.dylib */,
+				2ACD835A1701AF5600287DDC /* Social.framework */,
+				2ACD83601701B18600287DDC /* Accounts.framework */,
+				2ACD83581701AF4E00287DDC /* AdSupport.framework */,
+				2AE35CA0170059A2000993E6 /* FacebookSDKResources.bundle */,
+				2AE35CA1170059A2000993E6 /* FBUserSettingsViewResources.bundle */,
+				CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */,
+				2AE35C53170020BF000993E6 /* UIKit.framework */,
+				2AE35C55170020BF000993E6 /* Foundation.framework */,
+				2AE35C57170020BF000993E6 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2AE35C59170020BF000993E6 /* gigReplay */ = {
+			isa = PBXGroup;
+			children = (
+				2AE35C62170020BF000993E6 /* AppDelegate.h */,
+				2AE35C63170020BF000993E6 /* AppDelegate.m */,
+				2AE35C6B170020BF000993E6 /* ViewController.h */,
+				2AE35C6C170020BF000993E6 /* ViewController.m */,
+				2AE35C6E170020BF000993E6 /* ViewController.xib */,
+				2AE35C5A170020BF000993E6 /* Supporting Files */,
+			);
+			path = gigReplay;
+			sourceTree = "<group>";
+		};
+		2AE35C5A170020BF000993E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2A13AD991713E41E0009ACAE /* thesmos.rdb */,
+				2AD2DBDF1706CF8900E00478 /* Common.h */,
+				2AE35C8C17002E2D000993E6 /* images */,
+				2AE35C5B170020BF000993E6 /* gigReplay-Info.plist */,
+				2AE35C5C170020BF000993E6 /* InfoPlist.strings */,
+				2AE35C5F170020BF000993E6 /* main.m */,
+				2AE35C61170020BF000993E6 /* gigReplay-Prefix.pch */,
+				2AE35C65170020BF000993E6 /* Default.png */,
+				2AE35C67170020BF000993E6 /* Default@2x.png */,
+				2AE35C69170020BF000993E6 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2AE35C76170020CC000993E6 /* TabBarControllers */ = {
+			isa = PBXGroup;
+			children = (
+				CE4856F3171FA7B400837B88 /* CreateSessionViewController.h */,
+				CE4856F4171FA7B400837B88 /* CreateSessionViewController.m */,
+				CE4856F5171FA7B400837B88 /* CreateSessionViewController.xib */,
+				CE4856F8171FA7D300837B88 /* JoinSessionViewController.h */,
+				CE4856F9171FA7D300837B88 /* JoinSessionViewController.m */,
+				CE4856FA171FA7D300837B88 /* JoinSessionViewController.xib */,
+				CE485701171FA7D300837B88 /* OpenSessionViewController.h */,
+				CE485702171FA7D300837B88 /* OpenSessionViewController.m */,
+				CE485703171FA7D300837B88 /* OpenSessionViewController.xib */,
+				2AD2DC1A170C28D400E00478 /* TableViewCells */,
+				CE48570C171FA7EB00837B88 /* UploadTab.h */,
+				CE48570D171FA7EB00837B88 /* UploadTab.m */,
+				CE48570E171FA7EB00837B88 /* UploadTab.xib */,
+				CE48572C171FA92A00837B88 /* SettingsViewController.h */,
+				CE48572D171FA92A00837B88 /* SettingsViewController.m */,
+				CE48572E171FA92A00837B88 /* SettingsViewController.xib */,
+			);
+			name = TabBarControllers;
+			sourceTree = "<group>";
+		};
+		2AE35C8C17002E2D000993E6 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				CE868453171FFBE100B82638 /* record-button.png */,
+				2ACC740D171BE896003CBF38 /* tick.png */,
+				2AF711D91715438E00A89BC5 /* search.png */,
+				2AF711D7171525D400A89BC5 /* mik.png */,
+				2A13AD8B1712B0C10009ACAE /* BackButton.png */,
+				2A13AD871712AB0E0009ACAE /* video_camera.png */,
+				2A13AD881712AB0E0009ACAE /* mic.png */,
+				2ACD83561701A93B00287DDC /* img-new-1.png */,
+				2A52445E17017E60004CBA2F /* slate.png */,
+				2A52445C1701738C004CBA2F /* lipsync.png */,
+				2AE35CA417005D7F000993E6 /* facebook_login.png */,
+				2AE35C8E1700469F000993E6 /* img-join-1.png */,
+				2AE35C8F1700469F000993E6 /* img-open-1.png */,
+				2AE35C901700469F000993E6 /* img-settings-1.png */,
+				2AE35C911700469F000993E6 /* img-upload-1.png */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+		2AE35C9817005773000993E6 /* Facebook LoginView */ = {
+			isa = PBXGroup;
+			children = (
+				CE4856FB171FA7D300837B88 /* LoginViewController.h */,
+				CE4856FC171FA7D300837B88 /* LoginViewController.m */,
+				CE4856FD171FA7D300837B88 /* LoginViewController.xib */,
+			);
+			name = "Facebook LoginView";
+			sourceTree = "<group>";
+		};
+		CED49A8D171EADED00AF0B00 /* ASIHTTPRequest */ = {
+			isa = PBXGroup;
+			children = (
+				CE485731171FA96400837B88 /* ASIAuthenticationDialog.h */,
+				CE485732171FA96400837B88 /* ASIAuthenticationDialog.m */,
+				CE485733171FA96400837B88 /* ASICacheDelegate.h */,
+				CE485734171FA96400837B88 /* ASIDataCompressor.h */,
+				CE485735171FA96400837B88 /* ASIDataCompressor.m */,
+				CE485736171FA96400837B88 /* ASIDataDecompressor.h */,
+				CE485737171FA96400837B88 /* ASIDataDecompressor.m */,
+				CE485738171FA96400837B88 /* ASIDownloadCache.h */,
+				CE485739171FA96400837B88 /* ASIDownloadCache.m */,
+				CE48573A171FA96400837B88 /* ASIFormDataRequest.h */,
+				CE48573B171FA96400837B88 /* ASIFormDataRequest.m */,
+				CE48573C171FA96400837B88 /* ASIHTTPRequest.h */,
+				CE48573D171FA96400837B88 /* ASIHTTPRequest.m */,
+				CE48573E171FA96400837B88 /* ASIHTTPRequestConfig.h */,
+				CE48573F171FA96400837B88 /* ASIHTTPRequestDelegate.h */,
+				CE485740171FA96400837B88 /* ASIInputStream.h */,
+				CE485741171FA96400837B88 /* ASIInputStream.m */,
+				CE485742171FA96400837B88 /* ASINetworkQueue.h */,
+				CE485743171FA96400837B88 /* ASINetworkQueue.m */,
+				CE485744171FA96400837B88 /* ASIProgressDelegate.h */,
+				CE485745171FA96400837B88 /* Reachability.h */,
+				CE485746171FA96400837B88 /* Reachability.m */,
+			);
+			name = ASIHTTPRequest;
+			sourceTree = "<group>";
+		};
+		CED49ABB171EC11D00AF0B00 /* UploadModel */ = {
+			isa = PBXGroup;
+			children = (
+				CE485723171FA8F200837B88 /* UploadObject.h */,
+				CE485724171FA8F200837B88 /* UploadObject.m */,
+			);
+			name = UploadModel;
+			sourceTree = "<group>";
+		};
+		CED49AC1171ED9B900AF0B00 /* AudioRecorder */ = {
+			isa = PBXGroup;
+			children = (
+				CE485719171FA89D00837B88 /* AudioViewController.h */,
+				CE48571A171FA89D00837B88 /* AudioViewController.m */,
+				CE48571B171FA89D00837B88 /* AudioViewController.xib */,
+			);
+			name = AudioRecorder;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2AE35C4F170020BF000993E6 /* gigReplay */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AE35C73170020BF000993E6 /* Build configuration list for PBXNativeTarget "gigReplay" */;
+			buildPhases = (
+				2AE35C4C170020BF000993E6 /* Sources */,
+				2AE35C4D170020BF000993E6 /* Frameworks */,
+				2AE35C4E170020BF000993E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = gigReplay;
+			productName = gigReplay;
+			productReference = 2AE35C50170020BF000993E6 /* gigReplay.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2AE35C48170020BF000993E6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Leon Ng";
+			};
+			buildConfigurationList = 2AE35C4B170020BF000993E6 /* Build configuration list for PBXProject "gigReplay" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 2AE35C47170020BF000993E6;
+			productRefGroup = 2AE35C51170020BF000993E6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2AE35C4F170020BF000993E6 /* gigReplay */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2AE35C4E170020BF000993E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AE35C5E170020BF000993E6 /* InfoPlist.strings in Resources */,
+				2AE35C66170020BF000993E6 /* Default.png in Resources */,
+				2AE35C68170020BF000993E6 /* Default@2x.png in Resources */,
+				2AE35C6A170020BF000993E6 /* Default-568h@2x.png in Resources */,
+				2AE35C70170020BF000993E6 /* ViewController.xib in Resources */,
+				2AE35C931700469F000993E6 /* img-join-1.png in Resources */,
+				2AE35C941700469F000993E6 /* img-open-1.png in Resources */,
+				2AE35C951700469F000993E6 /* img-settings-1.png in Resources */,
+				2AE35C961700469F000993E6 /* img-upload-1.png in Resources */,
+				2AE35CA2170059A2000993E6 /* FacebookSDKResources.bundle in Resources */,
+				2AE35CA3170059A2000993E6 /* FBUserSettingsViewResources.bundle in Resources */,
+				2AE35CA517005D7F000993E6 /* facebook_login.png in Resources */,
+				2A52445D1701738C004CBA2F /* lipsync.png in Resources */,
+				2A52445F17017E60004CBA2F /* slate.png in Resources */,
+				2ACD83571701A93B00287DDC /* img-new-1.png in Resources */,
+				2A13AD891712AB0E0009ACAE /* video_camera.png in Resources */,
+				2A13AD8A1712AB0E0009ACAE /* mic.png in Resources */,
+				2A13AD8C1712B0C10009ACAE /* BackButton.png in Resources */,
+				2A13AD9A1713E41E0009ACAE /* thesmos.rdb in Resources */,
+				2AF711D8171525D400A89BC5 /* mik.png in Resources */,
+				2AF711DA1715438E00A89BC5 /* search.png in Resources */,
+				2ACC740E171BE896003CBF38 /* tick.png in Resources */,
+				CED49AB4171EC00100AF0B00 /* gigreplay.sqlite in Resources */,
+				CE4856F7171FA7B400837B88 /* CreateSessionViewController.xib in Resources */,
+				CE485705171FA7D300837B88 /* JoinSessionViewController.xib in Resources */,
+				CE485707171FA7D300837B88 /* LoginViewController.xib in Resources */,
+				CE485709171FA7D300837B88 /* MediaRecordViewController.xib in Resources */,
+				CE48570B171FA7D300837B88 /* OpenSessionViewController.xib in Resources */,
+				CE485713171FA7EB00837B88 /* UploadTab.xib in Resources */,
+				CE48571D171FA89D00837B88 /* AudioViewController.xib in Resources */,
+				CE485722171FA8C600837B88 /* CustomCell.xib in Resources */,
+				CE485730171FA92A00837B88 /* SettingsViewController.xib in Resources */,
+				CE868454171FFBE100B82638 /* record-button.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2AE35C4C170020BF000993E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2AE35C60170020BF000993E6 /* main.m in Sources */,
+				2AE35C64170020BF000993E6 /* AppDelegate.m in Sources */,
+				2AE35C6D170020BF000993E6 /* ViewController.m in Sources */,
+				CE4856F6171FA7B400837B88 /* CreateSessionViewController.m in Sources */,
+				CE485704171FA7D300837B88 /* JoinSessionViewController.m in Sources */,
+				CE485706171FA7D300837B88 /* LoginViewController.m in Sources */,
+				CE485708171FA7D300837B88 /* MediaRecordViewController.m in Sources */,
+				CE48570A171FA7D300837B88 /* OpenSessionViewController.m in Sources */,
+				CE485712171FA7EB00837B88 /* UploadTab.m in Sources */,
+				CE485718171FA86800837B88 /* ApiObject.m in Sources */,
+				CE48571C171FA89D00837B88 /* AudioViewController.m in Sources */,
+				CE485721171FA8C600837B88 /* CustomCell.m in Sources */,
+				CE485725171FA8F200837B88 /* UploadObject.m in Sources */,
+				CE48572A171FA91300837B88 /* ConnectToDatabase.m in Sources */,
+				CE48572B171FA91300837B88 /* SQLdatabase.m in Sources */,
+				CE48572F171FA92A00837B88 /* SettingsViewController.m in Sources */,
+				CE485747171FA96400837B88 /* ASIAuthenticationDialog.m in Sources */,
+				CE485748171FA96400837B88 /* ASIDataCompressor.m in Sources */,
+				CE485749171FA96400837B88 /* ASIDataDecompressor.m in Sources */,
+				CE48574A171FA96400837B88 /* ASIDownloadCache.m in Sources */,
+				CE48574B171FA96400837B88 /* ASIFormDataRequest.m in Sources */,
+				CE48574C171FA96400837B88 /* ASIHTTPRequest.m in Sources */,
+				CE48574D171FA96400837B88 /* ASIInputStream.m in Sources */,
+				CE48574E171FA96400837B88 /* ASINetworkQueue.m in Sources */,
+				CE48574F171FA96400837B88 /* Reachability.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		2AE35C5C170020BF000993E6 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2AE35C5D170020BF000993E6 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		2AE35C6E170020BF000993E6 /* ViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2AE35C6F170020BF000993E6 /* en */,
+			);
+			name = ViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2AE35C71170020BF000993E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		2AE35C72170020BF000993E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2AE35C74170020BF000993E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "gigReplay/gigReplay-Prefix.pch";
+				INFOPLIST_FILE = "gigReplay/gigReplay-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				OTHER_LDFLAGS = "-lsqlite3.0";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		2AE35C75170020BF000993E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "gigReplay/gigReplay-Prefix.pch";
+				INFOPLIST_FILE = "gigReplay/gigReplay-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				OTHER_LDFLAGS = "-lsqlite3.0";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2AE35C4B170020BF000993E6 /* Build configuration list for PBXProject "gigReplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AE35C71170020BF000993E6 /* Debug */,
+				2AE35C72170020BF000993E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AE35C73170020BF000993E6 /* Build configuration list for PBXNativeTarget "gigReplay" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2AE35C74170020BF000993E6 /* Debug */,
+				2AE35C75170020BF000993E6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2AE35C48170020BF000993E6 /* Project object */;
+}
