@@ -7,8 +7,7 @@
 //
 
 #import "ApiObject.h"
-
-
+//wporkgjwkrherjh[perjhojerophjaeojhoerh
 @implementation ApiObject;
 @synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString;
 
