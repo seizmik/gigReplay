@@ -265,7 +265,7 @@
 - (void)removeFile:(UploadObject *)fileDetails {
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:fileDetails.filePath error:&error];
+    [fileManager removeItemAtPath:[NSURL URLWithString:fileDetails.filePath] error:&error];
     if (error) {
         NSLog(@"Error occured: %@", [error localizedDescription]);
     }

@@ -47,8 +47,9 @@
 
 - (IBAction)syncTrial:(UIButton *)sender {
     double timeNow = [[NSDate date] timeIntervalSince1970];
-    timeNow += appDelegateObject.timeRelationship;
-    UIAlertView *syncTime = [[UIAlertView alloc] initWithTitle:@"Time Now" message:[NSString stringWithFormat:@"%f", timeNow] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+    //timeNow += appDelegateObject.timeRelationship;
+    double serverTime = timeNow + appDelegateObject.timeRelationship;
+    UIAlertView *syncTime = [[UIAlertView alloc] initWithTitle:@"Time Now" message:[NSString stringWithFormat:@"Phone time is %f. Server time is %f", timeNow, serverTime] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
     [syncTime show];
 }
 @end

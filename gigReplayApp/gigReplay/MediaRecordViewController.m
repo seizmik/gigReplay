@@ -208,7 +208,6 @@ bool isRecording;
         //Start recording
         isRecording = YES;
         [cameraUI startVideoCapture];
-        //[self getStartTime];
 
     } else {
         //cameraRecButton.hidden = YES;
