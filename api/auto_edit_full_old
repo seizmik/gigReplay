@@ -118,9 +118,7 @@
                 $cut_details = array();
                 $cut_details['src'] = generate_filepath($video_url); //path
                 $cut_details['seek_to'] = $ss_time;
-                //$cut_details['duration'] = $duration;
-                //Instead, put in duration_check here as we might need to add some numbers later
-                $cut_details['duration'] = $duration_check;
+                $cut_details['duration'] = $duration;
                 
                 $new_array[] = $cut_details;
             }
@@ -148,12 +146,6 @@
                 $count++;
             }
         }
-        
-        //A for each loop does not work here
-        for ($i = 0; $i < count($return_array); $i++) {
-            $return_array[$i]['duration'] = fftime($return_array[$i]['duration']);
-        }
-        
         return $return_array;
         
         
@@ -334,6 +326,49 @@
     $current_time = $first_start; //Current time starts with the $first_start
     //$i = 0;
     //$temp_trim_array = array();
+    
+    /* Original code
+    while ($current_time < $last_end) {
+        
+        $video_url = FALSE;
+        while ($video_url == FALSE) {
+            //Take a random video and cut it up
+            $random_number = rand(1, count($video_array)) - 1;
+            $current_vid = $video_array[$random_number];
+            //Check if content exists at this point
+            if (check_for_content($current_vid)) {
+                $video_url = $current_vid['media_url'];
+            }
+            //Seek to time is. Also, get a duration for the video
+            $ss_time = fftime($current_time - $current_vid['start_time']);
+            $duration_check = seek_to_check($current_vid, generate_duration()); //We did the check because we need to get back something to update $current_time at the end of the loop
+            $duration = fftime($duration_check);
+        
+        }
+        echo generate_filepath($video_url), "<br/>";
+        echo $ss_time, "<br/>"; //This is the current time
+        
+        //Create temp file name, then we can for-each each entry to stitch the videos together
+        //At this point, we should get the extension of the file and feed it into the trimpath
+        $temp_trimpath = $temp_path."trim".$i.".mpg";
+        //This creates the trim for the videos. Uncomment this when we get the loop running properly
+        exec("ffmpeg -i " . generate_filepath($video_url) . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:480 -threads 0 -an -ss " . $ss_time . " -t " . $duration . " " . $temp_trimpath);
+        //Include -an to take out the audio from the video.
+        
+        //Add the new file to the trimmed video array
+        //$temp_trim_array[] = $temp_intpath;
+        $temp_trim_array[] = $temp_trimpath;
+        echo $temp_trim_array[$i], "<br/>";
+        
+        //Next check if the videos are still valid and update $current_time
+        $current_time = $current_time + $duration_check;
+        $video_array = remove_useless_details($video_array);
+        $i++; //To update the filename later
+        
+        echo $current_time, " | ", count($video_array), "<br/>";
+        
+    }//End of while loop that controls the random video edits
+    */
     
     $trim_cmd_array = array();
     $trim_cmd_array = make_video_cut_array($video_array);

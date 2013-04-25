@@ -93,7 +93,7 @@ bool isRecording;
     cameraUI.allowsEditing = NO;
     //At this point, it should be taken from the options
     //cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeLow;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
