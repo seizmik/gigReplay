@@ -72,14 +72,12 @@
     {
         global $first_start, $last_end, $current_time;
         $new_array = array();
-        
-        //echo "Count of array is ", count($array), "<br/>";
-        
+                
         while ($current_time < $last_end) {
             //As long as the current time is less than the last_end, it will continue cutting
             //First, sort the videos and check if there is a gap in the videos
-            usort($array, 'cmp');
             $blank_check = 0;
+            usort($array, 'cmp');
             foreach ($array as $video_details) {
                 if (check_for_content($video_details)) {
                     $blank_check++;
@@ -89,11 +87,12 @@
             if ($blank_check == 0) {
                 //Means that there are videos before last_end, but no content here
                 //Create a blank video that starts at current time and ends at the next videos start_time
+                //In fact, we can just make b-roll here. Randomly pick a video and cut something from it
                 echo "There's a blank here<br/>";
                 
                 
                 
-                //Update the current time
+                //Update the current time. Since the array has been sorted, you can just pick the first entries start time as the next closest time
                 $duration_check = $array[0]['start_time'] - $current_time;
                 echo "Duration of blank is ", $duration_check, "<br/>";
                 
@@ -156,36 +155,6 @@
         
         return $return_array;
         
-        
-    }
-    
-    function join_all_audio($cmd_array)
-    {
-        //Feeding it an array with arrays
-        $outpath_array = array();
-        $i = 0;
-        global $temp_path;
-        
-        //Convert all to the same format
-        foreach ($cmd_array as $entry) {
-            $original_path = $entry['src'];
-            $ss_time = $entry['seek_to'];
-            $duration = $entry['duration'];
-            echo $original_path, "<br/>";
-            echo $ss_time, "<br/>";
-            echo $duration, "<br/>";
-            $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 512k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
-            $outpath_array[] = $temp_out_path;
-            $i++;
-        }
-        //Now, concatenate each audio file, even if there is only 1 file
-        $concat_files = "concat:\"" . implode("|", $outpath_array) . "\"";
-        echo $concat_files;
-        $output_audio_path = $temp_path."combined_audio.aac";
-        exec("ffmpeg -i ".$concat_files." ".$output_audio_path);
-        
-        return $output_audio_path;
     }
     
     function make_audio_cut_array($main_audio, $backup_audio_tracks, $the_end)
@@ -194,6 +163,8 @@
         //$backup_audio is the audio that we are using to supplement the main audio if there are sections missing
         
         $cut_details = array(); //This will feed into $cut_audio_array
+        
+        usort($backup_audio_tracks, 'cmp');
         
         global $current_time, $first_start, $cut_audio_array;
         
@@ -263,7 +234,35 @@
             $current_time += $duration;
             echo $current_time, " | ", $the_end, "<br/>";
         }
-        return $cut_audio_array;
+    }
+    
+    function join_all_audio($cmd_array)
+    {
+        //Feeding it an array with arrays
+        $outpath_array = array();
+        $i = 0;
+        global $temp_path;
+        
+        //Convert all to the same format
+        foreach ($cmd_array as $entry) {
+            $original_path = $entry['src'];
+            $ss_time = $entry['seek_to'];
+            $duration = $entry['duration'];
+            echo $original_path, "<br/>";
+            echo $ss_time, "<br/>";
+            echo $duration, "<br/>";
+            $temp_out_path = $temp_path."audio_trim".$i.".aac";
+            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 512k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
+            $outpath_array[] = $temp_out_path;
+            $i++;
+        }
+        //Now, concatenate each audio file, even if there is only 1 file
+        $concat_files = "concat:\"" . implode("|", $outpath_array) . "\"";
+        echo $concat_files;
+        $output_audio_path = $temp_path."combined_audio.aac";
+        exec("ffmpeg -i ".$concat_files." ".$output_audio_path);
+        
+        return $output_audio_path;
     }
     
     function deleteDirectory($dir)
@@ -293,8 +292,14 @@
     } else {
         mysql_select_db("gigreplay", $con);
         //First, select all the videos from the table
-        $query = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=2";
-        $result = mysql_query($query);
+        $query_2 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=2";
+        $query_1 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=1";
+        $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
+        //These are the results for all the videos for this session
+        $result_2 = mysql_query($query_2);
+        //These are the results for all the audio for this session
+        $result_1 = mysql_query($query_1);
+        $result_3 = mysql_query($query_3);
         mysql_close($con);
     }
     
@@ -303,7 +308,7 @@
     $last_end = 0;
     
     //Load up the video details in the video array, and get the first and last times
-    while ($row = mysql_fetch_array($result)) {
+    while ($row = mysql_fetch_array($result_2)) {
         if ($row['start_time'] < $first_start) {
             $first_start = $row['start_time'];
         }
@@ -322,28 +327,37 @@
     $temp_path = "../uploads/temp/".$session_id."/";
     if (!is_dir($temp_path)) {
         mkdir ($temp_path);
-    } //Please remember to delete it later
+    }
     $master_path = "../uploads/master/".$session_id."/";
     if (!is_dir($master_path)) {
         mkdir ($master_path);
     }
     
     
-    //OK, now we know the when the first video is, and when the last video is.
+    //OK, now we know when the first video is, and when the last video is.
     //Global variable $current_time will track where we are in the time continuum.
     $current_time = $first_start; //Current time starts with the $first_start
     //$i = 0;
     //$temp_trim_array = array();
     
     $trim_cmd_array = array();
+    $temp_trim_array - array();
     $trim_cmd_array = make_video_cut_array($video_array);
     
+    //Now that you have the trim commands, you can start making the trims
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
+        /*
         echo $trim_cmd_array[$i]['src'], "<br/>";
         echo $trim_cmd_array[$i]['seek_to'], "<br/>";
         echo $trim_cmd_array[$i]['duration'], "<br/>";
+        */
+        
+        $temp_trim_path = $temp_path . "trim".$i.".mpg";
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:480 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
+        $temp_trim_array[] = $temp_trim_path
     }
-    /*
+    
     
     $concat_files = "concat:\"" . implode("|", $temp_trim_array) . "\"";
     echo $concat_files, "<br/><br/>";
@@ -352,29 +366,12 @@
     $combined_video_path = $temp_path."combined_video.mpg";
     exec("ffmpeg -i ".$concat_files." -c copy ".$combined_video_path);
     
-    //Then convert back to mp4 format
-    //$combined_video_path = $temp_path."combined_video.mp4";
-    //exec("ffmpeg -i ".$temp_path."combined_video.mpg ".$combined_video_path);
-    
-    
     //Video edit complete---------------------------------------------------
     
     
     
     //Now that the video has been completed, let's head to make the audio for the video.
-    //First, boot up an audio array
-    $con = mysql_connect("localhost", "mik", "rivalries");
-    if (!$con) {
-        die(mysql_error());
-    } else {
-        mysql_select_db("gigreplay", $con);
-        //First, select all the videos from the table
-        $query_1 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=1";
-        $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
-        $result_1 = mysql_query($query_1);
-        $result_3 = mysql_query($query_3);
-        mysql_close($con);
-    }
+    //Audio results were grabbed earlier already
     
     $audio_1_array = array(); //This is dedicated audio
     $audio_3_array = array(); //This is audio from video
@@ -454,6 +451,7 @@
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".basename($final_video_path);
     echo $final_video_url;
     
+    //Now, delete the temp directory
     deleteDirectory($temp_path);
-    */
+    
 ?>
