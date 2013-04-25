@@ -8,9 +8,17 @@
         return $filepath;
     }
     
-    function cmp($a, $b) {
+    function compare_start($a, $b)
+    {
         //Sorting by ascending start time
         return ($a['start_time'] > $b['start_time']);
+    }
+    
+    function compare_length($a, $b)
+    {
+        //Sorting by descending order of media length
+        return ($a['media_length'] < $b['media_length']);
+        //BTW, that's what she said...
     }
     
     function fftime($time_in_sec)
@@ -77,7 +85,7 @@
             //As long as the current time is less than the last_end, it will continue cutting
             //First, sort the videos and check if there is a gap in the videos
             $blank_check = 0;
-            usort($array, 'cmp');
+            usort($array, 'compare_start');
             foreach ($array as $video_details) {
                 if (check_for_content($video_details)) {
                     $blank_check++;
@@ -87,14 +95,17 @@
             if ($blank_check == 0) {
                 //Means that there are videos before last_end, but no content here
                 //Create a blank video that starts at current time and ends at the next videos start_time
+                //There is a blank video in the api folder called empty_vid.mpeg. 720p
                 //In fact, we can just make b-roll here. Randomly pick a video and cut something from it
-                echo "There's a blank here<br/>";
+                echo "There's a blank here.<br/>";
                 
-                
+                $cut_details['src'] = "empty_vid.mpeg";
+                $cut_details['seek_to'] = "00:00:00.00";
                 
                 //Update the current time. Since the array has been sorted, you can just pick the first entries start time as the next closest time
                 $duration_check = $array[0]['start_time'] - $current_time;
                 echo "Duration of blank is ", $duration_check, "<br/>";
+                $cut_details['duration'] = $duration_check;
                 
             } else {
                 //Reset the video URL
@@ -111,18 +122,17 @@
                     //Seek to time generated. Also, get a duration for the video
                     $ss_time = fftime($current_time - $current_vid['start_time']);
                     $duration_check = seek_to_check($current_vid, generate_duration()); //We did the check because we need to get back something to update $current_time at the end of the loop
-                    $duration = fftime($duration_check);
                 }
                 //Now add it into the $new_array
                 $cut_details = array();
                 $cut_details['src'] = generate_filepath($video_url); //path
                 $cut_details['seek_to'] = $ss_time;
-                //$cut_details['duration'] = $duration;
-                //Instead, put in duration_check here as we might need to add some numbers later
+                //We put in duration_check here as we might need to add some numbers later
                 $cut_details['duration'] = $duration_check;
                 
-                $new_array[] = $cut_details;
             }
+            //Add the cut details into new array
+            $new_array[] = $cut_details;
             //Update the current time
             $current_time += $duration_check;
             //Remove video details that don't exist
@@ -148,7 +158,7 @@
             }
         }
         
-        //A for each loop does not work here
+        //A foreach loop does not work here. Converting duration check which is a float to something that ffmpeg can read later
         for ($i = 0; $i < count($return_array); $i++) {
             $return_array[$i]['duration'] = fftime($return_array[$i]['duration']);
         }
@@ -164,7 +174,7 @@
         
         $cut_details = array(); //This will feed into $cut_audio_array
         
-        usort($backup_audio_tracks, 'cmp');
+        usort($backup_audio_tracks, 'compare_start');
         
         global $current_time, $first_start, $cut_audio_array;
         
@@ -191,11 +201,13 @@
             //Lastly, update the current time
             $current_time += $duration;
             echo $current_time, " | ", $the_end;
-        }
+        } //This marks the end of the audio before the main audio
+        
+        
         
         if (check_for_content($main_audio)) {
             echo "Cutting the main audio<br/>";
-            //Next, cut the dedicated audio into the whole thing
+            //Next, cut the main audio into the whole thing
             $duration_check = $the_end - $current_time;
             $duration = seek_to_check($main_audio, $duration_check);
             
@@ -208,27 +220,58 @@
                 //Update the current time here
                 $current_time += $duration;
                 echo $duration, "<br/>";
-                echo $current_time, " | ", $the_end;
+                echo $current_time, " | ", $the_end, "<br/>";
             }
-        }
+        } //This ends the loop for the main audio
+        
+        
         
         while ($current_time < $the_end) {
-            //Choose a video that exists at this point of time, then check if it exists all the way to the start_time
-            //If it does, then stop at the start_time. Otherwise, add the length and repeat the process
             echo "The audio ended early<br/>";
-            for ($j=0; $j < count($backup_audio_tracks); $j++) {
-                if (check_for_content($backup_audio_tracks[$j])) {
-                    //If there is content there, take note of it
-                    $backup_audio_exists = $backup_audio_tracks[$j];
+            //echo "Backup audio array still has ", count($backup_audio_tracks), "<br/>";
+            //First, remove content from the backup array that is no longer valid
+            $backup_audio_tracks = remove_useless_details($backup_audio_tracks);
+            usort($backup_audio_tracks, 'compare_start');
+            
+            echo "After cleaning up, backup audio array still has ", count($backup_audio_tracks), "<br/>";
+            
+            $blank_check = 0;
+            foreach ($backup_audio_tracks as $entry) {
+                if (check_for_content($entry)) {
+                    $blank_check++;
                 }
             }
-            $duration_check = $the_end - $main_audio['end_time'];
-            $duration = seek_to_check($backup_audio_exists, $duration_check);
+            echo "Blank check: ", $blank_check, "<br/>";
             
-            //Create the cut_array
-            $cut_details['src'] = generate_filepath($backup_audio_exists['media_url']);
-            $cut_details['seek_to'] = fftime($current_time - $backup_audio_exists['start_time']);
-            $cut_details['duration'] = fftime($seek_to);
+            if ($blank_check == 0) {
+                $cut_details['src'] = "empty_audio.aac";
+                $cut_details['seek_to'] = "00:00:00.00";
+                if ($backup_audio_tracks[0]['start_time'] < $the_end) {
+                    $duration = $backup_audio_tracks[0]['start_time'] - $current_time;
+                } else {
+                    $duration = $the_end - $current_time;
+                }
+                $cut_details['duration'] = fftime($duration);
+            } else {
+                //Choose a video that exists at this point of time, then check if it exists all the way to the start_time
+                //If it does, then stop at the start_time. Otherwise, add the length and repeat the process
+                for ($j=0; $j < count($backup_audio_tracks); $j++) {
+                    if (check_for_content($backup_audio_tracks[$j])) {
+                        //If there is content there, take note of it
+                        $backup_audio_exists = $backup_audio_tracks[$j];
+                    }
+                }
+                $duration_check = $the_end - $current_time;
+                $duration = seek_to_check($backup_audio_exists, $duration_check);
+                
+                //Create the cut_array
+                $cut_details['src'] = generate_filepath($backup_audio_exists['media_url']);
+                $cut_details['seek_to'] = fftime($current_time - $backup_audio_exists['start_time']);
+                $cut_details['duration'] = fftime($duration);
+            }
+            echo "Cut duration was ", $duration, "<br/>";
+            
+            //Add to the cut_audio_array
             $cut_audio_array[] = $cut_details;
             //Lastly, update the current time
             $current_time += $duration;
@@ -282,7 +325,7 @@
 //End function list--------------------------------------------------------
     
     //Establish the session that we want to make the video for
-    $session_id = 102; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
+    $session_id = 103; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
     $video_array = array();
     
     //First query the database and get all the details
@@ -341,7 +384,7 @@
     //$temp_trim_array = array();
     
     $trim_cmd_array = array();
-    $temp_trim_array - array();
+    $temp_trim_array = array();
     $trim_cmd_array = make_video_cut_array($video_array);
     
     //Now that you have the trim commands, you can start making the trims
@@ -355,7 +398,7 @@
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
         exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:480 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
-        $temp_trim_array[] = $temp_trim_path
+        $temp_trim_array[] = $temp_trim_path;
     }
     
     
@@ -372,43 +415,38 @@
     
     //Now that the video has been completed, let's head to make the audio for the video.
     //Audio results were grabbed earlier already
-    
     $audio_1_array = array(); //This is dedicated audio
     $audio_3_array = array(); //This is audio from video
     while ($row = mysql_fetch_array($result_1)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_1_array[] = $row;
+        echo "Audio 1 end time is ", $row['end_time'], "<br/>";
     }
     while ($row = mysql_fetch_array($result_3)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_3_array[] = $row;
+        echo "Audio 3 end time is ", $row['end_time'], "<br/>";
     }
     
-    echo "Audio 1 array:", count($audio_1_array), "<br/>";
-    echo "Audio 3 array:", count($audio_3_array), "<br/>";
+    echo "Audio 1 array count:", count($audio_1_array), "<br/>";
+    echo "Audio 3 array count:", count($audio_3_array), "<br/>";
     
     //Create a global audio_cut_array for the function to add to
     $cut_audio_array = array();
     //Reset the current time to keep track of audio
     $current_time = $first_start;
-    //Now remove the empty audio tracks from audio_1_array
+    //Now remove the empty audio tracks from audio_1_array that exist before the start and after the end
     $audio_1_array = remove_useless_details($audio_1_array);
     
     //First, check how many of the dedicated audio
-    //In each case, we are feeding into the 
+    //In each case, we are feeding into the
     if (count($audio_1_array) == 0) {
         //Nothing? Then choose a track that came from audio 3
         echo "No dedicated audio<br/>";
         
         //Choose the longest track from audio_3_array as the main_audio
-        $length_check = 0;
-        foreach ($audio_3_array as $entry) {
-            if ($entry['media_length'] > $length_check) {
-                //If the media length of this track is a larger value, take note of it
-                $audio_3_main = $entry;
-            }
-        }
-        make_audio_cut_array($audio_3_main, $audio_3_array, $last_end);
+        usort($audio_3_array, 'compare_length');
+        make_audio_cut_array($audio_3_array[0], $audio_3_array, $last_end);
         
     } else if (count($audio_1_array) == 1) {
         //Since there's already one dedicated audio, use it
@@ -421,7 +459,7 @@
         //Ok la, maybe the audio cut out in between or something...
         
         //First sort the array to make sure they are all in order
-        usort($audio_1_array, "cmp");
+        usort($audio_1_array, 'compare_start');
         //For each of the audio_1 entries, make the audio_cut_array with the next entry's start_time
         for ($i=0; $i < count($audio_1_array); $i++) {
             $k = $i+1;
