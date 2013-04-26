@@ -131,6 +131,7 @@
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
     NSString *returnString = [NSString string];
+    
     returnString = [self uploadThisFile:fileDetails];
     
     NSLog(@"%@", returnString);
@@ -146,7 +147,7 @@
             [self removeFile:fileDetails];
         }
         
-        NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=1 WHERE id=%i", fileDetails.entryNumber];
+        NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE id=%i", fileDetails.entryNumber];
         while (![dbObject updateDatabase:strQuery]) {
             NSLog(@"Retrying...");
         }
@@ -163,6 +164,7 @@
         [alertUpload show];
     }
     
+        
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
@@ -171,7 +173,7 @@
 {
     //Initialise this entire thing by calling upon all the files that have not been uploaded
     dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = @"SELECT * FROM upload_tracker WHERE upload_status=0";
+    NSString *strQuery = @"SELECT * FROM upload_tracker WHERE upload_status=1";
     uploadArray = [NSMutableArray array];
     uploadArray = [dbObject uploadCheck:strQuery];
     
@@ -265,7 +267,7 @@
 - (void)removeFile:(UploadObject *)fileDetails {
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:[NSURL URLWithString:fileDetails.filePath] error:&error];
+    [fileManager removeItemAtPath:fileDetails.filePath error:&error];
     if (error) {
         NSLog(@"Error occured: %@", [error localizedDescription]);
     }

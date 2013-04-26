@@ -5,6 +5,13 @@
         $info = pathinfo($filename);
         return $info['filename'] . '.' . $new_extension;
     }
+    
+    function create_random_name ($filename)
+    {
+        $random_string = generate_random_string();
+        $info = pathinfo($filename);
+        return $info['filename'] . $random_string . '.' . $info['extension'];
+    }
 
     function calculate_content_length($media_path)
     {
@@ -16,6 +23,16 @@
         $total_seconds .= ".".$milli;
         $media_length = strval($total_seconds);
         return $media_length;
+    }
+    
+    function generate_random_string($length = 10) {
+        //Can set length by making length a fixed number
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
     }
     
     
@@ -38,7 +55,7 @@
     //If audio, rename into mp3. If video, rename into mp4.
     if ($media_type==1) {
         
-        $caf = basename($_FILES['uploadedfile']['name']);
+        $caf = create_random_name(basename($_FILES['uploadedfile']['name']));
         $mp3 = replace_extension($caf, mp3);
         
         //Variables to feed into ffmpeg commands
@@ -51,7 +68,7 @@
         
     } else if ($media_type==2) {
         
-        $video = basename($_FILES['uploadedfile']['name']);
+        $video = create_random_name(basename($_FILES['uploadedfile']['name']));
         //$ext = end(explode(".", $video));
         $mp4 = replace_extension($video, mp4);
 

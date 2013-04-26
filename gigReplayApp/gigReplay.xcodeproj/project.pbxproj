@@ -77,6 +77,8 @@
 		CE48574D171FA96400837B88 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485741171FA96400837B88 /* ASIInputStream.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CE48574E171FA96400837B88 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485743171FA96400837B88 /* ASINetworkQueue.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CE48574F171FA96400837B88 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485746171FA96400837B88 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE78A3E3172942F800B80615 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CE78A3E2172942F800B80615 /* icon.png */; };
+		CE78A3E5172943B800B80615 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE78A3E4172943B800B80615 /* icon@2x.png */; };
 		CE868454171FFBE100B82638 /* record-button.png in Resources */ = {isa = PBXBuildFile; fileRef = CE868453171FFBE100B82638 /* record-button.png */; };
 		CED49A88171EACCA00AF0B00 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */; };
 		CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */; };
@@ -189,6 +191,8 @@
 		CE485744171FA96400837B88 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIProgressDelegate.h; path = gigReplay/ASIProgressDelegate.h; sourceTree = "<group>"; };
 		CE485745171FA96400837B88 /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = gigReplay/Reachability.h; sourceTree = "<group>"; };
 		CE485746171FA96400837B88 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = gigReplay/Reachability.m; sourceTree = "<group>"; };
+		CE78A3E2172942F800B80615 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		CE78A3E4172943B800B80615 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		CE868453171FFBE100B82638 /* record-button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "record-button.png"; sourceTree = "<group>"; };
 		CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -281,6 +285,8 @@
 		2AE35C47170020BF000993E6 = {
 			isa = PBXGroup;
 			children = (
+				CE78A3E4172943B800B80615 /* icon@2x.png */,
+				CE78A3E2172942F800B80615 /* icon.png */,
 				2AF711D417140A6C00A89BC5 /* lipsync app icon white.psd */,
 				2A13AD811712A5E50009ACAE /* MediaRecording */,
 				2AD2DBEC17088E0000E00478 /* APIs */,
@@ -545,6 +551,8 @@
 				CE485722171FA8C600837B88 /* CustomCell.xib in Resources */,
 				CE485730171FA92A00837B88 /* SettingsViewController.xib in Resources */,
 				CE868454171FFBE100B82638 /* record-button.png in Resources */,
+				CE78A3E3172942F800B80615 /* icon.png in Resources */,
+				CE78A3E5172943B800B80615 /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

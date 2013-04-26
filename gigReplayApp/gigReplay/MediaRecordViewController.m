@@ -74,7 +74,8 @@ bool isRecording;
 #pragma mark - Video Recorder Methods
 
 //StartVideoCaptureMethods
--(BOOL)startCameraController:(UIViewController *)controller usingDelegate:(id)delegate{
+- (BOOL)startCameraController:(UIViewController *)controller usingDelegate:(id)delegate
+{
     
     if (([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera] == NO)
         || (delegate == nil)
@@ -93,7 +94,7 @@ bool isRecording;
     cameraUI.allowsEditing = NO;
     //At this point, it should be taken from the options
     //cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeMedium;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -102,6 +103,99 @@ bool isRecording;
     return YES;
 }
 
+-(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    //This is in case the user becomes snap happy, so we need to record the URL and the startTime of the last video
+    double thisVideoStartTime = startTime;
+    
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
+    {
+        
+        UIAlertView *saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress" message:@"Do not close app until save is complete" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [saveAlert show];
+        //Save the video
+        NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        self.movieURL = capturedVideoURL;
+        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
+        [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
+         {
+             if (exportSession.status == AVAssetExportSessionStatusCompleted)
+             {
+                 UIAlertView *saveComplete = [[UIAlertView alloc] initWithTitle:@"Save Completed" message:@"File has been saved and is ready for upload." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 //Save the details into the database
+                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
+                 
+                 //[self RemoveRecordedVideoFromHD];
+                 //NSLog(@"local path %@",[outputURL path]);
+             }
+             else
+             {
+                 printf("saving to document directory  error\n");
+                 //[self RemoveRecordedVideoFromHD];
+                 
+             }
+         }];
+        
+        
+        
+        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self,@selector(video:didFinishSavingWithError:contextInfo:), nil);
+    }
+    
+    
+    
+}
+
+- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
+                                   outputURL:(NSURL*)outputURL
+                                     handler:(void (^)(AVAssetExportSession*))handler   //Used to compress the video
+{
+    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+    exportSession.outputURL = outputURL;
+    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+         
+     }];
+}
+
+- (NSURL*)getLocalFilePathToSave   //Calls when recorded video saved to document library
+{
+    NSString *todayString = [[NSDate date] description];
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    // NSString *currentPath;
+    // currentPath = [filemgr currentDirectoryPath];
+    NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *docsDir = [dirPaths objectAtIndex:0];
+    NSString *newDir = [docsDir stringByAppendingPathComponent:@"LIPSYNC_VIDEO"];
+    // NSLog(@"%@",newDir);
+    
+    NSString *m_strFilepath  = [[NSString alloc]initWithString:newDir];
+    
+    if ([filemgr fileExistsAtPath:m_strFilepath])
+    {
+        // NSLog(@"hai");
+    }
+    
+    else
+    {
+        [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.MOV",newDir,todayString];
+    
+    if (m_strFilepath!=Nil)
+    {
+        m_strFilepath=Nil;
+    }
+    
+    NSURL *videopath=[NSURL fileURLWithPath:videoFilePath];
+    return videopath;
+}
+
+/* This was the original code.
 //This method is required as it is a callback method when videoController is done with videoRecording else it doesnt know
 //what to do with the recorded video
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -123,6 +217,7 @@ bool isRecording;
     }
     
 }
+*/
 
 -(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
     if (error) {
@@ -138,34 +233,8 @@ bool isRecording;
                                                        delegate:self
                                               cancelButtonTitle:@"Continue"
                                               otherButtonTitles:nil];
-        [self saveVideo];
         [alert show];
-        //Only insert it into the database here, because the user hasn't said yes
-        //Might move it as a UIAlertView delegate method to improve performance
-        //[self insertIntoDatabase];
     }
-}
-
--(void) saveVideo
-{
-    NSFileManager *filemgr = [NSFileManager defaultManager];
-    // NSString *currentPath;
-    // currentPath = [filemgr currentDirectoryPath];
-    NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-    NSString *docsDir = [dirPaths objectAtIndex:0];
-    NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_VIDEO"];
-    NSLog(@"%@",newDir);
-    if ([filemgr createDirectoryAtPath:newDir withIntermediateDirectories:nil attributes:nil error:nil])
-    {
-        // Failed to create directory
-    }
-    NSString *aName = [NSString stringWithFormat:@"/GIGREPLAY_VIDEO/%@.mp4",[[NSDate date] description]];
-    NSString *videoFilePath = [docsDir stringByAppendingPathComponent:aName];
-    NSData *videoData = [NSData dataWithContentsOfURL:movieURL];
-    [videoData writeToFile:videoFilePath atomically:YES];
-    NSLog(@"%@",videoFilePath);
-    movieURL = [NSURL fileURLWithPath:videoFilePath];
-    [self insertIntoDatabase];
 }
 
 -(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
@@ -227,10 +296,10 @@ bool isRecording;
 
 #pragma mark - Upload tracking methods
 
-- (void)insertIntoDatabase
+- (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %i, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, movieURL, startTime];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %i, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, videoURL, videoStartTime];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }
