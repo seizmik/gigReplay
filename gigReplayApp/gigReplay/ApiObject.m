@@ -782,6 +782,7 @@ didStartElement:(NSString *)elementName
         NSString *expirationDate=[expirationDetails objectAtIndex:0];
         
         
+        NSLog(@"%@ This is the session_id response",self.Session_Id);
         
         self.CreatedUserName=appDelegateObject.CurrentUserName;
         NSString *query=[NSString stringWithFormat:@"insert into Session_Details ('Time','Date','User_ID','Session_Name','Session_Code','User_Name','Session_Expiration_Date','Session_Expiration_Time','Session_Has_Expired') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@')",Time,Date,self.User_ID,self.Scene_Name,self.SessionCode,self.CreatedUserName,expirationDate,expirationTime,self.sessionExpirationStatus];
