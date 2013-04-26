@@ -45,8 +45,8 @@
 												 name:@"JoinSearchParsingCompleted"
 											   object:nil];
     
-    UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
-    [self.view addGestureRecognizer:tapToDismiss];
+//    UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
+//    [self.view addGestureRecognizer:tapToDismiss];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)RemoveLoadingView:(NSNotification *)notification
@@ -78,10 +78,10 @@
     
     if ([status isEqualToString:@"Success"])
     {
-        //[mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
-        //[self presentViewController:mediaObject animated:YES completion:nil];
-        MediaRecordViewController *recordVC = [[MediaRecordViewController alloc] init];
-        [self.navigationController pushViewController:recordVC animated:YES];
+//        [mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
+//        [self presentViewController:mediaObject animated:YES completion:nil];
+        
+        [self.navigationController pushViewController:mediaObject animated:YES];
        
         
     }
@@ -235,9 +235,17 @@
     
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Do some stuff when the row is selected
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSArray *Details=[sessionDetailsHolder objectAtIndex:indexPath.row];
+    NSString *Session_Code= [Details objectAtIndex:5];
+    NSString *userID=[Details objectAtIndex:1];
+    NSString *SessionName=[Details objectAtIndex:4];
+    NSString  *createdby=[Details objectAtIndex:0];
+    appDelegateObject.CurrentSession_Code=Session_Code;
+    appDelegateObject.CurrentSession_Name=SessionName;
+    [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
+    
 }
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 150;
@@ -247,77 +255,77 @@
 /////////////////////End of TableViewCell Implementation////////////////////////
 
 //////////////// Joining Sessions Implementation methods////////////////////////
--(void)JoinToSessions:(NSString *)session_pass
-{
-    
-  
-    NSArray *Details=[sessionDetailsHolder objectAtIndex:currentSelectedSession];
-    NSString *Session_Code= [Details objectAtIndex:5];
-    
-    //PROBLEM LIES HERE WHEN POSTING TO SERVER USERID CANT BE 0!
-    ////////////// //////////// //////////// /////////// ////////////
-    
-    NSString *userID=[Details objectAtIndex:1];
-    NSString *SessionName=[Details objectAtIndex:4];
-    NSString  *createdby=[Details objectAtIndex:0];
-    
-    if ([Session_Code isEqualToString:session_pass]) {
-        appDelegateObject.CurrentSession_Code=Session_Code;
-        appDelegateObject.CurrentSession_Name=SessionName;
-        [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
-        
-    }
-    
-    else
-    {
-        [self ShowAlertMessage:@"Error" Message:@"Session Code Doesn't Match"];
-    }
-}
--(IBAction)start:(id)sender
-{
-    if (!SelectionButtonSeleted)
-    {
-        [self ShowAlertMessage:@"Warning" Message:@"Please select a session to start"];
-        return;
-    }
-    else
-    {
-        [self CheckPasswordAndJoinToSession];
-    }
-    
-    
-}
--(void)CheckPasswordAndJoinToSession
-{
-    
-    [self showAlertWithTextField];
-    
-    
-}
--(void)showAlertWithTextField{
-    UIAlertView* dialog = [[UIAlertView alloc] initWithTitle:@"SessionCode Needed" message:@"Enter SessionCode" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Join", nil];
-    [dialog setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    
-    
-    [dialog show];
-    
-}
-
-
--(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-            if (buttonIndex == 1)
-        {
-            
-            NSString *UserTypedSessioncode=[[alertView textFieldAtIndex:0]text];
-            [self JoinToSessions:UserTypedSessioncode];
-        }
-        
-        
-    
-    
-    
-}
+//-(void)JoinToSessions:(NSString *)session_pass
+//{
+//    
+//  
+//    NSArray *Details=[sessionDetailsHolder objectAtIndex:currentSelectedSession];
+//    NSString *Session_Code= [Details objectAtIndex:5];
+//    
+//    //PROBLEM LIES HERE WHEN POSTING TO SERVER USERID CANT BE 0!
+//    ////////////// //////////// //////////// /////////// ////////////
+//    
+//    NSString *userID=[Details objectAtIndex:1];
+//    NSString *SessionName=[Details objectAtIndex:4];
+//    NSString  *createdby=[Details objectAtIndex:0];
+//    
+//    if ([Session_Code isEqualToString:session_pass]) {
+//        appDelegateObject.CurrentSession_Code=Session_Code;
+//        appDelegateObject.CurrentSession_Name=SessionName;
+//        [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
+//        
+//    }
+//    
+//    else
+//    {
+//        [self ShowAlertMessage:@"Error" Message:@"Session Code Doesn't Match"];
+//    }
+//}
+//-(IBAction)start:(id)sender
+//{
+//    if (!SelectionButtonSeleted)
+//    {
+//        [self ShowAlertMessage:@"Warning" Message:@"Please select a session to start"];
+//        return;
+//    }
+//    else
+//    {
+//        [self CheckPasswordAndJoinToSession];
+//    }
+//    
+//    
+//}
+//-(void)CheckPasswordAndJoinToSession
+//{
+//    
+//    [self showAlertWithTextField];
+//    
+//    
+//}
+//-(void)showAlertWithTextField{
+//    UIAlertView* dialog = [[UIAlertView alloc] initWithTitle:@"SessionCode Needed" message:@"Enter SessionCode" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Join", nil];
+//    [dialog setAlertViewStyle:UIAlertViewStylePlainTextInput];
+//    
+//    
+//    [dialog show];
+//    
+//}
+//
+//
+//-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+//{
+//            if (buttonIndex == 1)
+//        {
+//            
+//            NSString *UserTypedSessioncode=[[alertView textFieldAtIndex:0]text];
+//            [self JoinToSessions:UserTypedSessioncode];
+//        }
+//        
+//        
+//    
+//    
+//    
+//}
 
 
 #pragma mark End of join session methods

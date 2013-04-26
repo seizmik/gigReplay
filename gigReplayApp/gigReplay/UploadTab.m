@@ -231,7 +231,7 @@
     }
     
     //Set up the URL we are posting to
-    NSURL *uploadURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/upload_file.php"];
+    NSURL *uploadURL = [NSURL URLWithString:@"http://wwws.lipsync.xminds.com/api/autoedit"];
     
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];

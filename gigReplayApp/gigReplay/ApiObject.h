@@ -27,7 +27,7 @@
      ASIHTTPRequest   *ASIHTTPrequest;
         NSString *Session_Name;
     /******* SESSION CREATION DETAILS ********************************/
-    
+    BOOL IsId;
     BOOL IsCode;
     BOOL IsCreatedDetails;
     BOOL ISCreatedUser;
@@ -48,7 +48,7 @@
     
     /******* SEARCH  SESSION DETAILS ************************************/
     
-     BOOL                SessionPrefixFound;
+   
     BOOL                 IsCodeFoundInSearch;
     BOOL                 IsSessionNameFoundInSearch;
     BOOL                 IsSessionCreatedInfoInSearch;
@@ -71,9 +71,42 @@
     
     
     //******* SEARCH  SESSION DETAILS ************************************/
+    /******* OPEN SESSION DETAILS ************************************/
+    
+    BOOL                SessionPrefixFound;
+    BOOL                CodeFound;
+    BOOL                DateFound;
+    BOOL                Issession_name;
+    BOOL                Iscreated_user_Name;
+    BOOL                Iscreated_user_id;
+    BOOL                IsCreated_timeandDate;
+    
+    BOOL                Iscreated_Date;
+    
+    
+    BOOL                isSessionExpiryElement;
+    BOOL                isSessionExpiryDateAndTime;
+    BOOL                isSessionExpiryStatus;
+    
+    NSString            *SessionExpiryDateAndTime;
+    NSString            *SessionExpiryStatus;
+    
+    NSString            *SessionCreatedDateForOpen;
+    NSString            *created_useridFor_Open;
+    NSString            *Created_UserName_Open;
+    NSString            *Created_SessionCode_Open;
+    NSString            *Created_SessionName_Open;
+    
+    NSMutableArray      *OpenSessionDetailsHolder;
+    NSMutableArray      *SearchSessionDetailsHolder;
+    
+    NSString            *task;
+    
+    /******* OPEN SESSION DETAILS ***********************************/
 }
 @property (nonatomic, retain) NSString       *Session_Name;
 @property (nonatomic, retain)  NSString *SessionCode;
+@property (nonatomic, retain)  NSString *Session_Id;
 @property (nonatomic, retain)  NSString *CreatedUserName;
 @property(nonatomic,strong)ApiObject *apiWrapperObject;
 @property (nonatomic, retain) NSString       *Scene_Name;
@@ -86,6 +119,7 @@
 @property (nonatomic, retain)  NSString *SessionExpiryStatus;
 @property (nonatomic, retain)  NSString *hasExpiredString;
 @property (nonatomic, retain)NSMutableArray *SearchSessionDetailsHolder;
+@property (nonatomic, retain)NSMutableArray *OpenSessionDetailsHolder;
 
 @property (nonatomic, retain)NSString             *SessionCodeFromSearch;
 @property (nonatomic, retain)NSString             *SessionNameFromSearch;
@@ -96,7 +130,11 @@
 @property (nonatomic, retain)NSString             *SessionExpiryStatusFromSearch;
 @property (nonatomic, retain)NSString             *SessionCreatedUserNameFromSearch;
 
-
+@property (nonatomic, retain)NSString            *SessionCreatedDateForOpen;
+@property (nonatomic, retain)NSString            *created_useridFor_Open;
+@property (nonatomic, retain)NSString            *Created_UserName_Open;
+@property (nonatomic, retain)NSString            *Created_SessionCode_Open;
+@property (nonatomic, retain)NSString            *Created_SessionName_Open;
 
 
 -(void)SendNotificationsAfterUserRegistration:(NSString*)Status;
@@ -108,5 +146,5 @@
 -(void)postCreateSessionDetails:(NSString *)userid SessionName:(NSString *)sessioname APILink:(NSString *)Link APIIdentifier:(int)Identifier;
 -(void)postJoinSessionDetails:(NSString *)userid SesssionName:(NSString *)sessionname  SessionID:(NSString *)sessionid Created_User_Id:(NSString *)Created_User_ID APIIdentifier:(int)Identifier;
 -(void)SearchSessionDetails:(NSString *)Username  SessionName:(NSString *)sessionName APIIdentifier:(int)Identifier;
-
+-(void)OpenSessionDetails:(int)Userid WithSession:(NSString*)SessionID APIIdentifier:(int)Identifier;
 @end

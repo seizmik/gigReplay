@@ -10,7 +10,7 @@
 
 
 @implementation ApiObject;
-@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString;
+@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen;
 
 //REST method of POST facebook details to WebURL(online DB)
 -(void)postUserDetails:(NSString *)facebookId userEmail:(NSString *)email userName:(NSString *)Username facebookToken:(NSString *)fbtoken APIIdentifier:(int)Identifier
@@ -96,6 +96,22 @@
     [request startAsynchronous];
     
 }
+-(void)OpenSessionDetails:(int)Userid WithSession:(NSString*)SessionID APIIdentifier:(int)Identifier
+{
+    OpenSessionDetailsHolder=[[NSMutableArray alloc] init];
+    ResponseIdentifier=API_IDENTIFIER_OPEN_SESSION;
+    
+    
+    NSString *UrlString=[NSString stringWithFormat:COMMON_SERVER_URL @"open/%d?format=xml",Userid];
+    //  NSLog(@"%@",UrlString);
+    NSURL    *URL=[NSURL URLWithString:UrlString];
+    ASIHTTPrequest = [ASIHTTPRequest requestWithURL:URL];
+    ASIHTTPrequest.requestMethod=@"GET";
+    [ASIHTTPrequest setDelegate:self];
+    [ASIHTTPrequest startAsynchronous];
+    
+}
+
 
 
 
@@ -157,9 +173,9 @@
 }
 - (void)parser:(NSXMLParser *)parser
 didStartElement:(NSString *)elementName
-namespaceURI:(NSString *)namespaceURI
-qualifiedName:(NSString *)qualifiedName
-attributes:(NSDictionary *)attributeDict
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qualifiedName
+    attributes:(NSDictionary *)attributeDict
 {
     if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
     {
@@ -167,10 +183,11 @@ attributes:(NSDictionary *)attributeDict
         {
             IsUserID=TRUE;
         }
-     
+        
     }
     else if(ResponseIdentifier==API_IDENTIFIER_SESSION_CREATION)
     {
+        
         
         if([elementName isEqualToString:@"code"])
         {
@@ -206,7 +223,10 @@ attributes:(NSDictionary *)attributeDict
                 IssessionHasExpired=TRUE;
             }
             
-            
+        }
+        if([elementName isEqualToString:@"session_id"])
+        {
+            IsId=TRUE;
         }
     }
     else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
@@ -282,27 +302,81 @@ attributes:(NSDictionary *)attributeDict
         }
         
     }
-
-
+    else if (ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
+    {
+        //NSLog(@"elemnt %@",elementName);
+        if ([elementName hasPrefix:@"session_"])
+        {
+            SessionPrefixFound=TRUE;
+        }
+        if (SessionPrefixFound)
+        {
+            if ([elementName isEqualToString:@"code"])
+            {
+                CodeFound=TRUE;
+            }
+            if ([elementName isEqualToString:@"session_name"])
+            {
+                Issession_name=TRUE;
+            }
+            if ([elementName isEqualToString:@"created_time"])
+            {
+                IsCreated_timeandDate=TRUE;
+            }
+            if (IsCreated_timeandDate)
+            {
+                if ([elementName isEqualToString:@"date"])
+                {
+                    Iscreated_Date=TRUE;
+                    
+                }
+                
+            }
+            
+            if ([elementName isEqualToString:@"created_user_name"])
+            {
+                Iscreated_user_Name=TRUE;
+            }
+            if ([elementName isEqualToString:@"sessionexpirationtime"])
+            {
+                isSessionExpiryElement=TRUE;
+            }
+            if (isSessionExpiryElement)
+            {
+                if ([elementName isEqualToString:@"date"])
+                {
+                    isSessionExpiryDateAndTime=TRUE;
+                }
+                if ([elementName isEqualToString:@"has_expired"])
+                {
+                    isSessionExpiryStatus=TRUE;
+                }
+                
+            }
+            
+            
+            
+            
+        }
+    }
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
 {
     
     
-     if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
+    if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
     {
         if (IsUserID)
         {
             self.User_ID=[string intValue];
-              NSLog(@"%d user_id parse in!",User_ID);
+            NSLog(@"%d user_id parse in!",User_ID);
         }
-      
+        
         
     }
     else if (ResponseIdentifier==API_IDENTIFIER_SESSION_CREATION)
     {
-        
         
         if (IsCode)
         {
@@ -329,6 +403,11 @@ attributes:(NSDictionary *)attributeDict
                 self.sessionExpirationStatus=string;
             }
             
+            
+        }
+        
+        if(IsId){
+            self.Session_Id=string;
             
         }
         
@@ -395,28 +474,70 @@ attributes:(NSDictionary *)attributeDict
             
         }
     }
-
+    else if (ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
+    {
+        if (SessionPrefixFound)
+        {
+            if (CodeFound)
+            {
+                self.Created_SessionCode_Open=string;
+                
+            }
+            if (Issession_name)
+            {
+                self.Created_SessionName_Open=string;
+                
+            }
+            if (Iscreated_Date)
+            {
+                self.SessionCreatedDateForOpen=string;
+                
+            }
+            if (Iscreated_user_Name)
+            {
+                Created_UserName_Open=string;
+                
+            }
+            
+            if (isSessionExpiryElement)
+            {
+                if (isSessionExpiryDateAndTime)
+                {
+                    self.SessionExpiryDateAndTime=string;
+                    
+                }
+                if (isSessionExpiryStatus)
+                {
+                    self.SessionExpiryStatus=string;
+                    
+                }
+            }
+        }
+    }
+    
+    
 }
 
 - (void)parser:(NSXMLParser *)parser
-didEndElement:(NSString *)elementName
-namespaceURI:(NSString *)namespaceURI
-qualifiedName:(NSString *)qName
+ didEndElement:(NSString *)elementName
+  namespaceURI:(NSString *)namespaceURI
+ qualifiedName:(NSString *)qName
 {
     
-
-  if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
+    
+    if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
     {
         if ([elementName isEqualToString:@"id"])
         {
             IsUserID=FALSE;
             
         }
-       
+        
     }
     
     else if (ResponseIdentifier==API_IDENTIFIER_SESSION_CREATION)
     {
+        
         if (IsCode)
         {
             IsCode=FALSE;
@@ -440,6 +561,9 @@ qualifiedName:(NSString *)qName
         if (IssessionExpirationElement)
         {
             IssessionHasExpired=FALSE;
+        }
+        if(IsId){
+            IsId=FALSE;
         }
         
         
@@ -507,7 +631,58 @@ qualifiedName:(NSString *)qName
         
         
     }
-
+    
+    else if (ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
+    {
+        if (SessionPrefixFound)
+        {
+            if (([elementName isEqualToString:@"code"])&&(CodeFound))
+            {
+                CodeFound=FALSE;
+            }
+            if (([elementName isEqualToString:@"session_name"])&&(Issession_name))
+            {
+                Issession_name=FALSE;
+            }
+            if (([elementName isEqualToString:@"date"])&&(Iscreated_Date))
+            {
+                Iscreated_Date=FALSE;
+                IsCreated_timeandDate=FALSE;
+            }
+            if (([elementName isEqualToString:@"created_user_name"])&&(Iscreated_user_Name))
+            {
+                Iscreated_user_Name=FALSE;
+            }
+            if (([elementName isEqualToString:@"date"])&&(isSessionExpiryElement))
+            {
+                isSessionExpiryDateAndTime=FALSE;
+            }
+            if (([elementName isEqualToString:@"has_expired"])&&(isSessionExpiryElement))
+            {
+                isSessionExpiryStatus=FALSE;
+                isSessionExpiryElement=FALSE;
+            }
+            
+            if (([elementName hasPrefix:@"session_"])&& (SessionPrefixFound)&&(![elementName isEqualToString:@"session_name"]))
+            {
+                
+                NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,nil];
+                [self.OpenSessionDetailsHolder addObject:Details];
+                
+                SessionPrefixFound=FALSE;
+                
+                
+            }
+            
+            
+            
+        }
+        
+        
+        
+        
+    }
+    
 }
 
 - (void) doParse:(NSData *)data
@@ -534,13 +709,13 @@ qualifiedName:(NSString *)qName
         
         if (ResponseIdentifier==API_IDENTIFIER_SYNC)
         {
-      
+            
             [self SendNotificationsAfterSyncronisation:@"Success"];
             
         }
         else if (ResponseIdentifier==API_IDENTIFIER_USER_REG)
         {
-           [self UpdateUserDetailsTableWithUserID];
+            [self UpdateUserDetailsTableWithUserID];
             
         }
         else if (ResponseIdentifier==API_IDENTIFIER_SESSION_CREATION)
@@ -548,6 +723,11 @@ qualifiedName:(NSString *)qName
             [self SetSessionDetailsToDataBase];
             
         }
+        else if(ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
+        {
+            [self SetOpenedSessionToDataBase];
+        }
+        
         else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
         {
             [self SetJoinDetailsToDataBase];
@@ -561,8 +741,7 @@ qualifiedName:(NSString *)qName
     ResponseTimeData=nil;
     
     
-}
--(void)SendNotificationsAfterSyncronisation:(NSString*)Status
+}-(void)SendNotificationsAfterSyncronisation:(NSString*)Status
 {
     NSDictionary* dict = [NSDictionary dictionaryWithObject:
                           Status
@@ -689,6 +868,57 @@ qualifiedName:(NSString *)qName
         [self SendNotificationsAfterJoinSearchAPI:@"Success"];
     }
     
+    
+}
+-(void)SetOpenedSessionToDataBase
+{
+    if ([self.OpenSessionDetailsHolder count]==0)
+    {
+        // [self SendNotificationsAfterOpenAPI:@"Failed"];
+        return;
+    }
+    else
+    {
+        NSString *DeleteQuery=@"Delete from OpenSession_Details";
+        [appDelegateObject.databaseObject deleteFromDatabase:DeleteQuery];
+        
+        for (int i=0; i<[self.OpenSessionDetailsHolder count]; i++)
+        {
+            
+            NSArray *details=[self.OpenSessionDetailsHolder objectAtIndex:i];
+            NSString *Session_ID=[details objectAtIndex:0];
+            NSString *DateDetails=[details objectAtIndex:2];
+            NSArray *InfoSplit=[DateDetails  componentsSeparatedByString:@" "];
+            NSString *Time=[InfoSplit objectAtIndex:1];
+            NSString *Date=[InfoSplit objectAtIndex:0];
+            NSString *session_Name=[details objectAtIndex:1];
+            NSString *Created_Name=[details objectAtIndex:3];
+            NSString *Expirydetails=[details objectAtIndex:4];
+            NSArray *InfoSplitForExpiry=[Expirydetails  componentsSeparatedByString:@" "];
+            NSString *ExpiryTime=[InfoSplitForExpiry objectAtIndex:1];
+            NSString *ExpiryDate=[InfoSplitForExpiry objectAtIndex:0];
+            NSString *ExpiryStatus=[details objectAtIndex:5];
+            
+            
+            
+            
+            NSString *query=[NSString stringWithFormat:@"insert into OpenSession_Details ('Time','Date','User_ID','Session_Code','Session_Name','Created_User_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@')",Time,Date,appDelegateObject.CurrentUserID,Session_ID,session_Name,Created_Name,ExpiryDate,ExpiryTime,ExpiryStatus];
+            
+            
+            [appDelegateObject.databaseObject insertIntoDatabase:query];
+        }
+        [self SendNotificationsAfterOpenAPI:@"Success"];
+    }
+    
+    
+}
+-(void)SendNotificationsAfterOpenAPI:(NSString*)Status
+{
+    NSDictionary* dict = [NSDictionary dictionaryWithObject:
+                          Status
+                                                     forKey:@"Status"];
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:@"OpenSessionDetailsCompleted" object:self userInfo:dict];
     
 }
 

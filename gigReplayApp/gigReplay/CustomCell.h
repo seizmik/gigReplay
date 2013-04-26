@@ -22,7 +22,7 @@
 @property (strong, nonatomic) IBOutlet FBProfilePictureView *fbProfilePictureView;
 
 @property (strong, nonatomic) IBOutlet UIButton *sceneSelectionButton;
-- (IBAction)pressedButton:(id)sender;
+
 
 
 

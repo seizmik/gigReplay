@@ -7,6 +7,24 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CustomCell.h"
+#import "ApiObject.h"
+#import "AppDelegate.h"
+#import "SQLdatabase.h"
+#import "Common.h"
+#import "MediaRecordViewController.h"
 
-@interface OpenSessionViewController : UIViewController
+@interface OpenSessionViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
+    NSMutableArray      *OpenedSessionDetailsHolder;
+    BOOL                 ViewWillAppeared;
+    MediaRecordViewController *mediaObject;
+}
+
+@property(strong,nonatomic) NSMutableArray  *OpenedSessionDetailsHolder;
+@property (strong, nonatomic) IBOutlet UITableView *openedSessionListTable;
+@property(strong,nonatomic)ApiObject *apiWrapperObject;
+
+
+
+
 @end
