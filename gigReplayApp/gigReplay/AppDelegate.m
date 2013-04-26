@@ -222,7 +222,7 @@
     double meanLag, meanTravelTime, meanDiffWithServer, meanServerTime, variance, serverVariance;
     double jitter=1000;
     
-    while (jitter > 0.015 && [diffArray count] < 9) { //If the jitter is not low enough, it won't take the time difference
+    while (jitter > 0.015) { //If the jitter is not low enough, it won't take the time difference
         
         //Reset the array
         lagArray = nil;

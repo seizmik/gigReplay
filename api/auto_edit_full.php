@@ -190,8 +190,10 @@
                     $backup_audio_exists = $backup_audio_tracks[$j];
                 }
             }
-            $duration_check = $main_audio_details['start_time'] - $current_time;
+            $duration_check = $main_audio['start_time'] - $current_time;
             $duration = seek_to_check($backup_audio_exists, $duration_check);
+            
+            echo "Duration is ", $duration, "<br/>";
             
             //Create the cut_array
             $cut_details['src'] = generate_filepath($backup_audio_exists['media_url']);
@@ -325,7 +327,7 @@
 //End function list--------------------------------------------------------
     
     //Establish the session that we want to make the video for
-    $session_id = 103; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
+    $session_id = 99; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
     $video_array = array();
     
     //First query the database and get all the details

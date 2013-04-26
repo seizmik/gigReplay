@@ -147,7 +147,7 @@
             [self removeFile:fileDetails];
         }
         
-        NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE id=%i", fileDetails.entryNumber];
+        NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=1 WHERE id=%i", fileDetails.entryNumber];
         while (![dbObject updateDatabase:strQuery]) {
             NSLog(@"Retrying...");
         }
@@ -173,7 +173,7 @@
 {
     //Initialise this entire thing by calling upon all the files that have not been uploaded
     dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = @"SELECT * FROM upload_tracker WHERE upload_status=1";
+    NSString *strQuery = @"SELECT * FROM upload_tracker WHERE upload_status=0";
     uploadArray = [NSMutableArray array];
     uploadArray = [dbObject uploadCheck:strQuery];
     
@@ -208,32 +208,14 @@
     } else if (fileDetails.contentType == 2) {
         uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.mp4", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber];
         uploadFileType = @"video/mp4";
-        
-        /*
-        //Set throttle limits for large files
-        // Will limit bandwidth to the predefined default for mobile applications when WWAN is active.
-        // Wi-Fi requests are not affected
-        // This method is only available on iOS
-        [ASIHTTPRequest setShouldThrottleBandwidthForWWAN:YES];
-        
-        // Will throttle bandwidth based on a user-defined limit when when WWAN (not Wi-Fi) is active
-        // This method is only available on iOS
-        [ASIHTTPRequest throttleBandwidthForWWANUsingLimit:14800];
-        
-        // Will prevent requests from using more than the predefined limit for mobile applications.
-        // Will limit ALL requests, regardless of whether Wi-Fi is in use or not - USE WITH CAUTION
-        [ASIHTTPRequest setMaxBandwidthPerSecond:ASIWWANBandwidthThrottleAmount];
-        
-        // Log how many bytes have been received or sent per second (average from the last 5 seconds)
-        //NSLog(@"%li",[ASIHTTPRequest averageBandwidthUsedPerSecond]);
-        */
     } else {
         //File is corrupted. Need to do something with the file when returned this.
         return 0;
     }
     
     //Set up the URL we are posting to
-    NSURL *uploadURL = [NSURL URLWithString:@"http://wwws.lipsync.xminds.com/api/autoedit"];
+    //NSURL *uploadURL = [NSURL URLWithString:@"http://wwws.lipsync.xminds.com/api/autoedit"];
+    NSURL *uploadURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/upload_file.php"];
     
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];

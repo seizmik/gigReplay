@@ -10,7 +10,7 @@
     {
         $random_string = generate_random_string();
         $info = pathinfo($filename);
-        return $info['filename'] . $random_string . '.' . $info['extension'];
+        return $info['filename'] . '_' . $random_string . '.' . $info['extension'];
     }
 
     function calculate_content_length($media_path)

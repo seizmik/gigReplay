@@ -112,53 +112,69 @@ bool isRecording;
     //This is in case the user becomes snap happy, so we need to record the URL and the startTime of the last video
     double thisVideoStartTime = startTime;
     
+    
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
     {
-        
-        UIAlertView *saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress" message:@"Do not close app until save is complete" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        /*
+        UIAlertView *saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress"
+                                                            message:@"Do not close app until save is complete. This may take several minutes"
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Continue"
+                                                  otherButtonTitles:nil];
         [saveAlert show];
         //Save the video
         NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         self.movieURL = capturedVideoURL;
-        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
+        //NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
+        
         [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
          {
              if (exportSession.status == AVAssetExportSessionStatusCompleted)
              {
-                 UIAlertView *saveComplete = [[UIAlertView alloc] initWithTitle:@"Save Completed" message:@"File has been saved and is ready for upload." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 //UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Completed" message:@"File has been saved and is ready for upload." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 //[compressComplete show];
                  //Save the details into the database
                  [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
+                 [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+                 cameraRecButton.enabled = YES;
                  
                  //[self RemoveRecordedVideoFromHD];
                  //NSLog(@"local path %@",[outputURL path]);
              }
              else
              {
-                 printf("saving to document directory  error\n");
+                 UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 [compressError show];
                  //[self RemoveRecordedVideoFromHD];
              }
-         }];
+         }];*/
+        [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime];
         UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     }
 }
 
 - (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
     if (error) {
-        /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                         message:@"Failed to save video"
                                                        delegate:nil
                                               cancelButtonTitle:@"Continue"
                                               otherButtonTitles:nil];
-        [alert show];*/
+        [alert show];
+        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+        cameraRecButton.enabled = YES;
     } else {
-        NSLog(@"Successful save to camera roll");
-        /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved"
+        NSLog(@"Successfully saved to the camera roll");
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved"
                                                         message:@"Video saved to your camera roll"
                                                        delegate:self
                                               cancelButtonTitle:@"Continue"
                                               otherButtonTitles:nil];
-        [alert show];*/
+        [alert show];
+        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+        cameraRecButton.enabled = YES;
     }
 }
 
@@ -176,6 +192,8 @@ bool isRecording;
          handler(exportSession);
      }];
 }
+
+
 
 - (NSURL*)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {
@@ -257,13 +275,14 @@ bool isRecording;
         [cameraUI startVideoCapture];
 
     } else {
-        //cameraRecButton.hidden = YES;
+        [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
-        [self getStartTime];
+        //[self getStartTime];
         isRecording = NO;
         [backButton setHidden:NO];
-        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+        [cameraRecButton setTitle:@"Saving" forState:UIControlStateNormal];
+        cameraRecButton.enabled = NO;
     }
     
 }
