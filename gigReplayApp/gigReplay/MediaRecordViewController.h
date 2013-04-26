@@ -23,6 +23,8 @@
 @interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
     UIButton *cameraRecButton;
+    UIButton *backButton;
+    UIButton *helpButton;
     UIView *overlay;
 }
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;

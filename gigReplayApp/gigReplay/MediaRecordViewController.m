@@ -73,7 +73,6 @@ bool isRecording;
 
 #pragma mark - Video Recorder Methods
 
-//StartVideoCaptureMethods
 - (BOOL)startCameraController:(UIViewController *)controller usingDelegate:(id)delegate
 {
     
@@ -89,9 +88,14 @@ bool isRecording;
     cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
     // Displays a control that allows the user to choose movie capture
     cameraUI.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie, nil];
+    cameraUI.videoMaximumDuration = 900;
+    
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
+    cameraUI.showsCameraControls = NO;
+    cameraUI.navigationBarHidden = YES;
+    
     //At this point, it should be taken from the options
     //cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
     cameraUI.videoQuality = UIImagePickerControllerQualityTypeMedium;
@@ -99,7 +103,7 @@ bool isRecording;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
     //4 -overlay added to cameraui
-    cameraUI.cameraOverlayView=overlay;
+    cameraUI.cameraOverlayView = overlay;
     return YES;
 }
 
@@ -133,17 +137,29 @@ bool isRecording;
              {
                  printf("saving to document directory  error\n");
                  //[self RemoveRecordedVideoFromHD];
-                 
              }
          }];
-        
-        
-        
-        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self,@selector(video:didFinishSavingWithError:contextInfo:), nil);
+        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     }
-    
-    
-    
+}
+
+- (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
+    if (error) {
+        /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                        message:@"Failed to save video"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Continue"
+                                              otherButtonTitles:nil];
+        [alert show];*/
+    } else {
+        NSLog(@"Successful save to camera roll");
+        /*UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved"
+                                                        message:@"Video saved to your camera roll"
+                                                       delegate:self
+                                              cancelButtonTitle:@"Continue"
+                                              otherButtonTitles:nil];
+        [alert show];*/
+    }
 }
 
 - (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
@@ -158,7 +174,6 @@ bool isRecording;
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
          handler(exportSession);
-         
      }];
 }
 
@@ -195,87 +210,50 @@ bool isRecording;
     return videopath;
 }
 
-/* This was the original code.
-//This method is required as it is a callback method when videoController is done with videoRecording else it doesnt know
-//what to do with the recorded video
--(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
-    NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
-    movieURL = [info valueForKey:UIImagePickerControllerMediaURL];
-    
-    //What if you don't dismiss? Can still take more videos?
-    [self dismissViewControllerAnimated:YES completion:nil];
-    // Handle a movie capture
-    if (CFStringCompare ((__bridge_retained CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
-        NSString *moviePath = [[info objectForKey:UIImagePickerControllerMediaURL] path];
-        if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(moviePath)) {
-            UISaveVideoAtPathToSavedPhotosAlbum(moviePath, self,
-                                                @selector(video:didFinishSavingWithError:contextInfo:), nil);
-            //Updates movieURL so that we can update the database with it
-            //movieURL = [NSURL URLWithString:moviePath];
-            NSLog(@"Movie path is %@. Start time is %f.", movieURL, startTime);
-        } 
-    }
-    
-}
-*/
-
--(void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
-    if (error) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                        message:@"Failed to save video"
-                                                       delegate:nil
-                                              cancelButtonTitle:@"Continue"
-                                              otherButtonTitles:nil];
-        [alert show];
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Video Saved"
-                                                        message:@"Video saved to your camera roll"
-                                                       delegate:self
-                                              cancelButtonTitle:@"Continue"
-                                              otherButtonTitles:nil];
-        [alert show];
-    }
-}
-
--(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [self dismissViewControllerAnimated:NO completion:nil];
-}
-
 -(void)createOverlay{
+    //Determine size of screen in case of iPhone 5
+    float setY = self.view.bounds.size.height - 50;
+    float setX = self.view.bounds.size.width;
+    
     //overlay = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0)];
-    overlay = [[UIView alloc] initWithFrame:CGRectMake(270,430,320,480)];
+    overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 430, setX, 50)];
+    //NSLog(@"setX is %f. setY is %f", setX, setY);
     overlay.backgroundColor = [UIColor clearColor];
     overlay.opaque = NO;
     
-    /*
-    miksButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    UIImage * saveButtonImage = [UIImage imageNamed:@"mik.png"];
-    [miksButton setBackgroundImage:saveButtonImage forState:UIControlStateNormal];
-    [miksButton setFrame:CGRectMake(0, 0, 60, 40)];
-    [miksButton addTarget:self action:@selector(miksButtonMethod) forControlEvents:UIControlEventTouchUpInside];
-    [overlay addSubview:miksButton];
-     */
+    //Back button
+    backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    [backButton setFrame:CGRectMake(5.0, 0.0, 60.0, 50.0)];
+    [backButton addTarget:self action:@selector(imagePickerControllerDidCancel:) forControlEvents:UIControlEventTouchUpInside];
+    backButton.enabled = YES;
+    [overlay addSubview:backButton];
     
-    //Record Button
-    //cameraRecButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    //UIImage *recButtonImage = [UIImage imageNamed:@"record-button.png"];
-    //[cameraRecButton setBackgroundImage:recButtonImage forState:UIControlStateNormal];
-    //[cameraRecButton setTitle:@"Rec" forState:UIControlStateNormal];
-    //[cameraRecButton setFrame:CGRectMake(110.0, 8.0, 90.0, 40.0)];
+    //Help button
+    helpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [helpButton setTitle:@"Help" forState:UIControlStateNormal];
+    [helpButton setFrame:CGRectMake((setX - 45.0), 0.0, 40.0, 40.0)];
+    [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    helpButton.enabled = YES;
+    [overlay addSubview:helpButton];
     
+    //Recording button
     cameraRecButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    //[cameraRecButton setAlpha:1.0];
-    [cameraRecButton setFrame:CGRectMake(0, 0, 120.0, 50.0)];
-    cameraRecButton.enabled = YES;
+    [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+    [cameraRecButton setFrame:CGRectMake((setX/2 - 60.0), 0, 120.0, 50.0)];
     [cameraRecButton addTarget:self action:@selector(recordButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    cameraRecButton.enabled = YES;
     [overlay addSubview:cameraRecButton];
 }
 
--(void)recordButtonPressed {
+- (void)recordButtonPressed
+{
     
     if (isRecording == NO) {
         //Start recording
         isRecording = YES;
+        [backButton setHidden:YES];
+        [cameraRecButton setTitle:@"STOP" forState:UIControlStateNormal];
         [cameraUI startVideoCapture];
 
     } else {
@@ -284,8 +262,18 @@ bool isRecording;
         [cameraUI stopVideoCapture];
         [self getStartTime];
         isRecording = NO;
+        [backButton setHidden:NO];
+        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
     }
     
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)helpButtonPressed {
+    NSLog(@"HELP!!!");
 }
 
 - (void)getStartTime {

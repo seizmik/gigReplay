@@ -21,11 +21,17 @@
     apiWrapperObject=[[ApiObject alloc]init];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(RemoveLoadingView:)
+											 selector:@selector(removeLoadingView:)
 												 name:@"OpenSessionDetailsCompleted"
 											   object:nil];
     // Do any additional setup after loading the view from its nib.
 }
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self OpenSessionDetailsFromAPI];
+}
+/*
 -(void)viewWillAppear:(BOOL)animated
 {
     
@@ -47,7 +53,8 @@
     ViewWillAppeared=TRUE;
     
 }
-
+*/
+ 
 -(void)OpenSessionDetailsFromAPI
 {
     
@@ -107,8 +114,11 @@
     appDelegateObject.CurrentSession_NameExpired=[Details objectAtIndex:9];
     appDelegateObject.CurrentSession_Expiring_Time=[Details objectAtIndex:8];
     [self showRecorderView];
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
 }
--(void)RemoveLoadingView:(NSNotification*)notification
+-(void)removeLoadingView:(NSNotification*)notification
 {
     NSDictionary *dict = [notification userInfo];
     NSString *status=[dict objectForKey:@"Status"];
