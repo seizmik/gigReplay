@@ -28,8 +28,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
 
-- (IBAction)videoRecord:(id)sender;
-- (IBAction)audioRecord:(UIButton *)sender;
+- (IBAction)videoRecordPressed:(UIButton *)sender;
+- (IBAction)audioRecordPressed:(UIButton *)sender;
 - (IBAction)uploadButtonPressed:(UIButton *)sender;
 
 //StartingVideoCameraMethods

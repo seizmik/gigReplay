@@ -56,11 +56,11 @@ bool isRecording;
 
 #pragma mark - Button actions
 
-- (IBAction)videoRecord:(id)sender {
+- (IBAction)videoRecordPressed:(UIButton *)sender {
     [self startCameraController:self usingDelegate:self];
 }
 
-- (IBAction)audioRecord:(UIButton *)sender {
+- (IBAction)audioRecordPressed:(UIButton *)sender {
     AudioViewController *audioVC = [[AudioViewController alloc] init];
     [self.navigationController pushViewController:audioVC animated:YES];
 }
