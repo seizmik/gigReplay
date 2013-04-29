@@ -209,11 +209,6 @@
         return 0;
     }
     
-    //Set up the URL we are posting to
-<<<<<<< HEAD
-    //NSURL *uploadURL = [NSURL URLWithString:@"http://wwws.lipsync.xminds.com/api/autoedit"];
-=======
->>>>>>> update gitignore
     NSURL *uploadURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/upload_file.php"];
     
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
