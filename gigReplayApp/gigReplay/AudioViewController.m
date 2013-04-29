@@ -78,10 +78,13 @@ float currentTime;
             NSLog(@"Error: %@", [error localizedDescription]);
         } else {
             [audioRecorder prepareToRecord];
-            [self getStartTime];
+            //[self getStartTime];
             [audioRecorder record];
+            [self getStartTime];
         }        
     } else {
+        //We get the stop time here to make it the same as video sync
+        //[self getStartTime];
         [audioRecorder stop];
         [self insertIntoDatabase];
     }
@@ -167,9 +170,9 @@ float currentTime;
     
     //Create a new directory, if one is not there already
     NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
-    [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:nil attributes:nil error:nil];
+    [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [[NSDate date] description]];
+    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateUniqueFilename]];
     NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
     soundFileURL = [NSURL fileURLWithPath:soundFilePath];
     
@@ -212,6 +215,15 @@ float currentTime;
 - (void)timeUpdate:(NSTimer *)theTimer {
     currentTime += 0.1;
     self.timeLabel.text = [NSString stringWithFormat:@"%.1f", currentTime];
+}
+
+- (NSString *)generateUniqueFilename
+{
+    NSString *prefixString = [NSString stringWithFormat:@"%i", appDelegateObject.CurrentSessionID];
+    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
+    NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
+    
+    return uniqueFileName;
 }
 
 #pragma mark - Delegate methods

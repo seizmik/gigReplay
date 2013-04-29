@@ -29,9 +29,10 @@
     [self SetDataBaseForLoginPurpose];
     [self LoadUser];
     [self checkExistingUser];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     //Here, just make a phony session id for testing
-    CurrentSessionID = 12;
+    CurrentSessionID = 99;
     
     //Load up the upload tracker database as well
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
@@ -73,14 +74,13 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-     [FBSession.activeSession handleDidBecomeActive];
+    [FBSession.activeSession handleDidBecomeActive];
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-    timeRelationship = [self syncWithServer];
+    
+    [self syncWithServer]; //This sets up the time relationship
     //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
     NSLog(@"Time relationship is %f", timeRelationship);
-    
-    CurrentSessionID = 99;
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -216,13 +216,17 @@
     [FBSession.activeSession closeAndClearTokenInformation];
 }
 
-- (double)syncWithServer
+- (void)syncWithServer
 {
+    //Reset the arrays
+    [lagArray removeAllObjects];
+    [diffArray removeAllObjects];
     
     double meanLag, meanTravelTime, meanDiffWithServer, meanServerTime, variance, serverVariance;
     double jitter=1000;
     
-    while (jitter > 0.015) { //If the jitter is not low enough, it won't take the time difference
+    //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
+    while (jitter > 0.015 || [diffArray count] < 9) { //If the jitter is not low enough, it won't take the time difference
         
         //Reset the array
         lagArray = nil;
@@ -319,8 +323,8 @@
         //NSLog(@"%f %f %f %f %i", meanLag, jitter, meanDiffWithServer, serverVariance, [lagArray count]);
     }
     
-    return meanDiffWithServer;
-    
+    //return meanDiffWithServer;
+    timeRelationship = meanDiffWithServer;
 }
 
 

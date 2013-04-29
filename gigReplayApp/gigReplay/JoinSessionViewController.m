@@ -130,7 +130,7 @@
             
         }
 
-    
+        [self resignTextField:self];
 }
 }
 

@@ -142,11 +142,6 @@
         UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
         [alertUpload show];
         
-        if (fileDetails.contentType == 1) {
-            //If it's an audio file, delete it from the path
-            [self removeFile:fileDetails];
-        }
-        
         NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=1 WHERE id=%i", fileDetails.entryNumber];
         while (![dbObject updateDatabase:strQuery]) {
             NSLog(@"Retrying...");
@@ -158,6 +153,7 @@
         
         //Now delete the file from the folder
         //First, check from the database the file path
+        [self removeFile:fileDetails];
         
     } else {
         UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
@@ -247,6 +243,7 @@
 }
 
 - (void)removeFile:(UploadObject *)fileDetails {
+    NSLog(@"%@", fileDetails.filePath);
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:fileDetails.filePath error:&error];

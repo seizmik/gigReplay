@@ -104,10 +104,10 @@
         }
         
         $media_length = calculate_content_length($low_res_path);
-        if ($media_type==2) {
+        if ($media_type == 2) {
+            //Due to electronic lag, we took the start time of the video to be the end of the video. So need to subtract the media length from it.
             $start_time = $start_time - $media_length;
         }
-        //Now that the length of the media has been calculated
         
         if ($_POST['session_id']) {
             $con = mysql_connect("localhost","mik","rivalries");
