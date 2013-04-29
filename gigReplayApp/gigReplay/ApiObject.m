@@ -10,7 +10,7 @@
 
 
 @implementation ApiObject;
-@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen;
+@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen,JoinSessionId;
 
 //REST method of POST facebook details to WebURL(online DB)
 -(void)postUserDetails:(NSString *)facebookId userEmail:(NSString *)email userName:(NSString *)Username facebookToken:(NSString *)fbtoken APIIdentifier:(int)Identifier
@@ -232,6 +232,10 @@ didStartElement:(NSString *)elementName
     else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
         
     {
+        if([elementName isEqualToString:@"session_id"])
+        {
+            IsSessionId=TRUE;
+        }
         
         if([elementName isEqualToString:@"code"])
         {
@@ -415,6 +419,10 @@ didStartElement:(NSString *)elementName
     else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
         
     {
+        if (IsSessionId) {
+            self.JoinSessionId=string;
+        }
+
         if (IsCode)
         {
             self.SessionCode=string;
@@ -570,6 +578,11 @@ didStartElement:(NSString *)elementName
     }
     else if (ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
     {
+        
+        if (IsSessionId)
+        {
+            IsSessionId=FALSE;
+        }
         if (IsCode)
         {
             IsCode=FALSE;
@@ -783,6 +796,7 @@ didStartElement:(NSString *)elementName
         
         
         NSLog(@"%@ This is the session_id response",self.Session_Id);
+        appDelegateObject.CurrentSessionID=Session_Id;
         
         self.CreatedUserName=appDelegateObject.CurrentUserName;
         NSString *query=[NSString stringWithFormat:@"insert into Session_Details ('Time','Date','User_ID','Session_Name','Session_Code','User_Name','Session_Expiration_Date','Session_Expiration_Time','Session_Has_Expired') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@')",Time,Date,self.User_ID,self.Scene_Name,self.SessionCode,self.CreatedUserName,expirationDate,expirationTime,self.sessionExpirationStatus];
@@ -807,6 +821,11 @@ didStartElement:(NSString *)elementName
         
         NSString *Time=[InfoSplit objectAtIndex:1];
         NSString *Date=[InfoSplit objectAtIndex:0];
+        NSLog(@"session ID of join details is %@",JoinSessionId);
+        NSLog(@"userid of user joining session is %d",User_ID);
+        appDelegateObject.CurrentUserID=User_ID;
+        appDelegateObject.CurrentSessionID=JoinSessionId;
+
         
         NSString *query=[NSString stringWithFormat:@"insert into Join_Details ('Time','Date','User_ID','Session_Code') values ('%@','%@','%d','%@')",Time,Date,appDelegateObject.CurrentUserID,self.SessionCode];
         

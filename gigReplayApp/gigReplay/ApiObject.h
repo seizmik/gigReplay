@@ -24,6 +24,7 @@
         BOOL  IsUserID;
         BOOL  IsFbId;
         int   User_ID;
+     BOOL   IsSessionId;
      ASIHTTPRequest   *ASIHTTPrequest;
         NSString *Session_Name;
     /******* SESSION CREATION DETAILS ********************************/
@@ -136,6 +137,8 @@
 @property (nonatomic, retain)NSString            *Created_SessionCode_Open;
 @property (nonatomic, retain)NSString            *Created_SessionName_Open;
 
+//for join session_id
+@property (nonatomic, retain)NSString            *JoinSessionId;
 
 -(void)SendNotificationsAfterUserRegistration:(NSString*)Status;
 -(void)SendNotificationsAfterJoinSearchAPI:(NSString*)Status;

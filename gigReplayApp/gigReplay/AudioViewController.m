@@ -155,7 +155,7 @@ float currentTime;
 - (void)insertIntoDatabase
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %i, '%@', %f, 1, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, soundFileURL, startTime];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 1, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, soundFileURL, startTime];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }

@@ -299,7 +299,11 @@ bool isRecording;
 - (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
+<<<<<<< HEAD
     NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %i, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, videoURL, videoStartTime];
+=======
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, movieURL, startTime];
+>>>>>>> update gitignore
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }

@@ -159,7 +159,7 @@
                 appDelegateObject.CurrentUserID = [[details objectAtIndex:5]intValue];
                 appDelegateObject.CurrentUserName = [details objectAtIndex:0];
 
-                NSLog(@"HEEEEE %d",appDelegateObject.CurrentUserID);
+            
                 
             }
             else

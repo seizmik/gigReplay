@@ -23,7 +23,7 @@
 
 @property (strong, nonatomic) UIWindow *window;
 @property (assign, nonatomic) int CurrentUserID;
-@property (assign, nonatomic) int CurrentSessionID;
+@property (assign, nonatomic) NSString *CurrentSessionID;
 
 
 @property(strong,nonatomic)UITabBarController *tabBarController;

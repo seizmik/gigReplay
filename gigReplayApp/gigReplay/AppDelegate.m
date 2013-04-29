@@ -32,7 +32,11 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     //Here, just make a phony session id for testing
+<<<<<<< HEAD
     CurrentSessionID = 99;
+=======
+    
+>>>>>>> update gitignore
     
     //Load up the upload tracker database as well
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
@@ -81,6 +85,11 @@
     [self syncWithServer]; //This sets up the time relationship
     //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
     NSLog(@"Time relationship is %f", timeRelationship);
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> update gitignore
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
