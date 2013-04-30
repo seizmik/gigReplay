@@ -10,7 +10,7 @@
 
 
 @implementation ApiObject;
-@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen,JoinSessionId;
+@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen,JoinSessionId,openSessionIdData;
 
 //REST method of POST facebook details to WebURL(online DB)
 -(void)postUserDetails:(NSString *)facebookId userEmail:(NSString *)email userName:(NSString *)Username facebookToken:(NSString *)fbtoken APIIdentifier:(int)Identifier
@@ -315,6 +315,10 @@ didStartElement:(NSString *)elementName
         }
         if (SessionPrefixFound)
         {
+            if ([elementName isEqualToString:@"session_id"])
+            {
+                OpenSessionId=TRUE;
+            }
             if ([elementName isEqualToString:@"code"])
             {
                 CodeFound=TRUE;
@@ -421,6 +425,7 @@ didStartElement:(NSString *)elementName
     {
         if (IsSessionId) {
             self.JoinSessionId=string;
+           
         }
 
         if (IsCode)
@@ -486,6 +491,11 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if(OpenSessionId)
+            {
+                self.openSessionIdData=string;
+                NSLog(@"%@wahhaha",openSessionIdData);
+            }
             if (CodeFound)
             {
                 self.Created_SessionCode_Open=string;
@@ -649,6 +659,10 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if (([elementName isEqualToString:@"session_id"])&&(OpenSessionId))
+            {
+                OpenSessionId=FALSE;
+            }
             if (([elementName isEqualToString:@"code"])&&(CodeFound))
             {
                 CodeFound=FALSE;
@@ -681,7 +695,7 @@ didStartElement:(NSString *)elementName
                 
                 NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,nil];
                 [self.OpenSessionDetailsHolder addObject:Details];
-                
+                NSLog(@"%@ opened sessions details here",Details);
                 SessionPrefixFound=FALSE;
                 
                 
@@ -738,7 +752,7 @@ didStartElement:(NSString *)elementName
         }
         else if(ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
         {
-            [self SetOpenedSessionToDataBase];
+         //   [self SetOpenedSessionToDataBase];
         }
         
         else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
@@ -908,15 +922,19 @@ didStartElement:(NSString *)elementName
             NSArray *details=[self.OpenSessionDetailsHolder objectAtIndex:i];
             NSString *Session_ID=[details objectAtIndex:0];
             NSString *DateDetails=[details objectAtIndex:2];
+            
             NSArray *InfoSplit=[DateDetails  componentsSeparatedByString:@" "];
             NSString *Time=[InfoSplit objectAtIndex:1];
             NSString *Date=[InfoSplit objectAtIndex:0];
+            
             NSString *session_Name=[details objectAtIndex:1];
             NSString *Created_Name=[details objectAtIndex:3];
             NSString *Expirydetails=[details objectAtIndex:4];
+            
             NSArray *InfoSplitForExpiry=[Expirydetails  componentsSeparatedByString:@" "];
             NSString *ExpiryTime=[InfoSplitForExpiry objectAtIndex:1];
             NSString *ExpiryDate=[InfoSplitForExpiry objectAtIndex:0];
+           
             NSString *ExpiryStatus=[details objectAtIndex:5];
             
             
