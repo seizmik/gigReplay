@@ -75,6 +75,7 @@
     /******* OPEN SESSION DETAILS ************************************/
     
     BOOL                SessionPrefixFound;
+    BOOL                OpenSessionId;
     BOOL                CodeFound;
     BOOL                DateFound;
     BOOL                Issession_name;
@@ -105,7 +106,7 @@
     
     /******* OPEN SESSION DETAILS ***********************************/
 }
-@property (nonatomic, retain) NSString       *Session_Name;
+@property (nonatomic, retain) NSString  *Session_Name;
 @property (nonatomic, retain)  NSString *SessionCode;
 @property (nonatomic, retain)  NSString *Session_Id;
 @property (nonatomic, retain)  NSString *CreatedUserName;
@@ -131,6 +132,7 @@
 @property (nonatomic, retain)NSString             *SessionExpiryStatusFromSearch;
 @property (nonatomic, retain)NSString             *SessionCreatedUserNameFromSearch;
 
+@property (nonatomic, strong)NSString            *openSessionIdData;
 @property (nonatomic, retain)NSString            *SessionCreatedDateForOpen;
 @property (nonatomic, retain)NSString            *created_useridFor_Open;
 @property (nonatomic, retain)NSString            *Created_UserName_Open;
