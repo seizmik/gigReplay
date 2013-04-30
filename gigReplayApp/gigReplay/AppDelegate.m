@@ -213,6 +213,8 @@
     [FBSession.activeSession closeAndClearTokenInformation];
 }
 
+#pragma mark - Synching methods
+
 - (void)syncWithServer
 {
     //Reset the arrays
@@ -220,12 +222,13 @@
     [diffArray removeAllObjects];
     
     double meanLag, meanTravelTime, meanDiffWithServer, meanServerTime, variance, serverVariance;
-    double jitter=1000;
+    double jitter;
+    int count;
     
     //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
-    while (jitter > 0.015 || [diffArray count] < 9) { //If the jitter is not low enough, it won't take the time difference
+    for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 9); count++) {
         
-        //Reset the array
+        //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
         lagArray = [NSMutableArray array];
         diffArray = nil;
@@ -320,9 +323,22 @@
         //NSLog(@"%f %f %f %f %i", meanLag, jitter, meanDiffWithServer, serverVariance, [lagArray count]);
     }
     
-    //return meanDiffWithServer;
-    timeRelationship = meanDiffWithServer;
+    if (count == 10) {
+        UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Exit", nil];
+        [syncError show];
+    } else {
+        timeRelationship = meanDiffWithServer;
+    }
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [self syncWithServer];
+    } else if (buttonIndex == 1) {
+        //Let's try to avoid the cancel button. Instead lead them out with the settings button
+        exit(0);
+    }
+}
 
 @end

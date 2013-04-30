@@ -97,7 +97,7 @@ bool isRecording;
     cameraUI.navigationBarHidden = YES;
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
     //cameraUI.videoQuality = UIImagePickerControllerQualityTypeMedium;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
@@ -128,9 +128,6 @@ bool isRecording;
              {
                  //At this point, it should reveal that the video has stopped processing and has been saved
                  [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
-                 [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
-                 cameraRecButton.enabled = YES;
-                 
                  //Supposed to remove the original file here
              }
              else
@@ -138,6 +135,11 @@ bool isRecording;
                  UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                  [compressError show];
                  //Supposed to remove original file here
+             }
+             if (isRecording == YES) {
+                 //This prevents the button from resetting when you press back and go back into recording and record again
+                 [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+                 cameraRecButton.enabled = YES;
              }
          }];
         UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);

@@ -43,7 +43,7 @@ float currentTime;
     [self checkRecording];
     [self checkPlaying];
     
-    NSLog(@"%i", appDelegateObject.CurrentSessionID);
+    //NSLog(@"%@", appDelegateObject.CurrentSessionID);
     
     [self.navigationItem.backBarButtonItem setTitle:@"Back"];
     

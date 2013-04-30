@@ -193,6 +193,7 @@
 
 - (NSString *)uploadThisFile:(UploadObject *)fileDetails
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     // First, turn the file into an NSData object
     NSData *fileToUpload = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileDetails.filePath]];
     //Create a filename
@@ -242,11 +243,14 @@
 
 - (void)removeFile:(UploadObject *)fileDetails {
     NSLog(@"%@", fileDetails.filePath);
+    NSURL *fileURL = [NSURL URLWithString:fileDetails.filePath];
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    [fileManager removeItemAtPath:fileDetails.filePath error:&error];
+    [fileManager removeItemAtURL:fileURL error:&error];
     if (error) {
         NSLog(@"Error occured: %@", [error localizedDescription]);
+    } else {
+        NSLog(@"It's gone!!!");
     }
 }
 
