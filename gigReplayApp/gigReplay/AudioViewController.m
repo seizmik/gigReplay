@@ -219,7 +219,7 @@ float currentTime;
 
 - (NSString *)generateUniqueFilename
 {
-    NSString *prefixString = [NSString stringWithFormat:@"%i", appDelegateObject.CurrentSessionID];
+    NSString *prefixString = [NSString stringWithFormat:@"%@", appDelegateObject.CurrentSessionID];
     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     

@@ -16,7 +16,7 @@
 @property (strong, nonatomic) NSMutableArray *uploadArray;
 @property (strong, nonatomic) ConnectToDatabase *dbObject;
 
-- (NSString *)uploadThisFile:(UploadObject *)fileDetails;
+- (void)uploadThisFile:(UploadObject *)fileDetails;
 
 
 @end
