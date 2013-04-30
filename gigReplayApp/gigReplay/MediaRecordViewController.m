@@ -41,7 +41,7 @@ bool isRecording;
     isRecording = NO;
 }
 
--(void)viewWillAppear:(BOOL)animated
+-(void)viewDidAppear:(BOOL)animated
 {
     sceneTitleDisplay.text=appDelegateObject.CurrentSession_Name;
     sceneCodeDisplay.text=appDelegateObject.CurrentSession_Code;
@@ -97,8 +97,7 @@ bool isRecording;
     cameraUI.navigationBarHidden = YES;
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
-    //cameraUI.videoQuality = UIImagePickerControllerQualityTypeMedium;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -126,7 +125,11 @@ bool isRecording;
          {
              if (exportSession.status == AVAssetExportSessionStatusCompleted)
              {
-                 [saveAlert dismissWithClickedButtonIndex:0 animated:YES];
+                 if (self.saveAlert) {
+                     [saveAlert dismissWithClickedButtonIndex:-1 animated:YES];
+                 }
+                 UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 [compressComplete show];
                  //At this point, it should reveal that the video has stopped processing and has been saved
                  [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
                  //Supposed to remove the original file here
@@ -136,11 +139,6 @@ bool isRecording;
                  UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                  [compressError show];
                  //Supposed to remove original file here
-             }
-             if (isRecording == YES) {
-                 //This prevents the button from resetting when you press back and go back into recording and record again
-                 [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
-                 cameraRecButton.enabled = YES;
              }
          }];
         UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
@@ -155,24 +153,21 @@ bool isRecording;
                                               cancelButtonTitle:@"Continue"
                                               otherButtonTitles:nil];
         [alert show];
-        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
-        cameraRecButton.enabled = YES;
     } else {
         //This is the case where the video is successfully saved onto the camera roll and into the app
-        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
-        cameraRecButton.enabled = YES;
+        NSLog(@"Wow! It actually saved!");
     }
 }
 
 - (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
                                    outputURL:(NSURL*)outputURL
-                                     handler:(void (^)(AVAssetExportSession*))handler   //Used to compress the video
+                                     handler:(void (^)(AVAssetExportSession *))handler  //Used to compress the video
 {
     [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
     exportSession.outputURL = outputURL;
-    exportSession.outputFileType = AVFileTypeQuickTimeMovie;
+    exportSession.outputFileType = AVFileTypeMPEG4;
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
          handler(exportSession);
@@ -183,7 +178,6 @@ bool isRecording;
 
 - (NSURL*)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {
-    NSString *todayString = [[NSDate date] description];
     NSFileManager *filemgr = [NSFileManager defaultManager];
     //NSString *currentPath;
     //currentPath = [filemgr currentDirectoryPath];
@@ -194,23 +188,19 @@ bool isRecording;
     
     NSString *m_strFilepath  = [[NSString alloc]initWithString:newDir];
     
-    if ([filemgr fileExistsAtPath:m_strFilepath])
-    {
+    if ([filemgr fileExistsAtPath:m_strFilepath]) {
         // NSLog(@"hai");
-    }
-    
-    else
-    {
+    } else {
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.MOV",newDir,todayString];
     
-    if (m_strFilepath!=Nil)
-    {
+    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
     
-    NSURL *videopath=[NSURL fileURLWithPath:videoFilePath];
+    NSURL *videopath = [NSURL fileURLWithPath:videoFilePath];
+    NSLog(@"Get file path to save returns: %@", videoFilePath);
     return videopath;
 }
 
@@ -277,8 +267,7 @@ bool isRecording;
         
         isRecording = NO;
         [backButton setHidden:NO];
-        [cameraRecButton setTitle:@"Saving" forState:UIControlStateNormal];
-        cameraRecButton.enabled = NO;
+        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
     }
     
 }
@@ -302,10 +291,19 @@ bool isRecording;
 - (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, movieURL, startTime];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, videoURL, videoStartTime];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }
+}
+
+- (NSString *)generateUniqueFilename
+{
+    NSString *prefixString = [NSString stringWithFormat:@"%@", appDelegateObject.CurrentSessionID];
+    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
+    NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
+    
+    return uniqueFileName;
 }
 
 @end
