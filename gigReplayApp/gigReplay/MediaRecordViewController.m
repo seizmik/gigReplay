@@ -17,7 +17,7 @@
 
 @implementation MediaRecordViewController
 @synthesize sceneTitleDisplay, sceneCodeDisplay;
-@synthesize cameraUI, movieURL;
+@synthesize cameraUI, movieURL, saveAlert;
 
 double startTime;
 float currentTime;
@@ -126,6 +126,7 @@ bool isRecording;
          {
              if (exportSession.status == AVAssetExportSessionStatusCompleted)
              {
+                 [saveAlert dismissWithClickedButtonIndex:0 animated:YES];
                  //At this point, it should reveal that the video has stopped processing and has been saved
                  [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
                  //Supposed to remove the original file here
@@ -267,7 +268,7 @@ bool isRecording;
         //[self getStartTime];
         
         //Remind user not to close the app. Otherwise, video gone fuck
-        UIAlertView *saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress"
+        saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress"
                                                             message:@"Do not close app until save is complete. This may take several minutes"
                                                            delegate:self
                                                   cancelButtonTitle:@"Continue"

@@ -75,9 +75,19 @@
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
-    [self syncWithServer]; //This sets up the time relationship
-    //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-    NSLog(@"Time relationship is %f", timeRelationship);
+    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    if (netStatus == NotReachable) {
+        [self showSyncAlert];
+    } else {
+        [self syncWithServer]; //This sets up the time relationship
+        //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+        NSLog(@"Time relationship is %f", timeRelationship);
+    }
+    
+    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -102,9 +112,6 @@
         userexists=FALSE;
        
     }
-
-    
-    
 }
 
 - (BOOL)checkFBSessionOpen{

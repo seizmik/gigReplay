@@ -43,5 +43,6 @@
 
 @property (strong, nonatomic) NSURL *movieURL;
 @property (strong, nonatomic) UIImagePickerController *cameraUI;
+@property (strong, nonatomic) UIAlertView *saveAlert;
 
 @end

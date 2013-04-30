@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "SQLdatabase.h"
 #import<FacebookSDK/FacebookSDK.h>
+#import "Reachability.h"
 #define appDelegateObject ((AppDelegate *)[[UIApplication sharedApplication] delegate])
-
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
