@@ -45,8 +45,8 @@
 												 name:@"JoinSearchParsingCompleted"
 											   object:nil];
     
-//    UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
-//    [self.view addGestureRecognizer:tapToDismiss];
+    UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
+    [self.view addGestureRecognizer:tapToDismiss];
     // Do any additional setup after loading the view from its nib.
 }
 -(void)RemoveLoadingView:(NSNotification *)notification

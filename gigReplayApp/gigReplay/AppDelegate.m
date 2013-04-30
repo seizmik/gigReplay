@@ -106,7 +106,8 @@
     
     
 }
--(BOOL)checkFBSessionOpen{
+
+- (BOOL)checkFBSessionOpen{
     if(FBSession.activeSession.isOpen){
         return TRUE;
     }
@@ -115,7 +116,8 @@
     }
     
 }
--(void)checkExistingUser
+
+- (void)checkExistingUser
 {
     
     if(userexists==TRUE){
@@ -166,7 +168,6 @@
     UIViewController *joinSession = [[JoinSessionViewController alloc]initWithNibName:@"JoinSessionViewController" bundle:nil];
     UIViewController *openSession = [[OpenSessionViewController alloc]initWithNibName:@"OpenSessionViewController" bundle:nil];
     UIViewController *settingsTab = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
-    //UIViewController *uploadTab = [[UploadViewController alloc] initWithNibName:@"UploadViewController" bundle:nil];
     UIViewController *uploadTab = [[UploadTab alloc] initWithNibName:@"UploadTab" bundle:nil];
     
     createSession.title=@"Create";
@@ -324,11 +325,16 @@
     }
     
     if (count == 10) {
-        UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Exit", nil];
-        [syncError show];
+        [self showSyncAlert];
     } else {
         timeRelationship = meanDiffWithServer;
     }
+}
+
+- (void)showSyncAlert
+{
+    UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Exit", nil];
+    [syncError show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

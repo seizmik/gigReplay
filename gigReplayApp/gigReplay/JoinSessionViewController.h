@@ -34,7 +34,7 @@
 @property(strong,nonatomic)NSMutableArray *sessionDetailsHolder;
 
 
-- (IBAction)start:(id)sender;
--(void)JoinToSessions:(NSString *)session_pass;
+//- (IBAction)start:(id)sender;
+//- (void)JoinToSessions:(NSString *)session_pass;
 
 @end
