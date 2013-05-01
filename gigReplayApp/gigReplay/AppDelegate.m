@@ -34,6 +34,12 @@
     //Load up the upload tracker database as well
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
     [dbObject checkAndCreateDatabase];
+    
+    //Update files that were cancelled during upload, if any
+    NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE upload_status=9"];
+    while (![dbObject updateDatabase:strQuery]) {
+        NSLog(@"Retrying...");
+    }
 
     return YES;
 }
