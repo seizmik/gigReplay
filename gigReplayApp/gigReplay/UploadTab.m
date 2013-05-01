@@ -130,35 +130,15 @@
     //Call the upload object to get the fileDetails
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
-    NSString *returnString = [NSString string];
     
-    returnString = [self uploadThisFile:fileDetails];
+    //Remove the data from the table and reload the data
+    [self updateTrackerWithFileDetails:fileDetails toStatus:1];
+    [self refreshDatabaseObjects];
+    [tableView reloadData];
     
-    NSLog(@"%@", returnString);
-    //NSLog(@"%f", fileDetails.startTime);
+    [self uploadThisFile:fileDetails];
     
-    //If returnString is TRUE, then update the database
-    if ([returnString isEqual: @"SUCCESS"]) {
-        UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-        [alertUpload show];
-        
-        NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=1 WHERE id=%i", fileDetails.entryNumber];
-        while (![dbObject updateDatabase:strQuery]) {
-            NSLog(@"Retrying...");
-        }
-        
-        //Then, refresh the table
-        [self refreshDatabaseObjects];
-        [tableView reloadData];
-        
-        //Now delete the file from the folder
-        //First, check from the database the file path
-        [self removeFile:fileDetails];
-        
-    } else {
-        UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-        [alertUpload show];
-    }
+    
     
         
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -170,14 +150,14 @@
     //Initialise this entire thing by calling upon all the files that have not been uploaded
     dbObject = [[ConnectToDatabase alloc] initDB];
     NSString *strQuery = @"SELECT * FROM upload_tracker WHERE upload_status=0";
+    uploadArray = nil;
     uploadArray = [NSMutableArray array];
-    uploadArray = [dbObject uploadCheck:strQuery];
     
-    /*We'll exclude this until we can get it right
     //Check if the file exists at that URL/path. You'll need a separate array for that
     NSMutableArray *dummyArray = [NSMutableArray arrayWithArray:[dbObject uploadCheck:strQuery]];
     for (UploadObject *uploadObject in dummyArray) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:uploadObject.filePath]) {
+        NSURL *fileCheck = [NSURL URLWithString:uploadObject.filePath];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[fileCheck path]]) {
             //If it exists, put it into uploadArray; this will be fed into the cells
             [uploadArray addObject:uploadObject];
         } else {
@@ -188,10 +168,10 @@
             }
         }
     }
-    */
+    
 }
 
-- (NSString *)uploadThisFile:(UploadObject *)fileDetails
+- (void)uploadThisFile:(UploadObject *)fileDetails
 {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     // First, turn the file into an NSData object
@@ -207,12 +187,12 @@
         uploadFileType = @"video/mp4";
     } else {
         //File is corrupted. Need to do something with the file when returned this.
-        return 0;
+        [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
     }
     
     NSURL *uploadURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/upload_file.php"];
     
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
+    __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
     //Now add the metadata
     [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
@@ -226,19 +206,43 @@
     //This will allow the request to continue even upon entering the background
     [request setShouldContinueWhenAppEntersBackground:YES];
     
+    //The following block will run the background
+    [request setCompletionBlock:^{
+        // Use when fetching text data
+        NSString *responseString = [request responseString];
+        //If returnString is TRUE, then update the database
+        if ([responseString isEqual: @"SUCCESS"]) {
+            UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+            [alertUpload show];
+            
+            [self removeFile:fileDetails];
+            
+        } else {
+            UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+            [alertUpload show];
+            
+            //If the uplaod was not successful, then have to update the upload tracker that the file has not been sent
+            [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+            [self refreshDatabaseObjects];
+            [uploadTable reloadData];
+            
+        }
+    }];
+    
+    [request setFailedBlock:^{
+        NSError *error = [request error];
+        if (error) {
+            [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+        }
+    }];
+    
     //UIProgressView *myProgressIndicator = [[UIProgressView alloc] init];
     //[request setUploadProgressDelegate:myProgressIndicator];
-    [request startSynchronous];
+    [request startAsynchronous];
     
     //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
     //NSLog(@"responseString %@",[request responseString]);
     //NSLog(@"Value: %f",[myProgressIndicator progress]);
-    
-    if (request.responseString == 0) {
-        return nil;
-    } else {
-        return [request responseString];
-    }
 }
 
 - (void)removeFile:(UploadObject *)fileDetails {
@@ -251,6 +255,14 @@
         NSLog(@"Error occured: %@", [error localizedDescription]);
     } else {
         NSLog(@"It's gone!!!");
+    }
+}
+
+- (void)updateTrackerWithFileDetails:(UploadObject *)fileDetails toStatus:(int)newStatus
+{
+    NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=%i WHERE id=%i", newStatus, fileDetails.entryNumber];
+    while (![dbObject updateDatabase:strQuery]) {
+        NSLog(@"Retrying...");
     }
 }
 
