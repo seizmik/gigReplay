@@ -10,11 +10,12 @@
 #import "ConnectToDatabase.h"
 #import "UploadObject.h"
 
-@interface UploadTab : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface UploadTab : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITableView *uploadTable;
 @property (strong, nonatomic) NSMutableArray *uploadArray;
 @property (strong, nonatomic) ConnectToDatabase *dbObject;
+@property (strong, nonatomic) UploadObject *detailsToDelete;
 
 - (void)uploadThisFile:(UploadObject *)fileDetails;
 

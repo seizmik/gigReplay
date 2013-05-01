@@ -15,9 +15,8 @@
 @end
 
 @implementation UploadTab
-@synthesize uploadTable;
-@synthesize uploadArray;
-@synthesize dbObject;
+@synthesize uploadTable, uploadArray, dbObject;
+@synthesize detailsToDelete;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -33,6 +32,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.title = @"Upload";
+    
+    UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
+                                          initWithTarget:self action:@selector(handleLongPress:)];
+    lpgr.minimumPressDuration = 2.0; //seconds
+    lpgr.delegate = self;
+    [self.uploadTable addGestureRecognizer:lpgr];
     
 }
 
@@ -132,15 +137,13 @@
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
     
     //Remove the data from the table and reload the data
-    [self updateTrackerWithFileDetails:fileDetails toStatus:1];
+    //Status 9 means uploading. I've set this in case the app was closed halfway. When the app loads up again, if checks if there were any that were still uploading when the app crashed, and will change upload status back to 0
+    [self updateTrackerWithFileDetails:fileDetails toStatus:9];
     [self refreshDatabaseObjects];
     [tableView reloadData];
     
     [self uploadThisFile:fileDetails];
     
-    
-    
-        
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
@@ -162,10 +165,7 @@
             [uploadArray addObject:uploadObject];
         } else {
             //Update the database that the file is missing. Status changed to -1
-            NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=-1 WHERE id=%i", uploadObject.entryNumber];
-            while (![dbObject updateDatabase:strQuery]) {
-                NSLog(@"Retrying...");
-            }
+            [self updateTrackerWithFileDetails:uploadObject toStatus:-1];
         }
     }
     
@@ -215,6 +215,10 @@
             UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
             [alertUpload show];
             
+            [self updateTrackerWithFileDetails:fileDetails toStatus:1];
+            [self refreshDatabaseObjects];
+            [uploadTable reloadData];
+            
             [self removeFile:fileDetails];
             
         } else {
@@ -236,14 +240,16 @@
         }
     }];
     
-    //UIProgressView *myProgressIndicator = [[UIProgressView alloc] init];
-    //[request setUploadProgressDelegate:myProgressIndicator];
+    [request setUploadProgressDelegate:self];
+    request.showAccurateProgress = YES;
     [request startAsynchronous];
     
     //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
     //NSLog(@"responseString %@",[request responseString]);
-    //NSLog(@"Value: %f",[myProgressIndicator progress]);
+    
 }
+
+#pragma mark - Delete file methods
 
 - (void)removeFile:(UploadObject *)fileDetails {
     NSLog(@"%@", fileDetails.filePath);
@@ -263,6 +269,42 @@
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=%i WHERE id=%i", newStatus, fileDetails.entryNumber];
     while (![dbObject updateDatabase:strQuery]) {
         NSLog(@"Retrying...");
+    }
+}
+
+-(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint p = [gestureRecognizer locationInView:self.uploadTable];
+    
+    NSIndexPath *indexPath = [self.uploadTable indexPathForRowAtPoint:p];
+    if (indexPath == nil) {
+        //Do nothing
+    } else {
+        if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+            UIAlertView *deleteAlert = [[UIAlertView alloc] initWithTitle:@"WARNING"
+                                                                  message:@"Are you sure you want to delete this file?"
+                                                                 delegate:self
+                                                        cancelButtonTitle:@"Cancel" otherButtonTitles:@"Delete", nil];
+            [deleteAlert show];
+            
+            //Set the current details
+            detailsToDelete = [uploadArray objectAtIndex:indexPath.row];
+        }
+        NSLog(@"long press on table view at row %d", indexPath.row);
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        //Reset the global parameter
+        detailsToDelete = nil;
+    } else if (buttonIndex == 1) {
+        //Delete the file with those fileDetails
+        [self removeFile:detailsToDelete];
+        [self updateTrackerWithFileDetails:detailsToDelete toStatus:-1];
+        [self refreshDatabaseObjects];
+        [uploadTable reloadData];
     }
 }
 
