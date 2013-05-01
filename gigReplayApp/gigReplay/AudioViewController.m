@@ -122,11 +122,14 @@ float currentTime;
 - (void)checkRecording
 {
     if (audioRecorder.recording) {
+        //Prevents phone from sleeping
+        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
         [recordButton setTitle:@"STOP" forState:UIControlStateNormal];
         playButton.enabled = NO;
         uploadButton.enabled = NO;
         [self.navigationItem setHidesBackButton: YES animated: YES];
     } else {
+        [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
         [recordButton setTitle:@"Record" forState:UIControlStateNormal];
         playButton.enabled = YES;
         uploadButton.enabled = YES;
@@ -208,13 +211,15 @@ float currentTime;
     }
 }
 
-- (void)getStartTime {
-    startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
-}
-
 - (void)timeUpdate:(NSTimer *)theTimer {
     currentTime += 0.1;
     self.timeLabel.text = [NSString stringWithFormat:@"%.1f", currentTime];
+}
+
+
+
+- (void)getStartTime {
+    startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
 }
 
 - (NSString *)generateUniqueFilename

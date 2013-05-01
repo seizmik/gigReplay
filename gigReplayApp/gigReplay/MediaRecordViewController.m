@@ -16,11 +16,11 @@
 @end
 
 @implementation MediaRecordViewController
-@synthesize sceneTitleDisplay, sceneCodeDisplay;
+@synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer, timeLabel;
 @synthesize cameraUI, movieURL, saveAlert;
 
 double startTime;
-float currentTime;
+int currentTime;
 bool isRecording;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -39,6 +39,7 @@ bool isRecording;
     [self.navigationController setNavigationBarHidden:NO];
     self.title = appDelegateObject.CurrentSession_Name;
     isRecording = NO;
+
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -97,7 +98,7 @@ bool isRecording;
     cameraUI.navigationBarHidden = YES;
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame1280x720;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -116,6 +117,7 @@ bool isRecording;
     //NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
     {
+        
         //Save the video
         NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         self.movieURL = capturedVideoURL;
@@ -125,9 +127,6 @@ bool isRecording;
          {
              if (exportSession.status == AVAssetExportSessionStatusCompleted)
              {
-                 if (self.saveAlert) {
-                     [saveAlert dismissWithClickedButtonIndex:-1 animated:YES];
-                 }
                  UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                  [compressComplete show];
                  //At this point, it should reveal that the video has stopped processing and has been saved
@@ -153,10 +152,7 @@ bool isRecording;
                                               cancelButtonTitle:@"Continue"
                                               otherButtonTitles:nil];
         [alert show];
-    } else {
-        //This is the case where the video is successfully saved onto the camera roll and into the app
-        NSLog(@"Wow! It actually saved!");
-    }
+    } //Don't need to do anything if the video was successfully saved
 }
 
 - (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
@@ -238,6 +234,7 @@ bool isRecording;
     [cameraRecButton addTarget:self action:@selector(recordButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     cameraRecButton.enabled = YES;
     [overlay addSubview:cameraRecButton];
+    
 }
 
 - (void)recordButtonPressed
@@ -285,6 +282,34 @@ bool isRecording;
     //NSLog(@"Start video! %f", startTime);
 }
 
+- (void)timerStartStop {
+    if (![videoTimer isValid]) {
+        currentTime = 0;
+        self.videoTimer = [NSTimer
+                           scheduledTimerWithTimeInterval:1.00
+                           target:self
+                           selector:@selector(timeUpdate:)
+                           userInfo:nil
+                           repeats:YES];
+    } else {
+        [self.videoTimer invalidate];
+        self.videoTimer = nil;
+    }
+}
+
+- (void)timeUpdate:(NSTimer *)theTimer {
+    currentTime += 1;
+    self.timeLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted:currentTime]];
+}
+
+- (NSString *)timeFormatted:(int)totalSeconds
+{
+    
+    int seconds = totalSeconds % 60;
+    int minutes = (totalSeconds / 60) % 60;
+    
+    return [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
+}
 
 #pragma mark - Upload tracking methods
 
