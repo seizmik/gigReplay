@@ -160,7 +160,7 @@
 {
     NSString *query=@"select * from OpenSession_Details";
     self.OpenedSessionDetailsHolder=[appDelegateObject.databaseObject readFromDatabaseOpenDetails:query];
-    NSLog(@"%d",[self.OpenedSessionDetailsHolder count]);
+    NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
     
     [openedSessionListTable reloadData];
     
