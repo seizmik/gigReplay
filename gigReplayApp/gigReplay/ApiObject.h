@@ -132,7 +132,8 @@
 @property (nonatomic, retain)NSString             *SessionExpiryStatusFromSearch;
 @property (nonatomic, retain)NSString             *SessionCreatedUserNameFromSearch;
 
-@property (nonatomic, strong)NSString            *openSessionIdData;
+
+@property (nonatomic, retain)NSString            *openSessionIdData;
 @property (nonatomic, retain)NSString            *SessionCreatedDateForOpen;
 @property (nonatomic, retain)NSString            *created_useridFor_Open;
 @property (nonatomic, retain)NSString            *Created_UserName_Open;

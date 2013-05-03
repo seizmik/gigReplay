@@ -315,7 +315,7 @@ didStartElement:(NSString *)elementName
         }
         if (SessionPrefixFound)
         {
-            if ([elementName isEqualToString:@"session_id"])
+            if ([elementName isEqualToString:@"data"])
             {
                 OpenSessionId=TRUE;
             }
@@ -659,7 +659,7 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
-            if (([elementName isEqualToString:@"session_id"])&&(OpenSessionId))
+            if (([elementName isEqualToString:@"data"])&&(OpenSessionId))
             {
                 OpenSessionId=FALSE;
             }
@@ -693,7 +693,7 @@ didStartElement:(NSString *)elementName
             if (([elementName hasPrefix:@"session_"])&& (SessionPrefixFound)&&(![elementName isEqualToString:@"session_name"]))
             {
                 
-                NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,nil];
+                NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,self.openSessionIdData,nil];
                 [self.OpenSessionDetailsHolder addObject:Details];
                 NSLog(@"%@ opened sessions details here",Details);
                 SessionPrefixFound=FALSE;
@@ -752,7 +752,7 @@ didStartElement:(NSString *)elementName
         }
         else if(ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
         {
-         //   [self SetOpenedSessionToDataBase];
+         [self SetOpenedSessionToDataBase];
         }
         
         else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
@@ -936,14 +936,16 @@ didStartElement:(NSString *)elementName
             NSString *ExpiryDate=[InfoSplitForExpiry objectAtIndex:0];
            
             NSString *ExpiryStatus=[details objectAtIndex:5];
+            NSString *Session_Data=[details objectAtIndex:6];
             
             
             
             
-            NSString *query=[NSString stringWithFormat:@"insert into OpenSession_Details ('Time','Date','User_ID','Session_Code','Session_Name','Created_User_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@')",Time,Date,appDelegateObject.CurrentUserID,Session_ID,session_Name,Created_Name,ExpiryDate,ExpiryTime,ExpiryStatus];
+            NSString *query=[NSString stringWithFormat:@"insert into OpenSession_Details ('Time','Date','User_ID','Session_Code','Session_Name','Created_User_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status','Session_ID') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@','%@')",Time,Date,appDelegateObject.CurrentUserID,Session_ID,session_Name,Created_Name,ExpiryDate,ExpiryTime,ExpiryStatus,Session_Data];
             
             
             [appDelegateObject.databaseObject insertIntoDatabase:query];
+            
         }
         [self SendNotificationsAfterOpenAPI:@"Success"];
     }

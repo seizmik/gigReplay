@@ -85,9 +85,9 @@
 		}
 	}
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    cell.SceneName.text=[Details objectAtIndex:5];
-    cell.directorName.text=[Details objectAtIndex:6];
-    cell.SceneTake.text=[Details objectAtIndex:0];
+    cell.SceneName.text=[Details objectAtIndex:0];
+    cell.directorName.text=[Details objectAtIndex:5];
+    cell.SceneTake.text=@"under construction";
     
     
     return cell;
@@ -107,12 +107,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    appDelegateObject.CurrentSession_Code=[Details objectAtIndex:4];
-    appDelegateObject.CurrentSession_Name=[Details objectAtIndex:5];
+    NSLog(@"%@",Details );
+    //appDelegateObject.CurrentSession_Code=[Details objectAtIndex:4];
+    appDelegateObject.CurrentSession_Name=[Details objectAtIndex:0];
+    appDelegateObject.CurrentSessionID=[Details objectAtIndex:9];
+    NSLog(@" OPENED SESSION SESSION ID IS %@",appDelegateObject.CurrentSessionID);
     
-    
-    appDelegateObject.CurrentSession_NameExpired=[Details objectAtIndex:9];
-    appDelegateObject.CurrentSession_Expiring_Time=[Details objectAtIndex:8];
+//    appDelegateObject.CurrentSession_NameExpired=[Details objectAtIndex:9];
+//    appDelegateObject.CurrentSession_Expiring_Time=[Details objectAtIndex:8];
     [self showRecorderView];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
