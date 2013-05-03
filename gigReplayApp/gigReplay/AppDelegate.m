@@ -255,7 +255,7 @@
         double backTime, travelTime, lag, startTime;
         
         //The request to ping the API page
-        NSURL *url = [NSURL URLWithString:GIGREPLAY_API_URL@"get_time.php"];
+        NSURL *url = [NSURL URLWithString:@"http://www.lipsync.sg/api/get_time.php"];
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Start looping x times for request

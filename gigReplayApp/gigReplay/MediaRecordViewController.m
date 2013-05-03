@@ -82,7 +82,7 @@ bool isRecording;
     
     if ([userDetails count] == 1) {
         //Create the form and post it to the API
-        NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
+        NSURL *postURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/auto_edit_user.php"];
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
         //Now, add the data. In this case, we only send the user id, email and session number
         [request addPostValue:appDelegateObject.CurrentSessionID forKey:@"session_id"];
@@ -198,7 +198,7 @@ bool isRecording;
 {
     [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetHighestQuality];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
     exportSession.outputURL = outputURL;
     exportSession.outputFileType = AVFileTypeMPEG4;
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
