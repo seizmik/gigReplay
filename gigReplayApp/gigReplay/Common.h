@@ -11,6 +11,8 @@
 
 /********************* SYNCING WITH SERVER TIME ******************/
 #define COMMON_SERVER_URL                   @"http://wwws.lipsync.xminds.com/api/"
+#define GIGREPLAY_API_URL                   @"http://www.lipsync.sg/api/"
+
 #define API_IDENTIFIER_SYNC                     1
 
 #define API_IDENTIFIER_USER_REG                 2

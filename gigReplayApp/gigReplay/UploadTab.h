@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ConnectToDatabase.h"
 #import "UploadObject.h"
+#import "Common.h"
 
 @interface UploadTab : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 

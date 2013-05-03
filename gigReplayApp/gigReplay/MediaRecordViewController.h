@@ -19,6 +19,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import<FacebookSDK/FacebookSDK.h>
+#import "Common.h"
 
 @interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 {
@@ -33,6 +34,7 @@
 - (IBAction)videoRecordPressed:(UIButton *)sender;
 - (IBAction)audioRecordPressed:(UIButton *)sender;
 - (IBAction)uploadButtonPressed:(UIButton *)sender;
+- (IBAction)generateVideo:(UIButton *)sender;
 
 //StartingVideoCameraMethods
 //Delegates send messages, and you have to say where you want the messages to go. Very typically, you want them to go to "you," so in that case you simply say x.delegate=self.

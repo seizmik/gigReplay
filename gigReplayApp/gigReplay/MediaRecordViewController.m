@@ -10,6 +10,9 @@
 #import "AudioViewController.h"
 #import "UploadTab.h"
 #import "ConnectToDatabase.h"
+#import "ASIFormDataRequest.h"
+#import "ASIHTTPRequest.h"
+#import "SQLdatabase.h"
 
 @interface MediaRecordViewController ()
 
@@ -69,6 +72,40 @@ bool isRecording;
 - (IBAction)uploadButtonPressed:(UIButton *)sender {
     UploadTab *uploadVC = [[UploadTab alloc] init];
     [self.navigationController pushViewController:uploadVC animated:YES];
+}
+
+- (IBAction)generateVideo:(UIButton *)sender {
+    //Getting the user's email here
+    SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
+    NSString *strQuery = @"SELECT * FROM Users";
+    NSMutableArray *userDetails = [sql readFromDatabaseUsers:strQuery];
+    
+    if ([userDetails count] == 1) {
+        //Create the form and post it to the API
+        NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
+        //Now, add the data. In this case, we only send the user id, email and session number
+        [request addPostValue:appDelegateObject.CurrentSessionID forKey:@"session_id"];
+        [request addPostValue:appDelegateObject.CurrentSession_Name forKey:@"session_name"];
+        [request addPostValue:[NSString stringWithFormat:@"%i", appDelegateObject.CurrentUserID] forKey:@"user_id"];
+        NSString *userEmail = [NSString stringWithFormat:@"%@", [[userDetails objectAtIndex:0] objectAtIndex:4]];
+        [request addPostValue:userEmail forKey:@"user_email"];
+        [request addPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
+        [request setRequestMethod:@"POST"];
+        [request setDelegate:self];
+        [request setShouldContinueWhenAppEntersBackground:YES];
+        [request startAsynchronous];
+        
+        UIAlertView *videoGenerating = [[UIAlertView alloc] initWithTitle:@"Processing" message:@"Video is currently being processed. An email will be sent to you once the video is ready for viewing." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [videoGenerating show];
+        
+        NSLog(@"%@", [request responseString]);
+    } else {
+        UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [generateError show];
+    }
+    
+    
 }
 
 
