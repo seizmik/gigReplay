@@ -21,7 +21,7 @@
 #import<FacebookSDK/FacebookSDK.h>
 #import "Common.h"
 
-@interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 {
     UIButton *cameraRecButton;
     UIButton *backButton;

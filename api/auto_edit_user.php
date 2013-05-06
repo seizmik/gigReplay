@@ -1,5 +1,5 @@
 <?php
-    set_include_path('/PHPMailer');
+    set_include_path('../api/PHPMailer');
     require 'class.phpmailer.php';
     
     function generate_filepath($path)
@@ -204,7 +204,7 @@
             $cut_audio_array[] = $cut_details;
             //Lastly, update the current time
             $current_time += $duration;
-            echo $current_time, " | ", $the_end;
+            echo $current_time, " | ", $the_end, "<br/>";
         } //This marks the end of the audio before the main audio
         
         
@@ -334,7 +334,10 @@
     $user_id = $_POST['user_id'];
     $user_email = $_POST['user_email'];
     $user_name = $_POST['user_name'];
+    
     $video_array = array();
+    
+    echo "Session id is " . $session_id, "<br/>";
     
     //First query the database and get all the details
     $con = mysql_connect("localhost", "mik", "rivalries");
@@ -375,17 +378,27 @@
     }
         
     //Create a temp folder and master folder
-    $temp_path = "../uploads/temp/".$session_id."/".$user_id."/";
+    $temp_path = "../uploads/temp/".$session_id."/";
     if (!is_dir($temp_path)) {
-        mkdir ($temp_path);
+        mkdir($temp_path);
     }
-    $master_path = "../uploads/master/".$session_id."/".$user_id."/";
-    if (!is_dir($master_path)) {
-        mkdir ($master_path);
+    $temp_path .= $user_id."/";
+    if (!is_dir($temp_path)) {
+        mkdir($temp_path);
     }
     
-    //If master_path is already present, delete everything that is there
-    deleteDirectory($master_path);
+    $master_path = "../uploads/master/".$session_id."/";
+    if (!is_dir($master_path)) {
+        mkdir($master_path);
+    }
+    $master_path .= $user_id."/";
+    if (!is_dir($master_path)) {
+        //If master_path is already present, delete everything that is there
+        mkdir($master_path);
+    } else {
+        deleteDirectory($master_path);
+        mkdir($master_path);
+    }
     
     //OK, now we know when the first video is, and when the last video is.
     //Global variable $current_time will track where we are in the time continuum.
@@ -399,18 +412,12 @@
     
     //Now that you have the trim commands, you can start making the trims
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
-        /*
-        echo $trim_cmd_array[$i]['src'], "<br/>";
-        echo $trim_cmd_array[$i]['seek_to'], "<br/>";
-        echo $trim_cmd_array[$i]['duration'], "<br/>";
-        */
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
         $temp_trim_array[] = $temp_trim_path;
     }
-    
     
     $concat_files = "concat:\"" . implode("|", $temp_trim_array) . "\"";
     echo $concat_files, "<br/><br/>";
@@ -491,13 +498,13 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     //Update into the database that the video has been completed
     
     
     //Then email those who were in that session about where to find this file
-    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".basename($final_video_path);
+    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
     echo $final_video_url;
     
     //Now, delete the temp directory
@@ -507,19 +514,19 @@
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
     $address = $user_email;
-    mail->AddAddress($address);
+    $mail->AddAddress($address);
     
     $mail->Subject = 'Your Video Has Been Completed';
-    $body = <<<EOD
-    <br><hr><br>
-    Dear $user_name,<br>
+    $body = "<br><hr><br>
+    Dear ".$user_name.",<br>
     <br>
     Your video for session $session_name has been completed. You can view your video at the following address: <br>
-    <a href=\"$final_video_url\">$final_video_url</a><br><br>
+    <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
     Remember, keep those videos rolling in.<br><br>
     
     GigReplay. Performances with a different angle.
-    EOD;
+    
+    <br><hr><br>This is an automatically generated email. Please do not reply.";
     $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
     $mail->MsgHTML($body);
     if(!$mail->Send()) {

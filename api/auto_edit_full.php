@@ -327,7 +327,7 @@
 //End function list--------------------------------------------------------
     
     //Establish the session that we want to make the video for
-    $session_id = 99; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
+    $session_id = 176; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
     $video_array = array();
     
     //First query the database and get all the details
@@ -391,18 +391,12 @@
     
     //Now that you have the trim commands, you can start making the trims
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
-        /*
-        echo $trim_cmd_array[$i]['src'], "<br/>";
-        echo $trim_cmd_array[$i]['seek_to'], "<br/>";
-        echo $trim_cmd_array[$i]['duration'], "<br/>";
-        */
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
         $temp_trim_array[] = $temp_trim_path;
     }
-    
     
     $concat_files = "concat:\"" . implode("|", $temp_trim_array) . "\"";
     echo $concat_files, "<br/><br/>";
@@ -483,7 +477,7 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     //Update into the database that the video has been completed
     

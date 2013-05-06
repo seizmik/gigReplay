@@ -190,7 +190,7 @@
         [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
     }
     
-    NSURL *uploadURL = [NSURL URLWithString:@"http://www.lipsync.sg/api/upload_file.php"];
+    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_file.php"];
     
     __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
