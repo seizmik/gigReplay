@@ -15,10 +15,10 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import "SQLdatabase.h"
-#import<MobileCoreServices/MobileCoreServices.h>
+#import <MobileCoreServices/MobileCoreServices.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-#import<FacebookSDK/FacebookSDK.h>
+#import <FacebookSDK/FacebookSDK.h>
 #import "Common.h"
 
 @interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>

@@ -199,16 +199,71 @@ bool isRecording;
 {
     [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
+    //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    //CGAffineTransform txf = [videoTrack preferredTransform];
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
     exportSession.outputURL = outputURL;
     exportSession.outputFileType = AVFileTypeMPEG4;
+    
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
          handler(exportSession);
      }];
 }
 
-
+/*
+- (void)fixOrientation
+{
+    AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
+    AVAssetTrack *FirstAssetTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    UIImageOrientation FirstAssetOrientation_  = UIImageOrientationUp;
+    BOOL  isFirstAssetPortrait_  = NO;
+    CGAffineTransform firstTransform = FirstAssetTrack.preferredTransform;
+    if(firstTransform.a == 0 && firstTransform.b == 1.0 && firstTransform.c == -1.0 && firstTransform.d == 0)  {FirstAssetOrientation_= UIImageOrientationRight; isFirstAssetPortrait_ = YES;}
+    if(firstTransform.a == 0 && firstTransform.b == -1.0 && firstTransform.c == 1.0 && firstTransform.d == 0)  {FirstAssetOrientation_ =  UIImageOrientationLeft; isFirstAssetPortrait_ = YES;}
+    if(firstTransform.a == 1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == 1.0)   {FirstAssetOrientation_ =  UIImageOrientationUp;}
+    if(firstTransform.a == -1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == -1.0) {FirstAssetOrientation_ = UIImageOrientationDown;}
+    CGFloat FirstAssetScaleToFitRatio = 1.0;
+    if(isFirstAssetPortrait_){
+        FirstAssetScaleToFitRatio = 1.0;
+        CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
+        [FirstlayerInstruction setTransform:CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor) atTime:kCMTimeZero];
+    }else{
+        CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
+        [FirstlayerInstruction setTransform:CGAffineTransformConcat(CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor),CGAffineTransformMakeTranslation(0, 160)) atTime:kCMTimeZero];
+    }
+    
+    [FirstlayerInstruction setOpacity:0.0 atTime:videoAsset.duration];
+    
+    AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:AudioTrack];
+    
+    
+    MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,nil];;
+    
+    AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
+    MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
+    MainCompositionInst.frameDuration = CMTimeMake(1, 30);
+    MainCompositionInst.renderSize = CGSizeMake(360.0, 480.0);
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"orientationFixedVideo-%d.mov",arc4random() % 1000]];
+    
+    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
+    
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetMediumQuality];
+    exporter.outputURL=url;
+    exporter.outputFileType = AVFileTypeQuickTimeMovie;
+    exporter.videoComposition = MainCompositionInst;
+    exporter.shouldOptimizeForNetworkUse = YES;
+    [exporter exportAsynchronouslyWithCompletionHandler:^
+     {
+         dispatch_async(dispatch_get_main_queue(), ^{
+             [self exportDidFinish:exporter];
+         });
+     }];
+}
+*/
 
 - (NSURL*)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {
