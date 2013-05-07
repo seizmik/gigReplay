@@ -181,9 +181,7 @@
 	}
    
     NSArray *Details=[self.sessionDetailsHolder objectAtIndex:indexPath.row];
-    cell.sceneSelectionButton.tag=indexPath.row;
-     [cell.sceneSelectionButton addTarget:self action:@selector(ClickedButtonForSelection:) forControlEvents:UIControlEventTouchUpInside];
-    
+        
         if (FBSession.activeSession.isOpen) {
             [[FBRequest requestForMe] startWithCompletionHandler:
              ^(FBRequestConnection *connection,
@@ -203,29 +201,29 @@
     
     return cell;
 }
--(void)ClickedButtonForSelection:(id)sender
-{
-    UIButton *btn=(UIButton*)sender;
-    [tableViewScenes reloadData];
-    NSIndexPath *myIndexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
-    CustomCell *cell=[tableViewScenes cellForRowAtIndexPath:myIndexPath];
-    
-    if(SelectionButtonSeleted)
-    {
-        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"File-Unselect.png"]  forState:UIControlStateNormal];
-        SelectionButtonSeleted=FALSE;
-        
-    }
-    else
-    {
-        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"tick.png"]  forState:UIControlStateNormal];
-        SelectionButtonSeleted=TRUE;
-        currentSelectedSession=btn.tag;
-        
-    }
-    
-    
-}
+//-(void)ClickedButtonForSelection:(id)sender
+//{
+//    UIButton *btn=(UIButton*)sender;
+//    [tableViewScenes reloadData];
+//    NSIndexPath *myIndexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
+//    CustomCell *cell=[tableViewScenes cellForRowAtIndexPath:myIndexPath];
+//    
+//    if(SelectionButtonSeleted)
+//    {
+//        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"File-Unselect.png"]  forState:UIControlStateNormal];
+//        SelectionButtonSeleted=FALSE;
+//        
+//    }
+//    else
+//    {
+//        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"tick.png"]  forState:UIControlStateNormal];
+//        SelectionButtonSeleted=TRUE;
+//        currentSelectedSession=btn.tag;
+//        
+//    }
+//    
+//    
+//}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -243,12 +241,13 @@
     appDelegateObject.CurrentSession_Code=Session_Code;
     appDelegateObject.CurrentSession_Name=SessionName;
     [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 150;
+    return 107;
 }
 
 

@@ -59,9 +59,7 @@
    
     // Do any additional setup after loading the view from its nib.
 }
--(void)viewWillAppear:(BOOL)animated{
-    [self.navigationController setNavigationBarHidden:YES];
-}
+
 
 
 - (void)didReceiveMemoryWarning
@@ -104,8 +102,6 @@
     if(RespondsReached){
         
         recordObj =[[MediaRecordViewController alloc]initWithNibName:@"MediaRecordViewController" bundle:nil];
-        [recordObj setModalTransitionStyle:UIModalTransitionStyleCoverVertical];
-        //[self presentViewController:recordObj animated:YES completion:Nil];
         [self.navigationController pushViewController:recordObj animated:YES];
     } else {
         [self ShowAlertMessage:@"Warning" Message:@"Scene was not set up properly!"];
@@ -116,6 +112,13 @@
 //Resign the textfield
 - (IBAction)resignTextField:(id)sender {
     [sceneNameTextField resignFirstResponder];
+}
+
+- (IBAction)settingsButton:(id)sender {
+ 
+    SettingsViewController *set=[[SettingsViewController alloc]init];
+    [self.navigationController pushViewController:set animated:YES];
+    
 }
 
 #pragma mark -

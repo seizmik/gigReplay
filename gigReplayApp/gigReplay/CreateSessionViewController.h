@@ -12,6 +12,7 @@
 #import "SQLdatabase.h"
 #import<FacebookSDK/FacebookSDK.h>
 #import "MediaRecordViewController.h"
+#import "SettingsViewController.h"
 
 @interface CreateSessionViewController : UIViewController{
     NSString *sessionname;
@@ -32,5 +33,6 @@
 - (IBAction)prepareMediaRecord:(id)sender;
 - (void)populateUserDetails;
 - (IBAction)resignTextField:(id)sender;
+- (IBAction)settingsButton:(id)sender;
 
 @end
