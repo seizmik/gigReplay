@@ -86,11 +86,28 @@ float currentTime;
         //We get the stop time here to make it the same as video sync
         //[self getStartTime];
         [audioRecorder stop];
-        [self insertIntoDatabase];
+        //[self insertIntoDatabase];
     }
     [self checkRecording];
     [self timerStartStop];
     
+    //Convert the file that was just taken
+    double thisAudioStartTime = startTime;
+    NSURL *capturedAudioURL = soundFileURL;
+    NSURL *outputURL = [self getLocalFilePathToSave];
+    
+    [self convertVideoToLowQuailtyWithInputURL:capturedAudioURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession) {
+        
+        if (exportSession.status == AVAssetExportSessionStatusCompleted) {
+            NSLog(@"Conversion successful");
+            [self insertIntoDatabaseWithPath:outputURL withStartTime:thisAudioStartTime];
+            //Then remove the original audio file
+            [[NSFileManager defaultManager] removeItemAtURL:capturedAudioURL error:NULL];
+        } else {
+            NSLog(@"Conversion failed");
+            [self insertIntoDatabaseWithPath:capturedAudioURL withStartTime:thisAudioStartTime];
+        }
+    }];
 }
 
 - (IBAction)playPressed:(UIButton *)sender {
@@ -115,53 +132,6 @@ float currentTime;
 - (IBAction)uploadPressed:(UIButton *)sender {
     UploadTab *uploadVC = [[UploadTab alloc] init];
     [self.navigationController pushViewController:uploadVC animated:YES];
-}
-
-#pragma mark - Updating methods
-
-- (void)checkRecording
-{
-    if (audioRecorder.recording) {
-        //Prevents phone from sleeping
-        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
-        [recordButton setTitle:@"STOP" forState:UIControlStateNormal];
-        playButton.enabled = NO;
-        uploadButton.enabled = NO;
-        [self.navigationItem setHidesBackButton: YES animated: YES];
-    } else {
-        [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
-        [recordButton setTitle:@"Record" forState:UIControlStateNormal];
-        playButton.enabled = YES;
-        uploadButton.enabled = YES;
-        [self.navigationItem setHidesBackButton: NO animated: YES];
-    }
-}
-
-- (void)checkPlaying
-{
-    if (audioPlayer.playing) {
-        [playButton setTitle:@"STOP" forState:UIControlStateNormal];
-        recordButton.enabled = NO;
-        uploadButton.enabled = NO;
-        [self.navigationItem setHidesBackButton: YES animated: YES];
-    } else {
-        [playButton setTitle:@"Play" forState:UIControlStateNormal];
-        recordButton.enabled = YES;
-        uploadButton.enabled = YES;
-        [self.navigationItem setHidesBackButton: NO animated: YES];
-        if ([audioTimer isValid]) {
-            [audioTimer invalidate];
-        }
-    }
-}
-
-- (void)insertIntoDatabase
-{
-    ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 1, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, soundFileURL, startTime];
-    while (![dbObject insertToDatabase:strQuery]) {
-        NSLog(@"Unable to update the database");
-    }
 }
 
 #pragma mark
@@ -229,6 +199,109 @@ float currentTime;
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     
     return uniqueFileName;
+}
+
+- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
+                                   outputURL:(NSURL*)outputURL
+                                     handler:(void (^)(AVAssetExportSession *))handler  //Used to compress the video
+{
+    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
+    //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    //CGAffineTransform txf = [videoTrack preferredTransform];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+    exportSession.outputURL = outputURL;
+    exportSession.outputFileType = AVFileTypeAppleM4A;
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+     }];
+}
+
+- (NSURL*)getLocalFilePathToSave   //Calls when recorded video saved to document library
+{
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    //NSString *currentPath;
+    //currentPath = [filemgr currentDirectoryPath];
+    NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *docsDir = [dirPaths objectAtIndex:0];
+    NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
+    // NSLog(@"%@",newDir);
+    
+    NSString *m_strFilepath  = [[NSString alloc]initWithString:newDir];
+    
+    if ([filemgr fileExistsAtPath:m_strFilepath]) {
+        // NSLog(@"hai");
+    } else {
+        [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    if (m_strFilepath!=Nil) {
+        m_strFilepath=Nil;
+    }
+    
+    NSURL *audioPath = [NSURL fileURLWithPath:audioFilePath];
+    //NSLog(@"Get file path to save returns: %@", audioFilePath);
+    return audioPath;
+}
+
+
+#pragma mark - Updating methods
+
+- (void)checkRecording
+{
+    if (audioRecorder.recording) {
+        //Prevents phone from sleeping
+        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
+        [recordButton setTitle:@"STOP" forState:UIControlStateNormal];
+        playButton.enabled = NO;
+        uploadButton.enabled = NO;
+        [self.navigationItem setHidesBackButton: YES animated: YES];
+    } else {
+        [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
+        [recordButton setTitle:@"Record" forState:UIControlStateNormal];
+        playButton.enabled = YES;
+        uploadButton.enabled = YES;
+        [self.navigationItem setHidesBackButton: NO animated: YES];
+    }
+}
+
+- (void)checkPlaying
+{
+    if (audioPlayer.playing) {
+        [playButton setTitle:@"STOP" forState:UIControlStateNormal];
+        recordButton.enabled = NO;
+        uploadButton.enabled = NO;
+        [self.navigationItem setHidesBackButton: YES animated: YES];
+    } else {
+        [playButton setTitle:@"Play" forState:UIControlStateNormal];
+        recordButton.enabled = YES;
+        uploadButton.enabled = YES;
+        [self.navigationItem setHidesBackButton: NO animated: YES];
+        if ([audioTimer isValid]) {
+            [audioTimer invalidate];
+        }
+    }
+}
+
+- (void)insertIntoDatabase
+{
+    ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 1, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, soundFileURL, startTime];
+    while (![dbObject insertToDatabase:strQuery]) {
+        NSLog(@"Unable to update the database");
+    }
+}
+
+- (void)insertIntoDatabaseWithPath:(NSURL *)audioURL withStartTime:(double)audioStartTime
+{
+    ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, audioURL, audioStartTime];
+    while (![dbObject insertToDatabase:strQuery]) {
+        NSLog(@"Unable to update the database");
+    }
 }
 
 #pragma mark - Delegate methods

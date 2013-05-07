@@ -90,7 +90,6 @@
     } else {
         [self syncWithServer]; //This sets up the time relationship
         //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-        NSLog(@"Time relationship is %f", timeRelationship);
     }
     
     
@@ -241,7 +240,7 @@
     
     //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
     for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 9); count++) {
-        
+        NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
         lagArray = [NSMutableArray array];
@@ -341,6 +340,7 @@
         [self showSyncAlert];
     } else {
         timeRelationship = meanDiffWithServer;
+        NSLog(@"Time relationship is %f", timeRelationship);
     }
 }
 
