@@ -96,6 +96,8 @@ float currentTime;
     NSURL *capturedAudioURL = soundFileURL;
     NSURL *outputURL = [self getLocalFilePathToSave];
     
+    NSLog(@"Extension is %@", [capturedAudioURL pathExtension]);
+    
     [self convertVideoToLowQuailtyWithInputURL:capturedAudioURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession) {
         
         if (exportSession.status == AVAssetExportSessionStatusCompleted) {
@@ -237,7 +239,7 @@ float currentTime;
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.m4a", newDir, [self generateUniqueFilename]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
