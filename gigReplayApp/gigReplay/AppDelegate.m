@@ -15,6 +15,7 @@
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
 #import "ConnectToDatabase.h"
+#import "GigReplayTableViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -170,46 +171,87 @@
 
 -(void)loadApplicationHome
 {
-    //NSLog(@"loadapphome");
-    tabBarController=[[UITabBarController alloc]init];
     
     
-    tabBarController.tabBar.tintColor=[UIColor blackColor];
-    
-    UIViewController *createSession = [[CreateSessionViewController alloc]initWithNibName:@"CreateSessionViewController" bundle:nil];
-    UIViewController *joinSession = [[JoinSessionViewController alloc]initWithNibName:@"JoinSessionViewController" bundle:nil];
-    UIViewController *openSession = [[OpenSessionViewController alloc]initWithNibName:@"OpenSessionViewController" bundle:nil];
-    UIViewController *settingsTab = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
-    UIViewController *uploadTab = [[UploadTab alloc] initWithNibName:@"UploadTab" bundle:nil];
+    CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
+    UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
     
     createSession.title=@"Create";
-    //createSession.view.backgroundColor=[UIColor blackColor];
-    createSession.tabBarItem.image=[UIImage imageNamed:@"img-new-1.png"];
+    [createSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"create_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"create_off.png"]];
+            
+    JoinSessionViewController *join=[[JoinSessionViewController alloc]init];
+    UINavigationController *joinSession=[[UINavigationController alloc]initWithRootViewController:join];
+    joinSession.title=@"Join";
+    [joinSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"join_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"join_off.png"]];
     
-    joinSession.title =@"Join";
-    joinSession.view.backgroundColor=[UIColor greenColor];
-    joinSession.tabBarItem.image=[UIImage imageNamed:@"img-join-1.png"];
+    OpenSessionViewController *open=[[OpenSessionViewController alloc]init];
+    UINavigationController *openSession=[[UINavigationController alloc]initWithRootViewController:open];
+    openSession.title =@"Open";
+    [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"open_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"open_off.png"]];
+   
+    UploadTab *upload=[[UploadTab alloc]init];
+    UINavigationController *uploadTab=[[UINavigationController alloc]initWithRootViewController:upload];
+    uploadTab.title =@"Upload";
+    [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"upload_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"upload_off.png"]];
     
-    openSession.title=@"Open";
-    openSession.view.backgroundColor=[UIColor  purpleColor];
-    openSession.tabBarItem.image=[UIImage imageNamed:@"img-open-1.png"];
+    GigReplayTableViewController *gigReplay=[[GigReplayTableViewController alloc]init];
+    UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
+    gig.title=@"GigReplay";
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"replay.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"replay.png"]];
     
-    settingsTab.title=@"Settings";
-    settingsTab.view.backgroundColor=[UIColor redColor];
-    settingsTab.tabBarItem.image=[UIImage imageNamed:@"img-settings-1.png"];
     
-    uploadTab.title = @"Upload";
-    uploadTab.tabBarItem.image = [UIImage imageNamed:@"img-upload-1.png"];
+    tabBarController=[[UITabBarController alloc]init];
+    tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color.png"]];
     
-    NSArray *viewControllersArray=[NSArray arrayWithObjects: createSession, joinSession, openSession, uploadTab, settingsTab, nil];
+    NSArray *viewArray=[NSArray arrayWithObjects:createSession,joinSession,openSession,uploadTab,gig,nil];
     
-    [tabBarController setViewControllers:viewControllersArray];
-    navController = [[UINavigationController alloc] init];
+    //set tab bar controller array
+    [tabBarController setViewControllers:viewArray];
+    
+    //push stack onto canvas
     [self.window addSubview:tabBarController.view];
-    self.window.rootViewController = navController;
-    [self.navController pushViewController:tabBarController animated:NO];
-    //[navController setNavigationBarHidden:YES animated:NO];
     [self.window makeKeyAndVisible];
+
+//    //NSLog(@"loadapphome");
+//    tabBarController=[[UITabBarController alloc]init];
+//    
+//    
+//    tabBarController.tabBar.tintColor=[UIColor blackColor];
+//    
+//    CreateSessionViewController *createSession = [[CreateSessionViewController alloc]initWithNibName:@"CreateSessionViewController" bundle:nil];
+//    UIViewController *joinSession = [[JoinSessionViewController alloc]initWithNibName:@"JoinSessionViewController" bundle:nil];
+//    UIViewController *openSession = [[OpenSessionViewController alloc]initWithNibName:@"OpenSessionViewController" bundle:nil];
+//    UIViewController *settingsTab = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
+//    UIViewController *uploadTab = [[UploadTab alloc] initWithNibName:@"UploadTab" bundle:nil];
+//    
+//    createSession.title=@"Create";
+//    //createSession.view.backgroundColor=[UIColor blackColor];
+//    createSession.tabBarItem.image=[UIImage imageNamed:@"img-new-1.png"];
+//    
+//    joinSession.title =@"Join";
+//    joinSession.view.backgroundColor=[UIColor greenColor];
+//    joinSession.tabBarItem.image=[UIImage imageNamed:@"img-join-1.png"];
+//    
+//    openSession.title=@"Open";
+//    openSession.view.backgroundColor=[UIColor  purpleColor];
+//    openSession.tabBarItem.image=[UIImage imageNamed:@"img-open-1.png"];
+//    
+//    settingsTab.title=@"Settings";
+//    settingsTab.view.backgroundColor=[UIColor redColor];
+//    settingsTab.tabBarItem.image=[UIImage imageNamed:@"img-settings-1.png"];
+//    
+//    uploadTab.title = @"Upload";
+//    uploadTab.tabBarItem.image = [UIImage imageNamed:@"img-upload-1.png"];
+//    
+//    NSArray *viewControllersArray=[NSArray arrayWithObjects: createSession, joinSession, openSession, uploadTab, settingsTab, nil];
+//    
+//    [tabBarController setViewControllers:viewControllersArray];
+//    navController = [[UINavigationController alloc] init];
+//    [self.window addSubview:tabBarController.view];
+//    self.window.rootViewController = navController;
+//    [self.navController pushViewController:tabBarController animated:NO];
+//    //[navController setNavigationBarHidden:YES animated:NO];
+  
 }
 
 
