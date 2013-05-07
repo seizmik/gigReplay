@@ -19,7 +19,7 @@
 @end
 
 @implementation MediaRecordViewController
-@synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer, timeLabel;
+@synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer;
 @synthesize cameraUI, movieURL, saveAlert;
 
 double startTime;
@@ -102,7 +102,9 @@ bool isRecording;
             [request setRequestMethod:@"POST"];
             [request setDelegate:self];
             [request setShouldContinueWhenAppEntersBackground:YES];
-            [request startAsynchronous];
+            [request startSynchronous];
+            
+            NSLog(@"%@", [request responseString]);
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
             [generateError show];
@@ -295,11 +297,12 @@ bool isRecording;
 
 -(void)createOverlay{
     //Determine size of screen in case of iPhone 5
-    //float setY = self.view.bounds.size.height - 50;
-    float setX = self.view.bounds.size.width;
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = screenRect.size.width;
+    CGFloat screenHeight = screenRect.size.height;
     
     //overlay = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0)];
-    overlay = [[UIView alloc] initWithFrame:CGRectMake(0, 430, setX, 50)];
+    overlay = [[UIView alloc] initWithFrame:CGRectMake(0, (screenHeight - 50), screenWidth, 50.0)];
     //NSLog(@"setX is %f. setY is %f", setX, setY);
     overlay.backgroundColor = [UIColor clearColor];
     overlay.opaque = NO;
@@ -315,7 +318,7 @@ bool isRecording;
     //Help button
     helpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [helpButton setTitle:@"Help" forState:UIControlStateNormal];
-    [helpButton setFrame:CGRectMake((setX - 45.0), 0.0, 40.0, 40.0)];
+    [helpButton setFrame:CGRectMake((screenWidth - 45.0), 0.0, 40.0, 40.0)];
     [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     helpButton.enabled = YES;
     [overlay addSubview:helpButton];
@@ -323,11 +326,27 @@ bool isRecording;
     //Recording button
     cameraRecButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
-    [cameraRecButton setFrame:CGRectMake((setX/2 - 60.0), 0, 120.0, 50.0)];
+    [cameraRecButton setFrame:CGRectMake((screenWidth/2 - 60.0), 0, 120.0, 50.0)];
     [cameraRecButton addTarget:self action:@selector(recordButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     cameraRecButton.enabled = YES;
     [overlay addSubview:cameraRecButton];
     
+    //Create the timerLabel
+    timerLabel = [[UILabel alloc] initWithFrame:CGRectMake((screenWidth - 70.0), -80.0, 75.0, 30.0)];
+    timerLabel.numberOfLines = 1;
+    timerLabel.backgroundColor = [UIColor lightGrayColor];
+    timerLabel.alpha = 0.6;
+    timerLabel.textColor = [UIColor whiteColor];
+    timerLabel.text = [self timeFormatted:0];
+    timerLabel.textAlignment = NSTextAlignmentCenter;
+    timerLabel.adjustsFontSizeToFitWidth = YES;
+    timerLabel.layer.cornerRadius = 8.0;
+    
+    //rotate label 90 degrees
+    timerLabel.transform = CGAffineTransformMakeRotation( M_PI/2 );
+    timerLabel.hidden = YES;
+    
+    [overlay addSubview:timerLabel];
 }
 
 - (void)recordButtonPressed
@@ -338,10 +357,12 @@ bool isRecording;
         isRecording = YES;
         [backButton setHidden:YES];
         [cameraRecButton setTitle:@"STOP" forState:UIControlStateNormal];
+        [self timerStartStop];
         [cameraUI startVideoCapture];
         //[self getStartTime];
 
     } else {
+        [self timerStartStop];
         [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
@@ -370,6 +391,8 @@ bool isRecording;
     NSLog(@"HELP!!!");
 }
 
+#pragma mark - Timer methods
+
 - (void)getStartTime {
     startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
     //NSLog(@"Start video! %f", startTime);
@@ -377,6 +400,8 @@ bool isRecording;
 
 - (void)timerStartStop {
     if (![videoTimer isValid]) {
+        timerLabel.text = [self timeFormatted:0];
+        timerLabel.hidden = NO;
         currentTime = 0;
         self.videoTimer = [NSTimer
                            scheduledTimerWithTimeInterval:1.00
@@ -387,12 +412,13 @@ bool isRecording;
     } else {
         [self.videoTimer invalidate];
         self.videoTimer = nil;
+        [timerLabel setHidden:YES];
     }
 }
 
 - (void)timeUpdate:(NSTimer *)theTimer {
     currentTime += 1;
-    self.timeLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted:currentTime]];
+    self->timerLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted:currentTime]];
 }
 
 - (NSString *)timeFormatted:(int)totalSeconds

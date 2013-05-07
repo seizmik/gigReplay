@@ -20,13 +20,15 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <FacebookSDK/FacebookSDK.h>
 #import "Common.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 {
-    UIButton *cameraRecButton;
-    UIButton *backButton;
-    UIButton *helpButton;
-    UIView *overlay;
+    UIButton    *cameraRecButton;
+    UIButton    *backButton;
+    UIButton    *helpButton;
+    UIView      *overlay;
+    UILabel     *timerLabel;
 }
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
@@ -47,6 +49,5 @@
 @property (strong, nonatomic) UIImagePickerController *cameraUI;
 @property (strong, nonatomic) UIAlertView *saveAlert;
 @property (strong, nonatomic) NSTimer *videoTimer;
-@property (strong, nonatomic) IBOutlet UILabel *timeLabel;
 
 @end
