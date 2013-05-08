@@ -44,13 +44,11 @@ float currentTime;
     [self checkPlaying];
     
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
-    
-    [self.navigationItem.backBarButtonItem setTitle:@"Back"];
-    
+        
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-    [self.navigationItem.backBarButtonItem setTitle:@"Back"];
+    
 }
 
 - (void)didReceiveMemoryWarning

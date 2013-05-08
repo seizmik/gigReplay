@@ -172,10 +172,8 @@
 -(void)loadApplicationHome
 {
     
-    
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
-    
     createSession.title=@"Create";
     [createSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"create_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"create_off.png"]];
             
@@ -204,6 +202,7 @@
     tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color.png"]];
     
     NSArray *viewArray=[NSArray arrayWithObjects:createSession,joinSession,openSession,uploadTab,gig,nil];
+    
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
@@ -251,7 +250,7 @@
 //    self.window.rootViewController = navController;
 //    [self.navController pushViewController:tabBarController animated:NO];
 //    //[navController setNavigationBarHidden:YES animated:NO];
-  
+    
 }
 
 
@@ -261,6 +260,12 @@
     UIViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
     self.window.rootViewController = loginViewController;
     [self.window makeKeyAndVisible];
+}
+
+- (void)goToSettings
+{
+    SettingsViewController *set=[[SettingsViewController alloc]init];
+    [navController pushViewController:set animated:YES];
 }
 
 -(void)closeFacebookSession

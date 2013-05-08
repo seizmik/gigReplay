@@ -42,7 +42,7 @@ bool isRecording;
     [self.navigationController setNavigationBarHidden:NO];
     self.title = appDelegateObject.CurrentSession_Name;
     isRecording = NO;
-
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated
