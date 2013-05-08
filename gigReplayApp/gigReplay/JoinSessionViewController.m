@@ -9,6 +9,7 @@
 #import "JoinSessionViewController.h"
 #import "CustomCell.h"
 #import "MediaRecordViewController.h"
+#import "SettingsViewController.h"
 
 @interface JoinSessionViewController ()
 
@@ -44,7 +45,7 @@
 											 selector:@selector(RemoveLoadingView:)
 												 name:@"JoinSearchParsingCompleted"
 											   object:nil];
-    
+    [self loadSettingsButton];
     //UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
     //[self.view addGestureRecognizer:tapToDismiss];
     // Do any additional setup after loading the view from its nib.
@@ -330,6 +331,24 @@
 #pragma mark End of join session methods
 #pragma mark -
 ////////////////////////////end of joining Sessions methods/////////////////////////
+
+- (void)loadSettingsButton
+{
+    UIImage *image = [UIImage imageNamed:@"settings_icon.png"];
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(0, 0, 25, 24)];
+    [settingsButton setImage:image forState:UIControlStateNormal];
+    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+}
+
+- (void)goToSettings
+{
+    SettingsViewController *set=[[SettingsViewController alloc] init];
+    [self.navigationController pushViewController:set animated:YES];
+}
 
 -(void) ShowAlertMessage:(NSString*)Title Message:(NSString*)message
 {

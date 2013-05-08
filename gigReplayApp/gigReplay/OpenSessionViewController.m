@@ -1,4 +1,5 @@
 #import "OpenSessionViewController.h"
+#import "SettingsViewController.h"
 
 @interface OpenSessionViewController ()
 
@@ -24,6 +25,7 @@
 											 selector:@selector(removeLoadingView:)
 												 name:@"OpenSessionDetailsCompleted"
 											   object:nil];
+    [self loadSettingsButton];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -143,6 +145,7 @@
     
     
 }
+
 -(void) ShowAlertMessage:(NSString*)Title Message:(NSString*)message
 {
     UIAlertView *alert=[[UIAlertView alloc] initWithTitle:Title message:message delegate:nil cancelButtonTitle:@"ok" otherButtonTitles: nil];
@@ -168,6 +171,24 @@
     
     
     
+}
+
+- (void)loadSettingsButton
+{
+    UIImage *image = [UIImage imageNamed:@"settings_icon.png"];
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(0, 0, 25, 24)];
+    [settingsButton setImage:image forState:UIControlStateNormal];
+    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+}
+
+- (void)goToSettings
+{
+    SettingsViewController *set=[[SettingsViewController alloc] init];
+    [self.navigationController pushViewController:set animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

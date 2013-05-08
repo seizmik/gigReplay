@@ -55,9 +55,10 @@
 												 name:@"UserRegistrationCompleted"
 											   object:nil];
     UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
-    [self.view addGestureRecognizer:tapToDismiss];    
-   
+    [self.view addGestureRecognizer:tapToDismiss];
+    
     // Do any additional setup after loading the view from its nib.
+    [self loadSettingsButton];
 }
 
 
@@ -114,11 +115,22 @@
     [sceneNameTextField resignFirstResponder];
 }
 
-- (IBAction)settingsButton:(id)sender {
- 
-    SettingsViewController *set=[[SettingsViewController alloc]init];
-    [self.navigationController pushViewController:set animated:YES];
+- (void)loadSettingsButton
+{
+    UIImage *image = [UIImage imageNamed:@"settings_icon.png"];
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(0, 0, 25, 24)];
+    [settingsButton setImage:image forState:UIControlStateNormal];
+    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+    self.navigationItem.rightBarButtonItem = rightButton;
     
+}
+
+- (void)goToSettings
+{
+    SettingsViewController *set=[[SettingsViewController alloc] init];
+    [self.navigationController pushViewController:set animated:YES];
 }
 
 #pragma mark -

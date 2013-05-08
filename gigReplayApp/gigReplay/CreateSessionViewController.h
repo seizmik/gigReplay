@@ -33,6 +33,5 @@
 - (IBAction)prepareMediaRecord:(id)sender;
 - (void)populateUserDetails;
 - (IBAction)resignTextField:(id)sender;
-- (IBAction)settingsButton:(id)sender;
 
 @end
