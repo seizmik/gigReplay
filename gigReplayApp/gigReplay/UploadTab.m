@@ -180,11 +180,11 @@
     NSString *uploadFileName = [NSString string];
     NSString *uploadFileType = [NSString string];
     if (fileDetails.contentType == 1) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.caf", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber];
-        uploadFileType = @"audio/caf";
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath pathExtension]];
+        uploadFileType = [NSString stringWithFormat:@"audio/%@", [fileDetails.filePath pathExtension]];
     } else if (fileDetails.contentType == 2) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.mp4", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber];
-        uploadFileType = @"video/mp4";
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath pathExtension]];
+        uploadFileType = [NSString stringWithFormat:@"video/%@", [fileDetails.filePath pathExtension]];
     } else {
         //File is corrupted. Need to do something with the file when returned this.
         [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
