@@ -331,7 +331,7 @@
     $video_array = array();
     
     //First query the database and get all the details
-    $con = mysql_connect("localhost", "mik", "rivalries");
+    $con = mysql_connect("localhost", "default", "thesmosinc");
     if (!$con) {
         die(mysql_error());
     } else {
