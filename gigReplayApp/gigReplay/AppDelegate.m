@@ -180,7 +180,7 @@
     GigReplayTableViewController *gigReplay=[[GigReplayTableViewController alloc]init];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:0.85] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
     
     
     tabBarController=[[UITabBarController alloc]init];
