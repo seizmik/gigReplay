@@ -174,35 +174,37 @@
     
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
+    
+    [createSession.navigationBar setBackgroundImage:[UIImage imageNamed: @"navigation_bar.png"]
+                                      forBarMetrics:UIBarMetricsDefault];
     createSession.title=@"Create";
-    [createSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"create_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"create_off.png"]];
-            
+    [createSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
+    
     JoinSessionViewController *join=[[JoinSessionViewController alloc]init];
     UINavigationController *joinSession=[[UINavigationController alloc]initWithRootViewController:join];
     joinSession.title=@"Join";
-    [joinSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"join_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"join_off.png"]];
+    [joinSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_join_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_join_button_off.png"]];
     
     OpenSessionViewController *open=[[OpenSessionViewController alloc]init];
     UINavigationController *openSession=[[UINavigationController alloc]initWithRootViewController:open];
     openSession.title =@"Open";
-    [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"open_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"open_off.png"]];
-   
+    [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];
+    
     UploadTab *upload=[[UploadTab alloc]init];
     UINavigationController *uploadTab=[[UINavigationController alloc]initWithRootViewController:upload];
     uploadTab.title =@"Upload";
-    [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"upload_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"upload_off.png"]];
+    [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
     GigReplayTableViewController *gigReplay=[[GigReplayTableViewController alloc]init];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"replay.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"replay.png"]];
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:0.85] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
     
     
     tabBarController=[[UITabBarController alloc]init];
     tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color.png"]];
     
     NSArray *viewArray=[NSArray arrayWithObjects:createSession,joinSession,openSession,uploadTab,gig,nil];
-    
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];

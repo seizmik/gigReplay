@@ -46,13 +46,13 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrameSize">{320, 106}</string>
 								<reference key="NSSuperview" ref="63279238"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="853412632"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">result.png</string>
+									<string key="NSResourceName">result@2x.png</string>
 								</object>
 							</object>
 							<object class="IBUILabel" id="662358059">
@@ -60,7 +60,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{146, 65}, {129, 21}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="737637296"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -96,7 +96,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{146, 20}, {129, 21}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
-								<reference key="NSNextKeyView"/>
+								<reference key="NSNextKeyView" ref="662358059"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -117,7 +117,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{193, 86}, {0, 0}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
-								<reference key="NSNextKeyView" ref="853412632"/>
+								<reference key="NSNextKeyView"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -576,7 +576,7 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">result.png</string>
+			<string key="NS.key.0">result@2x.png</string>
 			<string key="NS.object.0">{320, 107}</string>
 		</object>
 		<bool key="IBDocument.UseAutolayout">YES</bool>
