@@ -23,6 +23,16 @@
         //BTW, that's what she said...
     }
     
+    function generate_random_string($length = 7) {
+        //Can set length by making length a fixed number
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
+    
     function fftime($time_in_sec)
     {
         $time_in_sec = round($time_in_sec, 2);
@@ -312,6 +322,22 @@
         return $output_audio_path;
     }
     
+    function create_thumbnail($input_path, $time, $video_url)
+    {
+        $pathinfo = pathinfo($input_path);
+        $output_path = $pathinfo['dirname'];
+        $output_path .= "/".generate_random_string().".png";
+        $seek_to = fftime($time);
+        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=-1:360 -vframes 1 ".$output_path);
+        
+        //Create the URL
+        $url_pathinfo = pathinfo($video_url);
+        $output_pathinfo = pathinfo($output_path);
+        $output_url = $url_pathinfo['dirname']."/".$output_pathinfo['basename'];
+        
+        return $output_url;
+    }
+    
     function deleteDirectory($dir)
     {
         if (!file_exists($dir)) return true;
@@ -336,8 +362,6 @@
     $user_name = $_POST['user_name'];
     
     $video_array = array();
-    
-    echo "Session id is " . $session_id, "<br/>";
     
     //First query the database and get all the details
     $con = mysql_connect("localhost", "default", "thesmosinc");
@@ -500,17 +524,32 @@
     $final_video_path = $master_path . "output.mp4";
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
-    //Update into the database that the video has been completed
-    
-    
-    //Then email those who were in that session about where to find this file
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
     echo $final_video_url;
+    
+    //Create 3 thumbnails based on the videos length
+    $video_length = $last_end - $first_start;
+    $thumb_1 = create_thumbnail($final_video_path, ($video_length * 0.2), $final_video_url);
+    $thumb_2 = create_thumbnail($final_video_path, ($video_length * 0.5), $final_video_url);
+    $thumb_3 = create_thumbnail($final_video_path, ($video_length * 0.8), $final_video_url);
+    
+    //Update the database
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
+        mysqli_query($con, $query);
+        $entry_id = mysqli_insert_id($con);
+    }
+    mysqli_close($con);
+    
     
     //Now, delete the temp directory
     deleteDirectory($temp_path);
     
-    //Now, email the user the final video
+    
+    //Finally, email the user the final video
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
     $address = $user_email;

@@ -102,9 +102,7 @@ bool isRecording;
             [request setRequestMethod:@"POST"];
             [request setDelegate:self];
             [request setShouldContinueWhenAppEntersBackground:YES];
-            [request startSynchronous];
-            
-            NSLog(@"%@", [request responseString]);
+            [request startAsynchronous];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
             [generateError show];
