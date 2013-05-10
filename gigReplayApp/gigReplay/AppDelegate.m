@@ -108,26 +108,19 @@
     NSString *sqlCommand=[NSString stringWithFormat:@"Select * from Users"];
     NSMutableArray *UserDetails= [databaseObject readFromDatabaseUsers:sqlCommand];
     NSLog(@"%@",UserDetails);
-    NSLog(@"leonism")   ;
-    if ([UserDetails count]>0)
-    {
+    if ([UserDetails count]>0){
         userexists=TRUE;
-            }
-    else
-    {
+    } else {
         userexists=FALSE;
-       
     }
 }
 
 - (BOOL)checkFBSessionOpen{
     if(FBSession.activeSession.isOpen){
         return TRUE;
-    }
-    else{
+    } else {
         return FALSE;
     }
-    
 }
 
 - (void)checkExistingUser
@@ -135,9 +128,7 @@
     
     if(userexists==TRUE){
         [self loadApplicationHome];
-       
-    }
-    else if(userexists==FALSE){
+    } else if(userexists==FALSE) {
         [self goToLogin];
     }
 }
@@ -145,21 +136,15 @@
 {
     NSDictionary *dict = [notification userInfo];
     NSString *status=[dict objectForKey:@"Status"];
-    if ([status isEqualToString:@"Failed"])
-    {
+    if ([status isEqualToString:@"Failed"]) {
         [self ShowAlert:@"Warning" Message:@"You need to be connected to the internet"];
     }
-   
-    if (userexists)
-    {
+    
+    if (userexists) {
         [self loadApplicationHome];
-    }
-    else
-    {
+    } else {
         [self goToLogin];
     }
-    
-    
     
 }
 -(void)ShowAlert:(NSString*)Title Message:(NSString*)Message
@@ -174,9 +159,6 @@
     
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
-    
-    [createSession.navigationBar setBackgroundImage:[UIImage imageNamed: @"navigation_bar.png"]
-                                      forBarMetrics:UIBarMetricsDefault];
     createSession.title=@"Create";
     [createSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
     
@@ -208,6 +190,7 @@
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
+    [self customiseAppearance];
     
     //push stack onto canvas
     [self.window addSubview:tabBarController.view];
@@ -255,9 +238,12 @@
     
 }
 
+- (void)customiseAppearance
+{
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation_bar.png"] forBarMetrics:UIBarMetricsDefault];
+}
 
 -(void)goToLogin
-
 {
     UIViewController *loginViewController = [[LoginViewController alloc] initWithNibName:@"LoginViewController" bundle:nil];
     self.window.rootViewController = loginViewController;
