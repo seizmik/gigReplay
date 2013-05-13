@@ -12,7 +12,6 @@
 #import "ConnectToDatabase.h"
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
-#import "SQLdatabase.h"
 
 @interface MediaRecordViewController ()
 
@@ -21,6 +20,7 @@
 @implementation MediaRecordViewController
 @synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer;
 @synthesize cameraUI, movieURL, saveAlert;
+@synthesize videoRecordButton, audioRecordButton;
 
 double startTime;
 int currentTime;
@@ -43,12 +43,25 @@ bool isRecording;
     self.title = appDelegateObject.CurrentSession_Name;
     isRecording = NO;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
+    
+    //Whenever this view appears, it will read the database to see if the session has expired
+    NSString *strQuery = @"SELECT * FROM Session_Details";
+    NSMutableArray *session =[appDelegateObject.databaseObject readFromDatabaseSessionDetails:strQuery];
+    NSLog(@"%@", [session objectAtIndex:0]);
+    /*
+    if ([[[session objectAtIndex:0] objectAtIndex:7] isEqualToString:@"NO"]) {
+        videoRecordButton.enabled = NO;
+        [videoRecordButton setTintColor:[UIColor blackColor]];
+        audioRecordButton.enabled = NO;
+        [audioRecordButton setTintColor:[UIColor blackColor]];
+    }*/
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     sceneTitleDisplay.text=appDelegateObject.CurrentSession_Name;
     sceneCodeDisplay.text=appDelegateObject.CurrentSession_Code;
+    
 }
 
 - (void)didReceiveMemoryWarning

@@ -1,3 +1,11 @@
+//
+//  OpenSessionViewController.h
+//  GigReplay
+//
+//  Created by User on 25/3/13.
+//  Copyright (c) 2013 Thesmos Inc. All rights reserved.
+//
+
 #import "OpenSessionViewController.h"
 #import "SettingsViewController.h"
 
@@ -26,6 +34,7 @@
 												 name:@"OpenSessionDetailsCompleted"
 											   object:nil];
     [self loadSettingsButton];
+    
     // Do any additional setup after loading the view from its nib.
 }
 

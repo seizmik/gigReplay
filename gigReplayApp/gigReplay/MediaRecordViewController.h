@@ -37,6 +37,8 @@
 - (IBAction)audioRecordPressed:(UIButton *)sender;
 - (IBAction)uploadButtonPressed:(UIButton *)sender;
 - (IBAction)generateVideo:(UIButton *)sender;
+@property (strong, nonatomic) IBOutlet UIButton *videoRecordButton;
+@property (strong, nonatomic) IBOutlet UIButton *audioRecordButton;
 
 //StartingVideoCameraMethods
 //Delegates send messages, and you have to say where you want the messages to go. Very typically, you want them to go to "you," so in that case you simply say x.delegate=self.
