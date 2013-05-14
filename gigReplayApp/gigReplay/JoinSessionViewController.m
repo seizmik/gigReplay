@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title=@"Join";
     [mediaObject.view removeFromSuperview];
     mediaObject=[[MediaRecordViewController alloc]initWithNibName:@"MediaRecordViewController" bundle:nil];
     cellObject=[[CustomCell alloc]init];
@@ -241,6 +242,7 @@
     NSString  *createdby=[Details objectAtIndex:0];
     appDelegateObject.CurrentSession_Code=Session_Code;
     appDelegateObject.CurrentSession_Name=SessionName;
+    
     [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     

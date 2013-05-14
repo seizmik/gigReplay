@@ -13,7 +13,7 @@
 @end
 
 @implementation CreateSessionViewController
-@synthesize sceneCodeDisplay, sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay;
+@synthesize sceneCodeDisplay, sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button;
 //@synthesize userProfileImage;
 @synthesize timeDisplay;
 
@@ -39,6 +39,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title=@"Create";
     if (FBSession.activeSession.isOpen) {
         [self populateUserDetails];
     }
@@ -59,6 +60,9 @@
     
     // Do any additional setup after loading the view from its nib.
     [self loadSettingsButton];
+    
+    [self.start_button setBackgroundImage:[UIImage animatedImageNamed:@"start_" duration:4.0] forState:UIControlStateNormal];
+    
 }
 
 

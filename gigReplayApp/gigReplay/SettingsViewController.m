@@ -27,6 +27,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title=@"Settings";
     // Do any additional setup after loading the view from its nib.
 }
 

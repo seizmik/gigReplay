@@ -33,5 +33,6 @@
 - (IBAction)prepareMediaRecord:(id)sender;
 - (void)populateUserDetails;
 - (IBAction)resignTextField:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *start_button;
 
 @end
