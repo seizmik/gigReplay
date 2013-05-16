@@ -21,6 +21,7 @@
 @synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer;
 @synthesize cameraUI, movieURL, saveAlert;
 @synthesize videoRecordButton, audioRecordButton;
+@synthesize imgView;
 
 double startTime;
 int currentTime;
@@ -38,6 +39,7 @@ bool isRecording;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view from its nib.
     [self.navigationController setNavigationBarHidden:NO];
     self.title = appDelegateObject.CurrentSession_Name;
@@ -92,6 +94,49 @@ bool isRecording;
     UIAlertView *videoGenerating = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"This will generate a new video that will replace any previous versions. An email will be sent to you once the video is ready for viewing." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
     [videoGenerating show];
 }
+
+-(void)generateImage{
+ //   NSURL *url=[ NSURL URLWithString:@"http://lipsync.sg/uploads/original/239_4_1_V2cDkyFuJo.mp4"];
+    
+    MPMoviePlayerController *player = [[MPMoviePlayerController alloc]initWithContentURL:capturedVideoURL];
+    NSLog(@"%@",capturedVideoURL);
+   thumbnail = [player thumbnailImageAtTime:10.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+    
+    imgData = UIImagePNGRepresentation(thumbnail);
+    //    NSLog(@"%@",thumbnail);
+    NSLog(@"lenght of video thumb: %lu", (unsigned long)[imgData length]);
+    NSLog(@"%@",thumbnail);
+   UIImage *image=[UIImage imageWithData:imgData];
+    [self.view addSubview:imgView];
+    [imgView setImage:image];
+    [player stop];
+
+
+}
+-(void) insertIntoDatabaseVideoDetails:(NSURL*)videoURL image:(NSString*)videoThumb name:(NSString*)videoName{
+    
+    NSString *query=[NSString stringWithFormat:@"insert into Video_Details ('Video_URL','Video_Thumb','Video_Name') values ('%@','%@','%@')",videoURL,videoThumb,videoName];
+    
+
+    [appDelegateObject.databaseObject insertIntoDatabase:query];
+    
+}
+
+- (void)saveImage:(UIImage*)image:(NSString*)imageName {
+    //convert image into .png format.
+    NSData *imageData = UIImagePNGRepresentation(image);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    fullPathImage = [documentsDirectory stringByAppendingPathComponent:
+                          [NSString stringWithFormat:@"%@",imageName]];
+    
+    
+    [fileManager createFileAtPath:fullPathImage contents:imageData attributes:nil];
+    NSLog(@"%@",fullPathImage);
+    NSLog(@"image saved");
+}
+
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -170,9 +215,14 @@ bool isRecording;
     {
         
         //Save the video
-        NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         self.movieURL = capturedVideoURL;
-        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
+        [self generateImage];
+        NSString *uniqueFilename=[self generateUniqueFilename];
+        [self saveImage:thumbnail :uniqueFilename];
+        [self insertIntoDatabaseVideoDetails:capturedVideoURL image:fullPathImage name:uniqueFilename];
+        
+        outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
         
         [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
          {

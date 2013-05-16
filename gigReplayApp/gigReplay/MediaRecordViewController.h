@@ -29,6 +29,11 @@
     UIButton    *helpButton;
     UIView      *overlay;
     UILabel     *timerLabel;
+    NSURL       *capturedVideoURL;
+    NSURL       *outputURL;
+    UIImage     *thumbnail;
+    NSData      *imgData;
+    NSString    *fullPathImage;
 }
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
@@ -51,5 +56,6 @@
 @property (strong, nonatomic) UIImagePickerController *cameraUI;
 @property (strong, nonatomic) UIAlertView *saveAlert;
 @property (strong, nonatomic) NSTimer *videoTimer;
+@property (strong, nonatomic) IBOutlet UIImageView *imgView;
 
 @end

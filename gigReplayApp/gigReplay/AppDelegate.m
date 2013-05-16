@@ -15,7 +15,7 @@
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
 #import "ConnectToDatabase.h"
-#import "GigReplayTableViewController.h"
+#import "ReplaysViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -177,7 +177,7 @@
     uploadTab.title =@"Upload";
     [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
-    GigReplayTableViewController *gigReplay=[[GigReplayTableViewController alloc]init];
+    ReplaysViewController *gigReplay=[[ReplaysViewController alloc]init];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
     [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];

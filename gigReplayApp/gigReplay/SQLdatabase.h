@@ -24,5 +24,6 @@
 -(NSMutableArray *)readFromDatabaseSessionDetails:(NSString *)sqlCommand;
 -(NSMutableArray *)readFromDatabaseOpenDetails:(NSString *)sqlCommand;
 -(NSMutableArray*)readFromDatabaseSearchSessionDetails:(NSString*)strQuery;
+-(NSMutableArray*)readFromDatabaseVideos:(NSString*)strQuery;
 -(void) deleteFromDatabase:(NSString*)query;
 @end

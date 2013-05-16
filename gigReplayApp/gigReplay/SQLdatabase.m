@@ -336,5 +336,54 @@
 }
 
 
+-(NSMutableArray*)readFromDatabaseVideos:(NSString*)strQuery
+{
+    
+    sqlite3 *database;
+	
+	// Init the Favourites Array
+    NSMutableArray *videoDetails=[[NSMutableArray alloc] init];	// Init the  Array
+	
+	
+	// Open the database from the users filessytem
+	if(sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK)
+	{
+		// Setup the SQL Statement and compile it for faster access
+		//const char *sqlStatement = "select * from Favourites";
+        NSString *statement = strQuery;
+		const char *sqlStatement = (const char *) [statement UTF8String];
+        sqlite3_stmt *compiledStatement;
+		
+		
+		if(sqlite3_prepare_v2(database, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK)
+		{
+			// Loop through the results and add them to the feeds array
+			while(sqlite3_step(compiledStatement) == SQLITE_ROW)
+			{				// Read the data from the result row
+                
+                NSString *video_url=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
+                NSString *video_thumb=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                NSString *video_name=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+
+                
+                
+                NSArray *Details = [[NSArray alloc]initWithObjects:video_thumb,video_url,video_name ,nil];
+                
+                
+                [videoDetails addObject:Details];
+                
+                
+			}
+		}
+		// Release the compiled statement from memory
+		sqlite3_finalize(compiledStatement);
+		
+	}
+	sqlite3_close(database);
+    //NSLog(@"%d sql",[UserDetails count]);
+    return videoDetails;
+    
+}
+
 
 @end
