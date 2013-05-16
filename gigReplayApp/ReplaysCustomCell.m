@@ -9,6 +9,7 @@
 #import "ReplaysCustomCell.h"
 
 @implementation ReplaysCustomCell
+@synthesize Videos_name,imageView;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
