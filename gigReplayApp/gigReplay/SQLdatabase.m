@@ -361,9 +361,9 @@
 			while(sqlite3_step(compiledStatement) == SQLITE_ROW)
 			{				// Read the data from the result row
                 
-                NSString *video_url=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
-                NSString *video_thumb=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
-                NSString *video_name=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                NSString *video_url=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                NSString *video_thumb=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                NSString *video_name=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
 
                 
                 

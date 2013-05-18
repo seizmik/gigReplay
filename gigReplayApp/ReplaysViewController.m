@@ -33,23 +33,31 @@
     [self.view addSubview:img1];
     [img1 setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Applications/79421FB7-C6E4-4DF5-9229-E7F8583833EC/Documents/leon"]];
     
-    
-    
-   
+ 
 
   
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
-    NSString *strQuery = @"SELECT * FROM Video_Details";
+    NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
     videoDetails = [sql readFromDatabaseVideos:strQuery];
     NSLog(@"%@",videoDetails);
-    NSArray *firstItem=[videoDetails objectAtIndex:3];
+    //NSArray *firstItem=[videoDetails objectAtIndex:3];
     [self.view addSubview:img2];
-    [img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
+    //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
      NSLog(@"%d",[videoDetails count]);
     [tableviewVideos reloadData];
+    NSArray *items=[NSArray array];
+    for (items in videoDetails){
+    details=[[NSDictionary alloc]initWithObjectsAndKeys:[items objectAtIndex:0],@"image",
+                                                                    [items objectAtIndex:1],@"video",
+                                                                    [items objectAtIndex:2],@"name",
+                                                                                                nil];
+        NSLog(@"%@",details ) ;
+    }
+   
+     
     
 }
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
@@ -87,26 +95,15 @@
 		}
 	}
     
+    
+      
     NSArray *info = [videoDetails objectAtIndex:indexPath.row];
     cell.imageView.image=[UIImage imageWithContentsOfFile:[info objectAtIndex:0]];
     //cell.imageView.image=[UIImage imageNamed:[info objectAtIndex:0]];
     cell.Videos_name.text=[info objectAtIndex:2];
     // Set the data for this cell:
-//    cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:10];
-//    NSArray *info = [videoDetails objectAtIndex:indexPath.row];
-//    cell.textLabel.text = [info objectAtIndex:1];
-//    cell.detailTextLabel.text=[info objectAtIndex:2];
-//    cell.imageView.image = [UIImage imageWithContentsOfFile:[info objectAtIndex:0]];
     
-    
-    
-    // set the accessory view:
-//    cell.accessoryType =  UITableViewCellAccessoryDisclosureIndicator;
-//    NSArray *info=[videoDetails objectAtIndex:3];
-//    cell.textLabel.font = [UIFont fontWithName:@"Helvetica" size:15];
-//    cell.imageView.image =[UIImage imageWithContentsOfFile:[info objectAtIndex:0]];
-//    cell.textLabel.text =[NSString stringWithFormat:@"leon"];
-//    cell.detailTextLabel.text=@"hello";
+
     
     return cell;
 }
@@ -117,13 +114,14 @@
     //place detailviewcontroller to show more details of file
     NSArray *info = [videoDetails objectAtIndex:indexPath.row];
      url=[NSURL URLWithString:[info objectAtIndex:1]];
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     [self playMovie];
    
     }
+
 -(void)playMovie{
     
-    //NSURL *url=[NSURL URLWithString:@"http://www.thesmosinc.com/videos/Fireworks.mp4"];
     movieplayer=  [[MPMoviePlayerController alloc]
                     initWithContentURL:url];
     

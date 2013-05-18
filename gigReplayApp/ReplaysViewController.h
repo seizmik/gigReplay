@@ -20,6 +20,7 @@
 @interface ReplaysViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
     NSMutableArray *videoDetails;
     NSURL *url;
+    NSDictionary *details;
     
 }
 @property(strong,nonatomic)MPMoviePlayerController *movieplayer;
