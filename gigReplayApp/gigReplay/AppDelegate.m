@@ -62,6 +62,8 @@
 {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    
+    //Need to stop the sync here
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -98,7 +100,6 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    exit(0);
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
@@ -193,54 +194,15 @@
     [self customiseAppearance];
     
     //push stack onto canvas
+    self.window.rootViewController = tabBarController;
     [self.window addSubview:tabBarController.view];
     [self.window makeKeyAndVisible];
-
-//    //NSLog(@"loadapphome");
-//    tabBarController=[[UITabBarController alloc]init];
-//    
-//    
-//    tabBarController.tabBar.tintColor=[UIColor blackColor];
-//    
-//    CreateSessionViewController *createSession = [[CreateSessionViewController alloc]initWithNibName:@"CreateSessionViewController" bundle:nil];
-//    UIViewController *joinSession = [[JoinSessionViewController alloc]initWithNibName:@"JoinSessionViewController" bundle:nil];
-//    UIViewController *openSession = [[OpenSessionViewController alloc]initWithNibName:@"OpenSessionViewController" bundle:nil];
-//    UIViewController *settingsTab = [[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
-//    UIViewController *uploadTab = [[UploadTab alloc] initWithNibName:@"UploadTab" bundle:nil];
-//    
-//    createSession.title=@"Create";
-//    //createSession.view.backgroundColor=[UIColor blackColor];
-//    createSession.tabBarItem.image=[UIImage imageNamed:@"img-new-1.png"];
-//    
-//    joinSession.title =@"Join";
-//    joinSession.view.backgroundColor=[UIColor greenColor];
-//    joinSession.tabBarItem.image=[UIImage imageNamed:@"img-join-1.png"];
-//    
-//    openSession.title=@"Open";
-//    openSession.view.backgroundColor=[UIColor  purpleColor];
-//    openSession.tabBarItem.image=[UIImage imageNamed:@"img-open-1.png"];
-//    
-//    settingsTab.title=@"Settings";
-//    settingsTab.view.backgroundColor=[UIColor redColor];
-//    settingsTab.tabBarItem.image=[UIImage imageNamed:@"img-settings-1.png"];
-//    
-//    uploadTab.title = @"Upload";
-//    uploadTab.tabBarItem.image = [UIImage imageNamed:@"img-upload-1.png"];
-//    
-//    NSArray *viewControllersArray=[NSArray arrayWithObjects: createSession, joinSession, openSession, uploadTab, settingsTab, nil];
-//    
-//    [tabBarController setViewControllers:viewControllersArray];
-//    navController = [[UINavigationController alloc] init];
-//    [self.window addSubview:tabBarController.view];
-//    self.window.rootViewController = navController;
-//    [self.navController pushViewController:tabBarController animated:NO];
-//    //[navController setNavigationBarHidden:YES animated:NO];
     
 }
 
 - (void)customiseAppearance
 {
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation_bar.png"] forBarMetrics:UIBarMetricsDefault];
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation.png"] forBarMetrics:UIBarMetricsDefault];
 }
 
 -(void)goToLogin
