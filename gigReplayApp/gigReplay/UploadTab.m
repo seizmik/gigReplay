@@ -35,7 +35,7 @@
     
     UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
                                           initWithTarget:self action:@selector(handleLongPress:)];
-    lpgr.minimumPressDuration = 2.0; //seconds
+    lpgr.minimumPressDuration = 1.0; //seconds
     lpgr.delegate = self;
     [self.uploadTable addGestureRecognizer:lpgr];
     
@@ -272,6 +272,8 @@
     }
 }
 
+#pragma mark - Deleting files
+
 -(void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
 {
     CGPoint p = [gestureRecognizer locationInView:self.uploadTable];
@@ -290,7 +292,7 @@
             //Set the current details
             detailsToDelete = [uploadArray objectAtIndex:indexPath.row];
         }
-        NSLog(@"long press on table view at row %d", indexPath.row);
+        //NSLog(@"long press on table view at row %d", indexPath.row);
     }
 }
 

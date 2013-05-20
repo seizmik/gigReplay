@@ -84,6 +84,8 @@
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
@@ -101,6 +103,7 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 
@@ -236,7 +239,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
-    for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 9); count++) {
+    for (count = 0; count < 10 && (jitter > 0.02 || [diffArray count] < 9); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;

@@ -121,13 +121,11 @@ float currentTime;
 {
     if (audioRecorder.recording) {
         //Prevents phone from sleeping
-        [[UIApplication sharedApplication] setIdleTimerDisabled: YES];
         [recordButton setTitle:@"STOP" forState:UIControlStateNormal];
         playButton.enabled = NO;
         uploadButton.enabled = NO;
         [self.navigationItem setHidesBackButton: YES animated: YES];
     } else {
-        [[UIApplication sharedApplication] setIdleTimerDisabled: NO];
         [recordButton setTitle:@"Record" forState:UIControlStateNormal];
         playButton.enabled = YES;
         uploadButton.enabled = YES;
