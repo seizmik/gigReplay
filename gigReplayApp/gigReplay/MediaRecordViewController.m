@@ -95,49 +95,7 @@ bool isRecording;
     [videoGenerating show];
 }
 
--(void)generateImage{
- //   NSURL *url=[ NSURL URLWithString:@"http://lipsync.sg/uploads/original/239_4_1_V2cDkyFuJo.mp4"];
-    
-    MPMoviePlayerController *player = [[MPMoviePlayerController alloc]initWithContentURL:capturedVideoURL];
-    NSLog(@"%@",capturedVideoURL);
-   thumbnail = [player thumbnailImageAtTime:10.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
-    
-    imgData = UIImagePNGRepresentation(thumbnail);
-    //    NSLog(@"%@",thumbnail);
-    NSLog(@"lenght of video thumb: %lu", (unsigned long)[imgData length]);
-    NSLog(@"%@",thumbnail);
-   UIImage *image=[UIImage imageWithData:imgData];
-    [self.view addSubview:imgView];
-    [imgView setImage:image];
-    [player stop];
-
-
-}
--(void) insertIntoDatabaseVideoDetails:(NSURL*)videoURL image:(NSString*)videoThumb name:(NSString*)videoName{
-    
-    NSString *query=[NSString stringWithFormat:@"insert into Video_Details ('Video_URL','Video_Thumb','Video_Name') values ('%@','%@','%@')",videoURL,videoThumb,videoName];
-    
-
-    [appDelegateObject.databaseObject insertIntoDatabase:query];
-    
-}
-
-- (void)saveImage:(UIImage*)image:(NSString*)imageName {
-    //convert image into .png format.
-    NSData *imageData = UIImagePNGRepresentation(image);
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    fullPathImage = [documentsDirectory stringByAppendingPathComponent:
-                          [NSString stringWithFormat:@"%@",imageName]];
-    
-    
-    [fileManager createFileAtPath:fullPathImage contents:imageData attributes:nil];
-    NSLog(@"%@",fullPathImage);
-    NSLog(@"image saved");
-}
-
-
+//This is the alert
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
@@ -166,6 +124,54 @@ bool isRecording;
             [generateError show];
         }
     }
+}
+
+#pragma mark - Generating a thumbnail
+
+-(void)generateImageFromURL:(NSURL *)videoURL{
+    
+    MPMoviePlayerController *player = [[MPMoviePlayerController alloc]initWithContentURL:videoURL];
+    //NSLog(@"%@", videoURL);
+    UIImage *thumbnail = [[UIImage alloc] init];
+    thumbnail = [player thumbnailImageAtTime:3.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
+    
+    imgData = UIImagePNGRepresentation(thumbnail);
+    //NSLog(@"%@",thumbnail);
+    UIImage *image=[UIImage imageWithData:imgData];
+    [self.view addSubview:imgView];
+    [imgView setImage:image];
+    [player stop];
+    
+    NSString *uniqueFilename=[self generateUniqueFilename];
+    
+    //Now save image and insert into database
+    [self saveImage:thumbnail withName:uniqueFilename withURL:videoURL];
+
+}
+
+- (void)saveImage:(UIImage*)image withName:(NSString*)imageName withURL:(NSURL *)videoURL{
+    //convert image into .png format.
+    NSData *imageData = UIImagePNGRepresentation(image);
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    fullPathImage = [documentsDirectory stringByAppendingPathComponent:
+                          [NSString stringWithFormat:@"%@",imageName]];
+    
+    
+    [fileManager createFileAtPath:fullPathImage contents:imageData attributes:nil];
+    //NSLog(@"%@",fullPathImage);
+    //NSLog(@"image saved");
+    
+    //Now save into the database
+    [self insertIntoDatabaseVideoDetails:videoURL image:fullPathImage name:imageName];
+}
+
+-(void) insertIntoDatabaseVideoDetails:(NSURL*)videoURL image:(NSString*)videoThumb name:(NSString*)videoName{
+    
+    NSString *query=[NSString stringWithFormat:@"insert into Video_Details ('Video_URL','Video_Thumb','Video_Name') values ('%@','%@','%@')",videoURL,videoThumb,videoName];
+    [appDelegateObject.databaseObject insertIntoDatabase:query];
+    
 }
 
 #pragma mark - Video Recorder Methods
@@ -207,7 +213,7 @@ bool isRecording;
 {
     //This is in case the user becomes snap happy, so we need to record the URL and the startTime of the last video
     double thisVideoStartTime = startTime;
-    
+    NSString *thisVideoSession = appDelegateObject.CurrentSessionID;
     
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     //NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
@@ -217,10 +223,6 @@ bool isRecording;
         //Save the video
         capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         self.movieURL = capturedVideoURL;
-        [self generateImage];
-        NSString *uniqueFilename=[self generateUniqueFilename];
-        [self saveImage:thumbnail :uniqueFilename];
-        [self insertIntoDatabaseVideoDetails:capturedVideoURL image:fullPathImage name:uniqueFilename];
         
         outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
         
@@ -229,14 +231,18 @@ bool isRecording;
              if (exportSession.status == AVAssetExportSessionStatusCompleted)
              {
                  UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 [compressComplete dismissWithClickedButtonIndex:0 animated:YES];
                  [compressComplete show];
                  //At this point, it should reveal that the video has stopped processing and has been saved
-                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime];
-                 //Supposed to remove the original file here
+                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession];
+                 
+                 //Then generate the thumbnail
+                 [self generateImageFromURL:capturedVideoURL];
              }
              else
              {
                  UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                 [compressError dismissWithClickedButtonIndex:0 animated:YES];
                  [compressError show];
                  //Supposed to remove original file here
              }
@@ -257,15 +263,15 @@ bool isRecording;
 }
 
 - (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
-                                   outputURL:(NSURL*)outputURL
+                                   outputURL:(NSURL*)videoOutputURL
                                      handler:(void (^)(AVAssetExportSession *))handler  //Used to compress the video
 {
-    [[NSFileManager defaultManager] removeItemAtURL:outputURL error:nil];
+    [[NSFileManager defaultManager] removeItemAtURL:videoOutputURL error:nil];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
     //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     //CGAffineTransform txf = [videoTrack preferredTransform];
     AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
-    exportSession.outputURL = outputURL;
+    exportSession.outputURL = videoOutputURL;
     exportSession.outputFileType = AVFileTypeMPEG4;
     
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
@@ -493,10 +499,10 @@ bool isRecording;
 
 #pragma mark - Upload tracking methods
 
-- (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime
+- (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime forSession:(NSString *)sessionID
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, videoURL, videoStartTime];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status) VALUES (%i, %@, '%@', %f, 2, 0)", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }

@@ -107,6 +107,7 @@
     if(RespondsReached){
         
         recordObj =[[MediaRecordViewController alloc]initWithNibName:@"MediaRecordViewController" bundle:nil];
+        recordObj.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:recordObj animated:YES];
     } else {
         [self ShowAlertMessage:@"Warning" Message:@"Scene was not set up properly!"];

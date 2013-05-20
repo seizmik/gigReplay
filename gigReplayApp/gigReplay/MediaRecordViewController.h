@@ -31,7 +31,6 @@
     UILabel     *timerLabel;
     NSURL       *capturedVideoURL;
     NSURL       *outputURL;
-    UIImage     *thumbnail;
     NSData      *imgData;
     NSString    *fullPathImage;
 }

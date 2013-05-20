@@ -51,6 +51,7 @@
     //[self.view addGestureRecognizer:tapToDismiss];
     // Do any additional setup after loading the view from its nib.
 }
+
 -(void)RemoveLoadingView:(NSNotification *)notification
 {
     NSDictionary *dict = [notification userInfo];
@@ -234,6 +235,7 @@
     return [self.sessionDetailsHolder count];
     
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *Details=[sessionDetailsHolder objectAtIndex:indexPath.row];
     NSString *Session_Code= [Details objectAtIndex:5];

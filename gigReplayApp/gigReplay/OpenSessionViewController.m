@@ -76,7 +76,7 @@
 		}
 	}
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    NSLog(@"leonism %@",Details);
+    //NSLog(@"leonism %@",Details);
     cell.SceneName.text=[Details objectAtIndex:5];
     cell.directorName.text=[Details objectAtIndex:6];
     cell.SceneTake.text=[Details objectAtIndex:4];
