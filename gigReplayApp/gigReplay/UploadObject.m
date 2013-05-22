@@ -10,9 +10,9 @@
 
 @implementation UploadObject
 
-@synthesize sessionid, filePath, startTime, uploadStatus, entryNumber, contentType, userid;
+@synthesize sessionid, filePath, startTime, uploadStatus, entryNumber, contentType, userid, thumbnailPath;
 
-- (id)initWithFilePath:(NSString *)path entryid:(int)uid sessionid:(int)sid startTime:(double)start contentType:(int)type uploadStatus:(int)status fromUser:(int)user{
+- (id)initWithFilePath:(NSString *)path entryid:(int)uid sessionid:(int)sid startTime:(double)start contentType:(int)type uploadStatus:(int)status fromUser:(int)user thumbnail:(NSString *)thumbPath{
     self.filePath = path;
     self.sessionid = sid;
     self.startTime = start;
@@ -20,6 +20,7 @@
     self.entryNumber = uid;
     self.contentType = type;
     self.userid = user;
+    self.thumbnailPath = thumbPath;
     return self;
 }
 

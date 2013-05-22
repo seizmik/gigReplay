@@ -170,7 +170,6 @@
 		CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */; };
 		CED49AB0171EAEAB00AF0B00 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */; };
 		CED49AB2171EAEBA00AF0B00 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */; };
-		CED49AB4171EC00100AF0B00 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -371,7 +370,6 @@
 		CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
-		CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -537,7 +535,6 @@
 			isa = PBXGroup;
 			children = (
 				CED49ABB171EC11D00AF0B00 /* UploadModel */,
-				CED49AB3171EC00100AF0B00 /* gigreplay.sqlite */,
 				CE485726171FA91300837B88 /* ConnectToDatabase.h */,
 				CE485727171FA91300837B88 /* ConnectToDatabase.m */,
 				CE485728171FA91300837B88 /* SQLdatabase.h */,
@@ -793,7 +790,6 @@
 				2AE35C70170020BF000993E6 /* ViewController.xib in Resources */,
 				2AE35CA2170059A2000993E6 /* FacebookSDKResources.bundle in Resources */,
 				2AE35CA3170059A2000993E6 /* FBUserSettingsViewResources.bundle in Resources */,
-				CED49AB4171EC00100AF0B00 /* gigreplay.sqlite in Resources */,
 				CE4856F7171FA7B400837B88 /* CreateSessionViewController.xib in Resources */,
 				CE485705171FA7D300837B88 /* JoinSessionViewController.xib in Resources */,
 				CE485707171FA7D300837B88 /* LoginViewController.xib in Resources */,
@@ -1033,6 +1029,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "gigReplay/gigReplay-Prefix.pch";
 				INFOPLIST_FILE = "gigReplay/gigReplay-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1054,6 +1051,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "gigReplay/gigReplay-Prefix.pch";
 				INFOPLIST_FILE = "gigReplay/gigReplay-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
