@@ -442,7 +442,7 @@
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
         $temp_trim_array[] = $temp_trim_path;
     }
@@ -526,7 +526,7 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -vf scale=-1:720 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
     echo $final_video_url;
@@ -542,9 +542,19 @@
     if (mysqli_connect_errno($con)) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
-        $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
-        mysqli_query($con, $query);
-        $entry_id = mysqli_insert_id($con);
+        
+        //Find out if the video has already been created once before
+        $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
+        $result_master = mysqli_query($con, $query);
+        if (count($result_master) == 0) {
+            $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
+            mysqli_query($con, $query);
+            //$entry_id = mysqli_insert_id($con);
+        } else {
+            $query = "UPDATE media_master SET thumb_1_url=".$thumb_1.",thumb_2_url=".$thumb_2.",thumb_3_url=".$thumb_3." WHERE session_id=".$session_id." AND user_id=".$user_id;
+            mysqli_query($con, $query);
+        }
+        
     }
     mysqli_close($con);
     
