@@ -196,16 +196,18 @@ bool isRecording;
     //This is in case the user becomes snap happy, so we need to record the URL and the startTime of the last video
     double thisVideoStartTime = startTime;
     NSString *thisVideoSession = appDelegateObject.CurrentSessionID;
-    
+    NSString *thisSessionName = appDelegateObject.CurrentSession_Name;
+        
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
-    //NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+    
+    NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+    
     if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
     {
         
         //Save the video
-        NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
-        
-        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path
+        //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
         
         [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
          {
@@ -215,7 +217,7 @@ bool isRecording;
                  [compressComplete dismissWithClickedButtonIndex:0 animated:YES];
                  [compressComplete show];
                  //At this point, it should reveal that the video has stopped processing and has been saved
-                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession];
+                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
                  
              }
              else
@@ -476,13 +478,13 @@ bool isRecording;
 
 #pragma mark - Upload tracking methods
 
-- (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime forSession:(NSString *)sessionID
+- (void)insertIntoDatabaseWithPath:(NSURL *)videoURL withStartTime:(double)videoStartTime forSession:(NSString *)sessionID sessionNamed:(NSString *)sessionName
 {
     //Create the thumbnail at this point and store into the database
     NSString *thumbnailPath = [self generateImageFromURL:videoURL];
     
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path) VALUES (%i, %@, '%@', %f, 2, 0, '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path, session_name) VALUES (%i, %@, '%@', %f, 2, 0, '%@', '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath, sessionName];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }
@@ -498,8 +500,8 @@ bool isRecording;
 
 - (NSString *)generateUniqueFilename
 {
-    NSString *prefixString = [NSString stringWithFormat:@"%@_%@_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
-    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
+    NSString *prefixString = [NSString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
+    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     
     return uniqueFileName;

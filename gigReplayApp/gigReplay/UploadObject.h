@@ -18,7 +18,8 @@
 @property int contentType;
 @property int userid;
 @property (strong, nonatomic) NSString *thumbnailPath;
+@property (strong, nonatomic) NSString *sessionName;
 
-- (id)initWithFilePath:(NSString *)path entryid:(int)uid sessionid:(int)sid startTime:(double)start contentType:(int)type uploadStatus:(int)status fromUser:(int)user thumbnail:(NSString *)thumbPath;
+- (id)initWithFilePath:(NSString *)path entryid:(int)uid sessionid:(int)sid startTime:(double)start contentType:(int)type uploadStatus:(int)status fromUser:(int)user thumbnail:(NSString *)thumbPath fromSession:(NSString *)session;
 
 @end

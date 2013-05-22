@@ -99,7 +99,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    NSLog(@"%@",Details );
+    //NSLog(@"%@",Details );
     appDelegateObject.CurrentSession_Code=[Details objectAtIndex:4];
     appDelegateObject.CurrentSession_Name=[Details objectAtIndex:5];
     appDelegateObject.CurrentSessionID=[Details objectAtIndex:10];
@@ -157,7 +157,7 @@
 {
     NSString *query=@"select * from OpenSession_Details";
     self.OpenedSessionDetailsHolder=[appDelegateObject.databaseObject readFromDatabaseOpenDetails:query];
-    NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
+    //NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
     
     [openedSessionListTable reloadData];
     

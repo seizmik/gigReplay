@@ -9,6 +9,7 @@
 #import "UploadTab.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "UploadCell.h"
 
 @interface UploadTab ()
 
@@ -65,8 +66,14 @@
     return [uploadArray count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 60;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    /*
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -77,6 +84,27 @@
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
     cell.textLabel.text = [NSString stringWithFormat:@"Session Entry: %d_%d", fileDetails.sessionid, fileDetails.entryNumber];
+    */
+    
+    static NSString *UploadTableIdentifier = @"UploadTableCell";
+    UploadCell *cell = (UploadCell *)[tableView dequeueReusableCellWithIdentifier:UploadTableIdentifier];
+    
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"UploadCell" owner:self options:nil];
+        cell = [nib objectAtIndex:0];
+    }
+    
+    UploadObject *fileDetails = [[UploadObject alloc] init];
+    fileDetails = [uploadArray objectAtIndex:indexPath.row];
+    NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:fileDetails.startTime];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    
+    cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
+    cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
     
     return cell;
 }
@@ -252,7 +280,7 @@
 #pragma mark - Delete file methods
 
 - (void)removeFile:(UploadObject *)fileDetails {
-    NSLog(@"%@", fileDetails.filePath);
+    //NSLog(@"%@", fileDetails.filePath);
     NSURL *fileURL = [NSURL URLWithString:fileDetails.filePath];
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -260,7 +288,18 @@
     if (error) {
         NSLog(@"Error occured: %@", [error localizedDescription]);
     } else {
-        NSLog(@"It's gone!!!");
+        NSLog(@"File is gone!!!");
+    }
+    
+    if (fileDetails.contentType == 2) {
+        NSURL *thumbnailURL = [NSURL URLWithString:fileDetails.thumbnailPath];
+        NSError *thumbEerror;
+        [fileManager removeItemAtURL:thumbnailURL error:&thumbEerror];
+        if (error) {
+            NSLog(@"Error occured: %@", [error localizedDescription]);
+        } else {
+            NSLog(@"Thumbnail is gone!!!");
+        }
     }
 }
 

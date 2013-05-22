@@ -58,8 +58,9 @@
                 int contentType = sqlite3_column_int(compiledStatement, 5);
                 int uploadStatus = sqlite3_column_int(compiledStatement, 6);
                 NSString *thumbnailPath = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 7)];
+                NSString *sessionName = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 8)];
                 
-                UploadObject *uploadObject = [[UploadObject alloc] initWithFilePath:filePath entryid:entryid sessionid:sessionid startTime:startTime contentType:contentType uploadStatus:uploadStatus fromUser:userid thumbnail:thumbnailPath];
+                UploadObject *uploadObject = [[UploadObject alloc] initWithFilePath:filePath entryid:entryid sessionid:sessionid startTime:startTime contentType:contentType uploadStatus:uploadStatus fromUser:userid thumbnail:thumbnailPath fromSession:sessionName];
                 [uploadDetails addObject:uploadObject];
                 //NSLog(@"Upload object added to array");
             }
