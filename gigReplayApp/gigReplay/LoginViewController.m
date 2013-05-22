@@ -54,7 +54,8 @@
    // [appDelegateObject loadApplicationHome];
     [self LoadLoadingViewForFacebookSignUp];
     [self openSessionWithAllowLoginUI:YES];
-
+    NSLog(@"FB Permissions retrieved");
+    
 }
 /*
  <------------------FACEBOOK AUTHENTICATION METHODS DEFINED HERE-------------------->
@@ -64,9 +65,10 @@
                       state:(FBSessionState) state
                       error:(NSError *)error
 {
-    
+    NSLog(@"Starting FB Session");
     if (FBSession.activeSession.isOpen)
     {
+        NSLog(@"No error so far");
         [FBRequestConnection
          startForMeWithCompletionHandler:^(FBRequestConnection *connection,
                                            id<FBGraphUser> user,
@@ -136,20 +138,24 @@
                                  stringByAppendingString:
                                  [NSString stringWithFormat:@"Languages: %@\n\n",
                                   languageNames]];
+                 } else {
+                     NSLog(@"FB Error: %@", [error localizedDescription]);
                  }
                  
                  // Display the user info
-                 // NSLog(@"user info: %@",userInfo);
+                 NSLog(@"user info: %@",userInfo);
              }
              
              
             [self InputDetailsToDatabase];
          }];
     }
+    NSLog(@"It skipped a lot of steps");
 }
 
 
-- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI {
+- (BOOL)openSessionWithAllowLoginUI:(BOOL)allowLoginUI
+{
     NSArray *permissions = [[NSArray alloc] initWithObjects:
                             @"email",
                             
@@ -171,7 +177,7 @@
                                             initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     
     // Position the spinner
-    [myIndicator setCenter:CGPointMake(180.0, 200.0)];
+    [myIndicator setCenter:CGPointMake(160.0, 200.0)];
     myIndicator.color=[UIColor whiteColor];
   
     
