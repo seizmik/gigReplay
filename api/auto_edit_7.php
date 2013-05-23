@@ -543,7 +543,7 @@
     echo $final_video_url;
     
     //Now, delete the temp directory
-    //deleteDirectory($temp_path);
+    deleteDirectory($temp_path);
     
     /*
     //Create 3 thumbnails based on the videos length
@@ -552,16 +552,28 @@
     $thumb_2 = create_thumbnail($final_video_path, ($video_length * 0.5), $final_video_url);
     $thumb_3 = create_thumbnail($final_video_path, ($video_length * 0.8), $final_video_url);
     
-    //Update the database
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
-        mysqli_query($con, $query);
-        $entry_id = mysqli_insert_id($con);
-    }
-    mysqli_close($con);
+     //Update the database
+     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+     if (mysqli_connect_errno($con)) {
+     echo "Failed to connect to MySQL: " . mysqli_connect_error();
+     } else {
+     
+        //Find out if the video has already been created once before
+        $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
+        $result_master = mysqli_query($con, $query);
+        
+        if (mysqli_num_rows($result_master) == 0) {
+            $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
+            mysqli_query($con, $query);
+            //$entry_id = mysqli_insert_id($con);
+        } else {
+            echo "We should be here now";
+            $query = "UPDATE media_master SET thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
+            mysqli_query($con, $query);
+        }
+     
+     }
+     mysqli_close($con);
     
     
     //Finally, email the user the final video
