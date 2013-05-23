@@ -168,6 +168,7 @@
 		CE48574F171FA96400837B88 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = CE485746171FA96400837B88 /* Reachability.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CE577315173CC7D3002F234A /* navigation_settings_button.png in Resources */ = {isa = PBXBuildFile; fileRef = CE577314173CC7D3002F234A /* navigation_settings_button.png */; };
 		CE577317173CC7E9002F234A /* navigation_settings_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CE577316173CC7E9002F234A /* navigation_settings_button@2x.png */; };
+		CE659870174DE82200CB9585 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = CE65986F174DE82200CB9585 /* gigreplay.sqlite */; };
 		CED49A88171EACCA00AF0B00 /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */; };
 		CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */; };
 		CED49AB0171EAEAB00AF0B00 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */; };
@@ -371,6 +372,7 @@
 		CE485746171FA96400837B88 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = gigReplay/Reachability.m; sourceTree = "<group>"; };
 		CE577314173CC7D3002F234A /* navigation_settings_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation_settings_button.png; sourceTree = "<group>"; };
 		CE577316173CC7E9002F234A /* navigation_settings_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "navigation_settings_button@2x.png"; sourceTree = "<group>"; };
+		CE65986F174DE82200CB9585 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		CED49A87171EACCA00AF0B00 /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FacebookSDK.framework; sourceTree = "<group>"; };
 		CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -578,6 +580,7 @@
 			isa = PBXGroup;
 			children = (
 				2A4667B11741F05000CBE21B /* thesmos.rdb */,
+				CE65986F174DE82200CB9585 /* gigreplay.sqlite */,
 				CE13B916174A058100514F3F /* icon.png */,
 				CE13B917174A058100514F3F /* icon@2x.png */,
 				2A13AD811712A5E50009ACAE /* MediaRecording */,
@@ -910,6 +913,7 @@
 				CE13B91B174A173900514F3F /* navigation.png in Resources */,
 				CE13B91D174A174300514F3F /* navigation@2x.png in Resources */,
 				CE12D4A8174CA318002DA38A /* UploadCell.xib in Resources */,
+				CE659870174DE82200CB9585 /* gigreplay.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
