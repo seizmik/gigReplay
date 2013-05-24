@@ -158,11 +158,11 @@ float currentTime;
     }
 }
 
-- (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
+- (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(int)sessionid sessionNamed:(NSString *)sessionName
 {
     NSLog(@"Saving file: %@", soundFilePath);
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %@, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, sessionid, soundFilePath, start, sessionName];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %d, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, sessionid, soundFilePath, start, sessionName];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }

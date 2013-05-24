@@ -239,7 +239,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
-    for (count = 0; count < 10 && (jitter > 0.02 || [diffArray count] < 9); count++) {
+    for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -257,8 +257,8 @@
         NSURL *url = [NSURL URLWithString:GIGREPLAY_API_URL@"get_time.php"];
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
-        //Start looping x times for request
-        for (int i=0; i<10; i++) {
+        //Will calculate jitter based on 5 pings
+        for (int i=0; i<5; i++) {
             
             //Initialise the request
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
