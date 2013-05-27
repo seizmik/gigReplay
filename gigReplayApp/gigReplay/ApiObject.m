@@ -494,7 +494,7 @@ didStartElement:(NSString *)elementName
             if(OpenSessionId)
             {
                 self.openSessionIdData=string;
-                NSLog(@"%@wahhaha",openSessionIdData);
+                //NSLog(@"%@",openSessionIdData);
             }
             if (CodeFound)
             {
@@ -695,7 +695,7 @@ didStartElement:(NSString *)elementName
                 
                 NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,self.openSessionIdData,nil];
                 [self.OpenSessionDetailsHolder addObject:Details];
-                NSLog(@"%@ opened sessions details here",Details);
+                //NSLog(@"%@ opened sessions details here",Details);
                 SessionPrefixFound=FALSE;
                 
                 

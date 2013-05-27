@@ -54,6 +54,5 @@
 @property (strong, nonatomic) UIImagePickerController *cameraUI;
 @property (strong, nonatomic) UIAlertView *saveAlert;
 @property (strong, nonatomic) NSTimer *videoTimer;
-@property (strong, nonatomic) IBOutlet UIImageView *imgView;
 
 @end
