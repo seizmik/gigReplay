@@ -16,11 +16,19 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <Foundation/Foundation.h>
 #import "ReplaysCustomCell.h"
+//#define kGETUrl @""
+
+#define kGetURL [NSURL URLWithString: @"http://lipsync.sg/api/replaysvideos.php"]
+#define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
+
 
 @interface ReplaysViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
     NSMutableArray *videoDetails;
     NSURL *url;
-    NSDictionary *details;
+    NSMutableArray *videoArray;
+    NSString *fullPathImage;
+    NSString *videoImage;
+    UIImage *image1;
     
 }
 @property(strong,nonatomic)MPMoviePlayerController *movieplayer;

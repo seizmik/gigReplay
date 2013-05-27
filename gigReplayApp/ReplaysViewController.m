@@ -8,6 +8,8 @@
 
 #import "ReplaysViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
+#import "ASIHTTPRequest.h"
+
 
 
 @interface ReplaysViewController ()
@@ -33,13 +35,32 @@
     [self.view addSubview:img1];
     [img1 setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Applications/79421FB7-C6E4-4DF5-9229-E7F8583833EC/Documents/leon"]];
     
- 
 
-  
 }
 
+-(void) fetchedData:(NSData*) data{
+    
+    
+    videoArray=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    
+      [self.tableviewVideos reloadData];
+    
+    
+}
+-(void) obtainDataFromURL{
+    dispatch_async(kBgQueue, ^{
+        NSData* data = [NSData dataWithContentsOfURL:
+                        kGetURL];
+        [self performSelectorOnMainThread:@selector(fetchedData:)
+                               withObject:data waitUntilDone:YES];
+    });
+}
+
+
+
 -(void)viewDidAppear:(BOOL)animated{
-    SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
+    [self obtainDataFromURL];
+        SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
     NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
     videoDetails = [sql readFromDatabaseVideos:strQuery];
     NSLog(@"%@",videoDetails);
@@ -47,19 +68,15 @@
     [self.view addSubview:img2];
     //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
      NSLog(@"%d",[videoDetails count]);
-    [tableviewVideos reloadData];
-    NSArray *items=[NSArray array];
-    for (items in videoDetails){
-    details=[[NSDictionary alloc]initWithObjectsAndKeys:[items objectAtIndex:0],@"image",
-                                                                    [items objectAtIndex:1],@"video",
-                                                                    [items objectAtIndex:2],@"name",
-                                                                                                nil];
-        NSLog(@"%@",details ) ;
-    }
+    
+   
+   
    
      
     
 }
+
+
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
    
     return 1;
@@ -67,8 +84,9 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [videoDetails count];
+    return [videoArray count];
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    static NSString *CellIdentifier = @"Cell";
 //    
@@ -76,10 +94,10 @@
 //    if (cell == nil) {
 //        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 //    }
-    static NSString* CellIdentifier = @"CustomCell";
+    static NSString* CellIdentifier = @"ReplaysCustomCell";
 	
 	
-	ReplaysCustomCell *cell = (ReplaysCustomCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	ReplaysCustomCell *cell = (ReplaysCustomCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier ];
 	if (cell == nil)
 	{
 		
@@ -94,26 +112,36 @@
 			}
 		}
 	}
+   
+        
+            
+    NSMutableDictionary *info=[videoArray objectAtIndex:indexPath.row];
     
+    
+    cell.media_url.text=[info objectForKey:@"media_url"];
+    cell.thumb_url .text=[info objectForKey:@"thumb_1_url"];
+   
+    dispatch_async(kBgQueue, ^{
+         videoImage=[info objectForKey:@"thumb_1_url"];
+         UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoImage]]];
+        dispatch_sync(dispatch_get_main_queue(),^{
+            cell.imageView.image=image;
+          });
+    });
+   
     
       
-    NSArray *info = [videoDetails objectAtIndex:indexPath.row];
-    cell.imageView.image=[UIImage imageWithContentsOfFile:[info objectAtIndex:0]];
-    //cell.imageView.image=[UIImage imageNamed:[info objectAtIndex:0]];
-    cell.Videos_name.text=[info objectAtIndex:2];
-    // Set the data for this cell:
-    
-
-    
     return cell;
 }
+
+
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     //place moive player here to play
     //place detailviewcontroller to show more details of file
-    NSArray *info = [videoDetails objectAtIndex:indexPath.row];
-     url=[NSURL URLWithString:[info objectAtIndex:1]];
+    NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
+     url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     [self playMovie];
@@ -133,9 +161,12 @@
     movieplayer.controlStyle = MPMovieControlStyleDefault;
     movieplayer.shouldAutoplay = YES;
     [self.view addSubview:movieplayer.view];
+    [self shouldAutorotate];
     [movieplayer setFullscreen:YES animated:YES];
 
 }
+
+
 
 - (void) moviePlayBackDidFinish:(NSNotification*)notification {
     MPMoviePlayerController *player = [notification object];
