@@ -84,6 +84,8 @@
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
+    //At this point of time, we should retrieve the last sync and when it was taken to determine if another sync is needed. KIV
+    //NSLog(@"Previous time relationship is %f", timeRelationship);
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
@@ -92,9 +94,13 @@
     
     if (netStatus == NotReachable) {
         [self showSyncAlert];
-    } else {
-        [self syncWithServer]; //This sets up the time relationship
-        //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+    } else if (!stillSynching) {
+        //Only when still synching is NO, another queue will be dispatched
+        dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
+        dispatch_async(syncQueue, ^{
+            [self syncWithServer]; //This sets up the time relationship
+            //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+        });
     }
     
     
@@ -230,6 +236,9 @@
 
 - (void)syncWithServer
 {
+    //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
+    stillSynching = YES;
+    
     //Reset the arrays
     [lagArray removeAllObjects];
     [diffArray removeAllObjects];
@@ -238,7 +247,7 @@
     double jitter;
     int count;
     
-    //Need to make a retry loop. Only 10 tries allowedbefore a warning shows up
+    //Need to make a retry loop. Only 10 tries allowed before a warning shows up
     for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
@@ -342,6 +351,8 @@
         timeRelationship = meanDiffWithServer;
         NSLog(@"Time relationship is %f", timeRelationship);
     }
+    
+    stillSynching = NO;
 }
 
 - (void)showSyncAlert

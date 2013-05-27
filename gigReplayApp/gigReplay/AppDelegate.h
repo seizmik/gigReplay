@@ -16,8 +16,9 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 {
 
-     BOOL              userexists;
-     int               CurrentUserID;
+    BOOL    userexists;
+    int     CurrentUserID;
+    BOOL    stillSynching;
     
 }
 
