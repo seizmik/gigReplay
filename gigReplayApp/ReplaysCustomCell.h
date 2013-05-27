@@ -10,6 +10,8 @@
 
 @interface ReplaysCustomCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
-@property (strong, nonatomic) IBOutlet UILabel *Videos_name;
+@property (strong, nonatomic) IBOutlet UILabel *media_url;
+@property (strong, nonatomic) IBOutlet UILabel *thumb_url;
+
 
 @end

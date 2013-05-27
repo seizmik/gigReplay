@@ -96,7 +96,6 @@
 						<string key="NSFrame">{{115, 65}, {141, 21}}</string>
 						<reference key="NSSuperview" ref="191373211"/>
 						<reference key="NSWindow"/>
-						<reference key="NSNextKeyView"/>
 						<string key="NSReuseIdentifierKey">_NS:9</string>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
@@ -1136,7 +1135,6 @@
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="audioRecordButton">UIButton</string>
-						<string key="imgView">UIImageView</string>
 						<string key="sceneCodeDisplay">UILabel</string>
 						<string key="sceneTitleDisplay">UILabel</string>
 						<string key="videoRecordButton">UIButton</string>
@@ -1145,10 +1143,6 @@
 						<object class="IBToOneOutletInfo" key="audioRecordButton">
 							<string key="name">audioRecordButton</string>
 							<string key="candidateClassName">UIButton</string>
-						</object>
-						<object class="IBToOneOutletInfo" key="imgView">
-							<string key="name">imgView</string>
-							<string key="candidateClassName">UIImageView</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="sceneCodeDisplay">
 							<string key="name">sceneCodeDisplay</string>
