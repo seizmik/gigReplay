@@ -135,6 +135,7 @@
 - (void)goToSettings
 {
     SettingsViewController *set=[[SettingsViewController alloc] init];
+    set.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:set animated:YES];
 }
 

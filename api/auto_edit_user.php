@@ -319,7 +319,7 @@
         }
         //Now, concatenate each audio file, even if there is only 1 file
         $concat_files = "concat:\"" . implode("|", $outpath_array) . "\"";
-        echo $concat_files;
+        echo $concat_files, "</br>";
         $output_audio_path = $temp_path."combined_audio.aac";
         exec("ffmpeg -i ".$concat_files." ".$output_audio_path);
         
@@ -529,7 +529,7 @@
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
-    echo $final_video_url;
+    echo $final_video_url, "<br>";
     
     //Create 3 thumbnails based on the videos length
     $video_length = $last_end - $first_start;
@@ -546,12 +546,14 @@
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
-        if (count($result_master) == 0) {
+                
+        if (mysqli_num_rows($result_master) == 0) {
             $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
             mysqli_query($con, $query);
             //$entry_id = mysqli_insert_id($con);
         } else {
-            $query = "UPDATE media_master SET thumb_1_url=".$thumb_1.",thumb_2_url=".$thumb_2.",thumb_3_url=".$thumb_3." WHERE session_id=".$session_id." AND user_id=".$user_id;
+            echo "We should be here now";
+            $query = "UPDATE media_master SET thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
         
@@ -562,7 +564,7 @@
     //Now, delete the temp directory
     deleteDirectory($temp_path);
     
-    
+    /*
     //Finally, email the user the final video
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
@@ -584,6 +586,6 @@
     $mail->MsgHTML($body);
     if(!$mail->Send()) {
         echo "Mailer Error: " . $mail->ErrorInfo;
-    }
+    }*/
     
 ?>

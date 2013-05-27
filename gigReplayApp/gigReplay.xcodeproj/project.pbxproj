@@ -130,6 +130,8 @@
 		2AEF49E31740A60F00609768 /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF49E21740A60F00609768 /* start.png */; };
 		2AEF86411742AF1F0039419B /* ReplaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF863F1742AF1F0039419B /* ReplaysViewController.m */; };
 		2AEF86421742AF1F0039419B /* ReplaysViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF86401742AF1F0039419B /* ReplaysViewController.xib */; };
+		CE05034C174DFD6200EEB78B /* TPAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		CE05034E174E06F900EEB78B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE05034D174E06F900EEB78B /* AudioToolbox.framework */; };
 		CE12D4A6174CA276002DA38A /* UploadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12D4A5174CA276002DA38A /* UploadCell.m */; };
 		CE12D4A8174CA318002DA38A /* UploadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE12D4A7174CA318002DA38A /* UploadCell.xib */; };
 		CE13B918174A058100514F3F /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = CE13B916174A058100514F3F /* icon.png */; };
@@ -307,6 +309,9 @@
 		2AEF863E1742AF1F0039419B /* ReplaysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplaysViewController.h; sourceTree = "<group>"; };
 		2AEF863F1742AF1F0039419B /* ReplaysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplaysViewController.m; sourceTree = "<group>"; };
 		2AEF86401742AF1F0039419B /* ReplaysViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplaysViewController.xib; sourceTree = "<group>"; };
+		CE05034A174DFD6200EEB78B /* TPAACAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAACAudioConverter.h; sourceTree = "<group>"; };
+		CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAACAudioConverter.m; sourceTree = "<group>"; };
+		CE05034D174E06F900EEB78B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CE12D4A4174CA276002DA38A /* UploadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadCell.h; sourceTree = "<group>"; };
 		CE12D4A5174CA276002DA38A /* UploadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadCell.m; sourceTree = "<group>"; };
 		CE12D4A7174CA318002DA38A /* UploadCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadCell.xib; sourceTree = "<group>"; };
@@ -384,6 +389,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE05034E174E06F900EEB78B /* AudioToolbox.framework in Frameworks */,
 				2AD2DC12170948C600E00478 /* CFNetwork.framework in Frameworks */,
 				2AD2DC14170948D900E00478 /* MobileCoreServices.framework in Frameworks */,
 				CED49AB2171EAEBA00AF0B00 /* CoreMedia.framework in Frameworks */,
@@ -604,6 +610,7 @@
 		2AE35C52170020BF000993E6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE05034D174E06F900EEB78B /* AudioToolbox.framework */,
 				CED49AB1171EAEBA00AF0B00 /* CoreMedia.framework */,
 				CED49AAF171EAEAB00AF0B00 /* QuartzCore.framework */,
 				CED49AAD171EAEA000AF0B00 /* AVFoundation.framework */,
@@ -739,6 +746,8 @@
 				CE485719171FA89D00837B88 /* AudioViewController.h */,
 				CE48571A171FA89D00837B88 /* AudioViewController.m */,
 				CE48571B171FA89D00837B88 /* AudioViewController.xib */,
+				CE05034A174DFD6200EEB78B /* TPAACAudioConverter.h */,
+				CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */,
 			);
 			name = AudioRecorder;
 			sourceTree = "<group>";
@@ -952,6 +961,7 @@
 				2AEF86411742AF1F0039419B /* ReplaysViewController.m in Sources */,
 				2ADFD0251743E5D200F305D5 /* ReplaysCustomCell.m in Sources */,
 				CE12D4A6174CA276002DA38A /* UploadCell.m in Sources */,
+				CE05034C174DFD6200EEB78B /* TPAACAudioConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

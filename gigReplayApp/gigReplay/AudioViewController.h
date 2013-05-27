@@ -9,12 +9,21 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import "AppDelegate.h"
+#import <QuartzCore/QuartzCore.h>
+#import <AssetsLibrary/AssetsLibrary.h>
+#import "TPAACAudioConverter.h"
+#import <AudioToolbox/AudioToolbox.h>
 
-@interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate>
+@interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate, TPAACAudioConverterDelegate>
+{
+    TPAACAudioConverter *audioConverter;
+    AVAudioPlayer *audioPlayer;
+    AVAudioRecorder *audioRecorder;
+    NSTimer *audioTimer;
+    NSURL *lowResURL;
+    NSURL *soundFileURL;
+}
 
-@property (strong, nonatomic) AVAudioPlayer *audioPlayer;
-@property (strong, nonatomic) AVAudioRecorder *audioRecorder;
-@property (strong, nonatomic) NSTimer *audioTimer;
 @property (strong, nonatomic) IBOutlet UILabel *timeLabel;
 @property (strong, nonatomic) IBOutlet UIButton *recordButton;
 @property (strong, nonatomic) IBOutlet UIButton *playButton;
@@ -23,7 +32,5 @@
 - (IBAction)recordPressed:(UIButton *)sender;
 - (IBAction)playPressed:(UIButton *)sender;
 - (IBAction)uploadPressed:(UIButton *)sender;
-
-@property (strong, nonatomic) NSURL *soundFileURL;
 
 @end

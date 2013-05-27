@@ -21,7 +21,6 @@
 @synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer;
 @synthesize cameraUI, saveAlert;
 @synthesize videoRecordButton, audioRecordButton;
-@synthesize imgView;
 
 double startTime;
 int currentTime;
@@ -42,7 +41,6 @@ bool isRecording;
     
     // Do any additional setup after loading the view from its nib.
     [self.navigationController setNavigationBarHidden:NO];
-    self.title = appDelegateObject.CurrentSession_Name;
     isRecording = NO;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     
@@ -63,6 +61,7 @@ bool isRecording;
 {
     sceneTitleDisplay.text=appDelegateObject.CurrentSession_Name;
     sceneCodeDisplay.text=appDelegateObject.CurrentSession_Code;
+    self.title = appDelegateObject.CurrentSession_Name;
     
 }
 
@@ -144,10 +143,6 @@ bool isRecording;
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *imagePathFull = [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@", imageName]];
     [fileManager createFileAtPath:imagePathFull contents:imageData attributes:nil];
-    
-    UIImage *image = [UIImage imageWithData:imageData];
-    [self.view addSubview:imgView];
-    [imgView setImage:image];
     [player stop];
     
     return imagePathFull;
@@ -209,30 +204,38 @@ bool isRecording;
         //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
         
-        [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
-         {
-             if (exportSession.status == AVAssetExportSessionStatusCompleted)
+        //Put this entire process into the background
+        dispatch_queue_t compressQueue = dispatch_queue_create(NULL, 0);
+        dispatch_async(compressQueue, ^{
+            [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
              {
-                 UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-                 [compressComplete dismissWithClickedButtonIndex:0 animated:YES];
-                 [compressComplete show];
-                 //At this point, it should reveal that the video has stopped processing and has been saved
-                 [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
-                 
-             }
-             else
-             {
-                 UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-                 [compressError dismissWithClickedButtonIndex:0 animated:YES];
-                 [compressError show];
-                 //Supposed to remove original file here
-             }
-         }];
+                 if (exportSession.status == AVAssetExportSessionStatusCompleted)
+                 {
+                     UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                     [compressComplete dismissWithClickedButtonIndex:0 animated:YES];
+                     [compressComplete show];
+                     //At this point, it should reveal that the video has stopped processing and has been saved
+                     [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
+                     
+                 }
+                 else
+                 {
+                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                     [compressError dismissWithClickedButtonIndex:0 animated:YES];
+                     [compressError show];
+                     //Since it failed, we save the original video path instead
+                     [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
+                 }
+             }];
+        });
+        
         UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     }
 }
 
-- (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo {
+- (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
+{
+    NSLog(@"Main video saved");
     if (error) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                         message:@"Failed to save video"

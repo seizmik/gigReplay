@@ -16,10 +16,8 @@
 @end
 
 @implementation AudioViewController
-@synthesize audioPlayer, audioRecorder;
-@synthesize audioTimer, timeLabel;
+@synthesize timeLabel;
 @synthesize recordButton, playButton, uploadButton;
-@synthesize soundFileURL;
 
 double startTime;
 float currentTime;
@@ -79,14 +77,23 @@ float currentTime;
             //[self getStartTime];
             [audioRecorder record];
             [self getStartTime];
-        }        
+            [self checkRecording];
+        }
     } else {
         //We get the stop time here to make it the same as video sync
         //[self getStartTime];
         [audioRecorder stop];
-        [self insertIntoDatabase];
+        
+        //Convert the file to aac
+        lowResURL = [self getLocalFilePathToSave];
+        //Using TPAACAudioConverter to convert file to AAC format
+        audioConverter = [[TPAACAudioConverter alloc] initWithDelegate:self
+                                                                source:[soundFileURL path]
+                                                           destination:[lowResURL path]];
+        [audioConverter start];
+        //Here, we rely on the delegates to update the recording status. As long as the conversion is not complete, or has not faulted, the record button will not trigger. Hence, you cannot reset the soundFileURL, startTime, or back out and change the session.
+        
     }
-    [self checkRecording];
     [self timerStartStop];
     
 }
@@ -151,10 +158,11 @@ float currentTime;
     }
 }
 
-- (void)insertIntoDatabase
+- (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(int)sessionid sessionNamed:(NSString *)sessionName
 {
+    NSLog(@"Saving file: %@", soundFilePath);
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %@, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, appDelegateObject.CurrentSessionID, soundFileURL, startTime, appDelegateObject.CurrentSession_Name];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %d, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, sessionid, soundFilePath, start, sessionName];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }
@@ -172,18 +180,15 @@ float currentTime;
     [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
     
     NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateUniqueFilename]];
+    NSLog(@"Original audio path: %@", soundFileName);
     NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
     soundFileURL = [NSURL fileURLWithPath:soundFilePath];
     
     NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:AVAudioQualityMin],
-                                    AVEncoderAudioQualityKey,
-                                    [NSNumber numberWithInt:16],
-                                    AVEncoderBitRateKey,
-                                    [NSNumber numberWithInt: 2],
-                                    AVNumberOfChannelsKey,
-                                    [NSNumber numberWithFloat:44100.0],
-                                    AVSampleRateKey, nil];
+                                    [NSNumber numberWithInt:AVAudioQualityHigh], AVEncoderAudioQualityKey,
+                                    [NSNumber numberWithInt:16], AVEncoderBitRateKey,
+                                    [NSNumber numberWithInt: 2], AVNumberOfChannelsKey,
+                                    [NSNumber numberWithFloat:44100.0], AVSampleRateKey, nil];
     NSError *error = nil;
     
     audioRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:&error];
@@ -192,39 +197,96 @@ float currentTime;
     return error;
 }
 
-- (void)timerStartStop {
+- (void)timerStartStop
+{
     if (![audioTimer isValid]) {
         currentTime = 0;
-        self.audioTimer = [NSTimer
+        self->audioTimer = [NSTimer
                            scheduledTimerWithTimeInterval:0.1
                            target:self
                            selector:@selector(timeUpdate:)
                            userInfo:nil
                            repeats:YES];
     } else {
-        [self.audioTimer invalidate];
-        self.audioTimer = nil;
+        [self->audioTimer invalidate];
+        self->audioTimer = nil;
     }
 }
 
-- (void)timeUpdate:(NSTimer *)theTimer {
+- (void)timeUpdate:(NSTimer *)theTimer
+{
     currentTime += 0.1;
     self.timeLabel.text = [NSString stringWithFormat:@"%.1f", currentTime];
 }
 
-
-
-- (void)getStartTime {
+- (void)getStartTime
+{
     startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
 }
 
 - (NSString *)generateUniqueFilename
 {
-    NSString *prefixString = [NSString stringWithFormat:@"%@", appDelegateObject.CurrentSessionID];
+    NSString *prefixString = [NSString stringWithFormat:@"%@_%d", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
     NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     
     return uniqueFileName;
+}
+
+/*
+- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
+                                   outputURL:(NSURL*)audioOutputURL
+                                     handler:(void (^)(TPAACAudioConverter *))handler  //Used to compress the video
+{
+    //Using TPAACAudioConverter to convert file to AAC format
+    audioConverter = [[TPAACAudioConverter alloc] initWithDelegate:self
+                                                            source:[inputURL path]
+                                                       destination:[audioOutputURL path]];
+    [audioConverter start];
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+     }];
+}*/
+
+- (NSURL *)getLocalFilePathToSave   //Calls when recorded video saved to document library
+{
+    NSFileManager *filemgr = [NSFileManager defaultManager];
+    //NSString *currentPath;
+    //currentPath = [filemgr currentDirectoryPath];
+    NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
+    NSString *docsDir = [dirPaths objectAtIndex:0];
+    NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
+    // NSLog(@"%@",newDir);
+    
+    NSString *m_strFilepath  = [[NSString alloc]initWithString:newDir];
+    
+    if ([filemgr fileExistsAtPath:m_strFilepath]) {
+        // NSLog(@"hai");
+    } else {
+        [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
+    }
+    
+    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.aac", newDir, [self generateUniqueFilename]];
+    if (m_strFilepath!=Nil) {
+        m_strFilepath=Nil;
+    }
+    
+    NSURL *audiopath = [NSURL fileURLWithPath:audioFilePath];
+    NSLog(@"Get file path to save returns: %@", audioFilePath);
+    return audiopath;
+}
+
+- (void)removeFile:(NSURL *)fileURL {
+    NSError *error;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:fileURL error:&error];
+    if (error) {
+        NSLog(@"Error occured: %@", [error localizedDescription]);
+    } else {
+        NSLog(@"File is gone!!!");
+    }
 }
 
 #pragma mark - Delegate methods
@@ -243,6 +305,22 @@ float currentTime;
 
 - (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError *)error {
     NSLog(@"Encode Error occurred");
+}
+
+- (void)AACAudioConverterDidFinishConversion:(TPAACAudioConverter*)converter {
+    NSLog(@"So, by right, we should be adding it into the database at this point");
+    [self insertIntoDatabasewithPath:lowResURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+    [self removeFile:soundFileURL];
+    //Only once the 
+    [self checkRecording];
+    
+}
+
+- (void)AACAudioConverter:(TPAACAudioConverter*)converter didFailWithError:(NSError*)error {
+    NSLog(@"Error converting audio file");
+    //In this case, we stick to the original file
+    [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentUserID sessionNamed:appDelegateObject.CurrentSession_Name];
+    [self checkRecording];
 }
 
 #pragma  mark
