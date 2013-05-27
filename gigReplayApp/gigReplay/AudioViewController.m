@@ -158,11 +158,11 @@ float currentTime;
     }
 }
 
-- (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(int)sessionid sessionNamed:(NSString *)sessionName
+- (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
 {
     NSLog(@"Saving file: %@", soundFilePath);
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %d, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, sessionid, soundFilePath, start, sessionName];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status, session_name) VALUES (%i, %@, '%@', %f, 1, 0, '%@')", appDelegateObject.CurrentUserID, sessionid, soundFilePath, start, sessionName];
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to update the database");
     }
@@ -311,7 +311,7 @@ float currentTime;
     NSLog(@"So, by right, we should be adding it into the database at this point");
     [self insertIntoDatabasewithPath:lowResURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
     [self removeFile:soundFileURL];
-    //Only once the 
+    //Only once the conversion is complete, then you let the user take another audio
     [self checkRecording];
     
 }
@@ -319,7 +319,7 @@ float currentTime;
 - (void)AACAudioConverter:(TPAACAudioConverter*)converter didFailWithError:(NSError*)error {
     NSLog(@"Error converting audio file");
     //In this case, we stick to the original file
-    [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentUserID sessionNamed:appDelegateObject.CurrentSession_Name];
+    [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
     [self checkRecording];
 }
 

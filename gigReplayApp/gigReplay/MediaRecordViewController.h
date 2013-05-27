@@ -29,10 +29,10 @@
     UIButton    *helpButton;
     UIView      *overlay;
     UILabel     *timerLabel;
-    //NSURL       *capturedVideoURL;
-    //NSURL       *outputURL;
-    //NSData      *imgData;
-    //NSString    *fullPathImage;
+    UIBackgroundTaskIdentifier bgTask;
+    double startTime;
+    int currentTime;
+    bool isRecording;
 }
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;

@@ -22,10 +22,6 @@
 @synthesize cameraUI, saveAlert;
 @synthesize videoRecordButton, audioRecordButton;
 
-double startTime;
-int currentTime;
-bool isRecording;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -44,17 +40,7 @@ bool isRecording;
     isRecording = NO;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     
-    //Whenever this view appears, it will read the database to see if the session has expired
-    NSString *strQuery = @"SELECT * FROM Session_Details";
-    NSMutableArray *session =[appDelegateObject.databaseObject readFromDatabaseSessionDetails:strQuery];
-    NSLog(@"%@", [session objectAtIndex:0]);
-    /*
-    if ([[[session objectAtIndex:0] objectAtIndex:7] isEqualToString:@"NO"]) {
-        videoRecordButton.enabled = NO;
-        [videoRecordButton setTintColor:[UIColor blackColor]];
-        audioRecordButton.enabled = NO;
-        [audioRecordButton setTintColor:[UIColor blackColor]];
-    }*/
+    //Grab the expiration time
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -192,10 +178,12 @@ bool isRecording;
     double thisVideoStartTime = startTime;
     NSString *thisVideoSession = appDelegateObject.CurrentSessionID;
     NSString *thisSessionName = appDelegateObject.CurrentSession_Name;
-        
-    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     
+    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+    
+    //Save a copy to the camera roll
+    UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     
     if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
     {
@@ -204,6 +192,11 @@ bool isRecording;
         //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
         
+        bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+            bgTask = UIBackgroundTaskInvalid;
+        }];
+        
         //Put this entire process into the background
         dispatch_queue_t compressQueue = dispatch_queue_create(NULL, 0);
         dispatch_async(compressQueue, ^{
@@ -211,31 +204,29 @@ bool isRecording;
              {
                  if (exportSession.status == AVAssetExportSessionStatusCompleted)
                  {
-                     UIAlertView *compressComplete = [[UIAlertView alloc] initWithTitle:@"Save Complete" message:@"Video has been successfully saved and is ready for upload" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-                     [compressComplete dismissWithClickedButtonIndex:0 animated:YES];
-                     [compressComplete show];
                      //At this point, it should reveal that the video has stopped processing and has been saved
                      [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
-                     
+                     //If the conversion was successful, delete the original
+                     [self removeFile:capturedVideoURL];
                  }
                  else
                  {
-                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not save file properly" delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                      [compressError dismissWithClickedButtonIndex:0 animated:YES];
                      [compressError show];
                      //Since it failed, we save the original video path instead
                      [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
                  }
+                 
+                 [[UIApplication sharedApplication] endBackgroundTask:bgTask];
              }];
         });
         
-        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     }
 }
 
 - (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
 {
-    NSLog(@"Main video saved");
     if (error) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
                                                         message:@"Failed to save video"
@@ -254,9 +245,10 @@ bool isRecording;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
     //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     //CGAffineTransform txf = [videoTrack preferredTransform];
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset960x540];
     exportSession.outputURL = videoOutputURL;
     exportSession.outputFileType = AVFileTypeMPEG4;
+    NSLog (@"%@", exportSession.supportedFileTypes);
     
     [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
      {
@@ -416,15 +408,6 @@ bool isRecording;
         [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
-        
-        //Remind user not to close the app. Otherwise, video gone fuck
-        saveAlert = [[UIAlertView alloc] initWithTitle:@"Saving In Progress"
-                                                            message:@"Do not close app until save is complete. This may take several minutes"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Continue"
-                                                  otherButtonTitles:nil];
-        [saveAlert show];
-        
         isRecording = NO;
         [backButton setHidden:NO];
         [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
@@ -438,6 +421,17 @@ bool isRecording;
 
 - (void)helpButtonPressed {
     NSLog(@"HELP!!!");
+}
+
+- (void)removeFile:(NSURL *)fileURL {
+    NSError *error;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtURL:fileURL error:&error];
+    if (error) {
+        NSLog(@"Error occured: %@", [error localizedDescription]);
+    } else {
+        NSLog(@"File is gone!!!");
+    }
 }
 
 #pragma mark - Timer methods

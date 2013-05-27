@@ -332,7 +332,7 @@
         $output_path = $pathinfo['dirname'];
         $output_path .= "/".generate_random_string().".png";
         $seek_to = fftime($time);
-        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=-1:360 -vframes 1 ".$output_path);
+        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=320:-1 -vframes 1 ".$output_path);
         
         //Create the URL
         $url_pathinfo = pathinfo($video_url);
@@ -564,7 +564,7 @@
     //Now, delete the temp directory
     deleteDirectory($temp_path);
     
-    /*
+    
     //Finally, email the user the final video
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
@@ -586,6 +586,6 @@
     $mail->MsgHTML($body);
     if(!$mail->Send()) {
         echo "Mailer Error: " . $mail->ErrorInfo;
-    }*/
+    }
     
 ?>
