@@ -145,11 +145,12 @@
 }
 
 -(void)showRecorderView{
-    mediaObject=[[MediaRecordViewController alloc]initWithNibName:@"MediaRecordViewController" bundle:nil];
-    [mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal  ];
+    mediaObject=[[MediaRecordViewController alloc]init];
+//    [mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal  ];
+     mediaObject.hidesBottomBarWhenPushed=YES;
     //[self presentViewController:mediaObject animated:YES completion:nil];
     [self.navigationController pushViewController:mediaObject animated:YES];
-    
+   
 }
 
 

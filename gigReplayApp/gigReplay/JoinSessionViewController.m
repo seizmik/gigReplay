@@ -83,8 +83,9 @@
     {
 //        [mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal];
 //        [self presentViewController:mediaObject animated:YES completion:nil];
-        
+        mediaObject.hidesBottomBarWhenPushed=YES;
         [self.navigationController pushViewController:mediaObject animated:YES];
+        
        
         
     }

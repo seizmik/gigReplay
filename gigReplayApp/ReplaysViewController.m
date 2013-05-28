@@ -116,19 +116,18 @@
         
             
     NSMutableDictionary *info=[videoArray objectAtIndex:indexPath.row];
-    
-    
     cell.media_url.text=[info objectForKey:@"media_url"];
     cell.thumb_url .text=[info objectForKey:@"thumb_1_url"];
-   
     dispatch_async(kBgQueue, ^{
          videoImage=[info objectForKey:@"thumb_1_url"];
          UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoImage]]];
         dispatch_sync(dispatch_get_main_queue(),^{
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             cell.imageView.image=image;
+            
           });
     });
-   
+    cell.imageView.image =[UIImage imageNamed:@"placeholder.png"];
     
       
     return cell;
