@@ -14,13 +14,12 @@
 #import "SettingsViewController.h"
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
-#import "ConnectToDatabase.h"
 #import "ReplaysViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
 @synthesize navController;
-@synthesize lagArray, diffArray, timeRelationship;
+@synthesize lagArray, diffArray, timeRelationship, stillSynching, syncObject;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [FBProfilePictureView class];
@@ -33,7 +32,7 @@
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
         
     //Load up the upload tracker database as well
-    ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
+    dbObject = [[ConnectToDatabase alloc] initDB];
     [dbObject checkAndCreateDatabase];
     
     //Update files that were cancelled during upload, if any
@@ -85,8 +84,12 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     //At this point of time, we should retrieve the last sync and when it was taken to determine if another sync is needed. KIV
-    //NSLog(@"Previous time relationship is %f", timeRelationship);
+    dbObject = [[ConnectToDatabase alloc] initDB];
+    syncObject = [dbObject syncCheck];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    
+    NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
+    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still OK");
     
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
     [internetReach startNotifier];
@@ -94,12 +97,20 @@
     
     if (netStatus == NotReachable) {
         [self showSyncAlert];
+    } else if(!syncObject.expiredSync) {
+        timeRelationship = syncObject.previousTimeRelationship;
+        NSLog(@"Using previous time relationship of %f", timeRelationship);
     } else if (!stillSynching) {
         //Only when still synching is NO, another queue will be dispatched
         dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
         dispatch_async(syncQueue, ^{
+            //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
+            stillSynching = YES;
+            
             [self syncWithServer]; //This sets up the time relationship
             //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+            
+            self.stillSynching = NO;
         });
     }
     
@@ -236,9 +247,6 @@
 
 - (void)syncWithServer
 {
-    //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
-    stillSynching = YES;
-    
     //Reset the arrays
     [lagArray removeAllObjects];
     [diffArray removeAllObjects];
@@ -350,14 +358,21 @@
     } else {
         timeRelationship = meanDiffWithServer;
         NSLog(@"Time relationship is %f", timeRelationship);
+        
+        //Once a time relationship is established, input/update the database
+        if (syncObject.entryid == 1) {
+            [dbObject updateDatabase:[NSString stringWithFormat:@"UPDATE last_sync SET time_relationship=%f,last_sync=%f WHERE id=1", timeRelationship, [[NSDate date] timeIntervalSince1970]]];
+        } else {
+            [dbObject insertToDatabase:[NSString stringWithFormat:@"INSERT INTO last_sync (time_relationship,last_sync) VALUES (%f,%f)", timeRelationship, [[NSDate date] timeIntervalSince1970]]];
+        }
     }
-    
-    stillSynching = NO;
 }
+
+#pragma mark - Sync error functions
 
 - (void)showSyncAlert
 {
-    UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Exit", nil];
+    UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Ignore", nil];
     [syncError show];
 }
 
@@ -367,7 +382,8 @@
         [self syncWithServer];
     } else if (buttonIndex == 1) {
         //Let's try to avoid the cancel button. Instead lead them out with the settings button
-        exit(0);
+        //exit(0);
+        timeRelationship = syncObject.previousTimeRelationship;
     }
 }
 

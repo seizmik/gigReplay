@@ -72,6 +72,41 @@
     return uploadDetails;
 }
 
+- (SyncObject *)syncCheck
+{
+    sqlite3 *database;
+    NSString *strQuery = @"SELECT * FROM last_sync";
+    SyncObject *syncObject = [[SyncObject alloc] init];
+    if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
+        const char *sqlStatement = (const char *)[strQuery UTF8String];
+        sqlite3_stmt *compiledStatement;
+        if (sqlite3_prepare_v2(database, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+            //Loop through the results and add them to the uploadDetails array
+            while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
+                int entryid = sqlite3_column_int(compiledStatement, 0);
+                double lastRelationship = sqlite3_column_double(compiledStatement, 1);
+                double lastSync = sqlite3_column_double(compiledStatement, 2);
+                
+                syncObject.entryid = entryid;
+                syncObject.previousTimeRelationship = lastRelationship;
+                syncObject.previousSync = lastSync;
+                double currentTime = [[NSDate date] timeIntervalSince1970];
+                double timeDiff = currentTime - lastRelationship;
+                if (timeDiff > 7200) { //Edit this number to lengthen the period of synching
+                    syncObject.expiredSync = YES;
+                } else {
+                    syncObject.expiredSync = NO;
+                }
+                //NSLog(@"SyncCheck details: %i %f %f %f", entryid, lastRelationship, lastSync, timeDiff);
+            }
+        }
+        //Release the compiled statement
+        sqlite3_finalize(compiledStatement);
+    }
+    sqlite3_close(database);
+    return syncObject;
+}
+
 - (BOOL)insertToDatabase:(NSString *)strQuery
 {
     sqlite3 *database;

@@ -10,16 +10,17 @@
 #import "SQLdatabase.h"
 #import<FacebookSDK/FacebookSDK.h>
 #import "Reachability.h"
+#import "SyncObject.h"
+#import "ConnectToDatabase.h"
 #define appDelegateObject ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
 {
 
-    BOOL    userexists;
-    int     CurrentUserID;
-    BOOL    stillSynching;
-    
+    BOOL                userexists;
+    int                 CurrentUserID;
+    ConnectToDatabase   *dbObject;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -50,6 +51,8 @@
 @property (strong, nonatomic) NSMutableArray *lagArray;
 @property (strong, nonatomic) NSMutableArray *diffArray;
 @property double timeRelationship;
+@property BOOL stillSynching;
+@property (strong, nonatomic) SyncObject *syncObject;
 @property (strong, nonatomic) UINavigationController *navController;
 
 @end

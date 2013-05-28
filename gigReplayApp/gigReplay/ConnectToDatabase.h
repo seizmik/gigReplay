@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
+#import "SyncObject.h"
 
 @interface ConnectToDatabase : NSObject
 
@@ -17,6 +18,7 @@
 - (id)initDB;
 - (void)checkAndCreateDatabase;
 - (NSMutableArray *)uploadCheck:(NSString *)strQuery;
+- (SyncObject *)syncCheck;
 - (BOOL)insertToDatabase:(NSString *)strQuery;
 - (BOOL)updateDatabase:(NSString *)strQuery;
 
