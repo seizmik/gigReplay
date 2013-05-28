@@ -91,13 +91,13 @@
                 syncObject.previousTimeRelationship = lastRelationship;
                 syncObject.previousSync = lastSync;
                 double currentTime = [[NSDate date] timeIntervalSince1970];
-                double timeDiff = currentTime - lastRelationship;
-                if (timeDiff > 7200) { //Edit this number to lengthen the period of synching
+                double timeDiff = currentTime - lastSync;
+                if (timeDiff > 3600) { //Edit this number to lengthen the period of synching
                     syncObject.expiredSync = YES;
                 } else {
                     syncObject.expiredSync = NO;
                 }
-                //NSLog(@"SyncCheck details: %i %f %f %f", entryid, lastRelationship, lastSync, timeDiff);
+                NSLog(@"SyncCheck details: %i %f %f %f %f", entryid, lastRelationship, lastSync, currentTime, timeDiff);
             }
         }
         //Release the compiled statement
