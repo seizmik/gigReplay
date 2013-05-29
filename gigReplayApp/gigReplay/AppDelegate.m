@@ -19,7 +19,7 @@
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
 @synthesize navController;
-@synthesize lagArray, diffArray, timeRelationship, stillSynching, syncObject;
+@synthesize lagArray, diffArray, timeRelationship, syncObject;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [FBProfilePictureView class];
@@ -89,28 +89,26 @@
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
-    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still OK");
+    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid");
     
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
     
-    if (netStatus == NotReachable) {
-        [self showSyncAlert];
-    } else if(!syncObject.expiredSync) {
+    if(!syncObject.expiredSync) {
         timeRelationship = syncObject.previousTimeRelationship;
         NSLog(@"Using previous time relationship of %f", timeRelationship);
-    } else if (!stillSynching) {
+    } else if (netStatus == NotReachable) {
+        [self showSyncAlert];
+    }else if (!stillSynching) {
         //Only when still synching is NO, another queue will be dispatched
         dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
         dispatch_async(syncQueue, ^{
             //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
             stillSynching = YES;
-            
             [self syncWithServer]; //This sets up the time relationship
             //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-            
-            self.stillSynching = NO;
+            stillSynching = NO;
         });
     }
     
@@ -256,7 +254,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count = 0; count < 10 && (jitter > 0.015 || [diffArray count] < 5); count++) {
+    for (count=0; count<10 && (jitter>0.015 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -373,7 +371,7 @@
 - (void)showSyncAlert
 {
     UIAlertView *syncError = [[UIAlertView alloc] initWithTitle:@"Sync Error" message:@"Unable to create a stable sync. Please check your settings to ensure there is an internet connection." delegate:self cancelButtonTitle:nil otherButtonTitles:@"Retry", @"Ignore", nil];
-    [syncError show];
+    [syncError performSelectorOnMainThread:@selector(show) withObject:nil waitUntilDone:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -384,6 +382,7 @@
         //Let's try to avoid the cancel button. Instead lead them out with the settings button
         //exit(0);
         timeRelationship = syncObject.previousTimeRelationship;
+        NSLog(@"Using previous time relationship of %f", timeRelationship);
     }
 }
 

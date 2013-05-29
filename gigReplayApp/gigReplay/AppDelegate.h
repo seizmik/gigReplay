@@ -21,6 +21,7 @@
     BOOL                userexists;
     int                 CurrentUserID;
     ConnectToDatabase   *dbObject;
+    BOOL                stillSynching;
 }
 
 @property (strong, nonatomic) UIWindow *window;
@@ -51,7 +52,6 @@
 @property (strong, nonatomic) NSMutableArray *lagArray;
 @property (strong, nonatomic) NSMutableArray *diffArray;
 @property double timeRelationship;
-@property BOOL stillSynching;
 @property (strong, nonatomic) SyncObject *syncObject;
 @property (strong, nonatomic) UINavigationController *navController;
 
