@@ -194,7 +194,7 @@
     function make_audio_cut_array($main_audio, $backup_audio_tracks, $the_end)
     {
         //$main_audio is the audio that we are using for the primary track
-        //$backup_audio is the audio that we are using to supplement the main audio if there are sections missing
+        //$backup_audio is the array audio that we are using to supplement the main audio if there are sections missing
         
         $cut_details = array(); //This will feed into $cut_audio_array
         
@@ -205,28 +205,54 @@
         //First check if there are any pieces of audio at the start
         //If there is any audio1 file at the start, this will return false
         while ($current_time < $main_audio['start_time']) {
-            //Choose a video that exists at this point of time, then check if it exists all the way to the start_time
-            //If it does, then stop at the start_time. Otherwise, add the length and repeat the process
+            //So, if the main_audio does not start at this current time, it will enter this loop
             echo "The audio started late!<br/>";
-            for ($j=0; $j < count($backup_audio_tracks); $j++) {
-                if (check_for_content($backup_audio_tracks[$j])) {
-                    //If there is content there, take note of it
-                    $backup_audio_exists = $backup_audio_tracks[$j];
+            
+            $backup_audio_tracks = remove_useless_details($backup_audio_tracks);
+            usort($backup_audio_tracks, 'compare_start');
+            
+            echo "After cleaning up, backup audio array still has ", count($backup_audio_tracks), "<br/>";
+            
+            $blank_check = 0;
+            foreach ($backup_audio_tracks as $entry) {
+                if (check_for_content($entry)) {
+                    $blank_check++;
                 }
             }
-            $duration_check = $main_audio['start_time'] - $current_time;
-            $duration = seek_to_check($backup_audio_exists, $duration_check);
+            echo "Blank check: ", $blank_check, "<br/>";
             
-            echo "Duration is ", $duration, "<br/>";
+            if ($blank_check == 0) {
+                $cut_details['src'] = "empty_audio.aac";
+                $cut_details['seek_to'] = "00:00:00.00";
+                if ($backup_audio_tracks[0]['start_time'] < $main_audio['start_time']) {
+                    $duration = $backup_audio_tracks[0]['start_time'] - $current_time;
+                } else {
+                    $duration = $main_audio['start_time'] - $current_time;
+                }
+                $cut_details['duration'] = fftime($duration);
+            } else {
+                for ($j=0; $j < count($backup_audio_tracks); $j++) {
+                    if (check_for_content($backup_audio_tracks[$j])) {
+                        //If there is content there, take note of it
+                        $backup_audio_exists = $backup_audio_tracks[$j];
+                    }
+                }
+                $duration_check = $main_audio['start_time'] - $current_time;
+                $duration = seek_to_check($backup_audio_exists, $duration_check);
+                
+                echo "Duration is ", $duration, "<br/>";
+                
+                //Create the cut_array
+                $cut_details['src'] = generate_filepath($backup_audio_exists['media_url']);
+                $cut_details['seek_to'] = fftime($current_time - $backup_audio_exists['start_time']);
+                $cut_details['duration'] = fftime($duration);
+            }
             
-            //Create the cut_array
-            $cut_details['src'] = generate_filepath($backup_audio_exists['media_url']);
-            $cut_details['seek_to'] = fftime($current_time - $backup_audio_exists['start_time']);
-            $cut_details['duration'] = fftime($duration);
             $cut_audio_array[] = $cut_details;
             //Lastly, update the current time
             $current_time += $duration;
             echo $current_time, " | ", $the_end, "<br/>";
+            //$backup_audio_tracks = remove_useless_details($backup_audio_tracks);
         } //This marks the end of the audio before the main audio
         
         
@@ -327,7 +353,7 @@
         }
         //Now, concatenate each audio file, even if there is only 1 file
         $concat_files = "concat:\"" . implode("|", $outpath_array) . "\"";
-        echo $concat_files;
+        echo $concat_files, "</br>";
         $output_audio_path = $temp_path."combined_audio.aac";
         exec("ffmpeg -i ".$concat_files." ".$output_audio_path);
         
@@ -367,7 +393,7 @@
 //End function list----------------------------------------------------------------------------------
     
     //Establish the session that we want to make the video for
-    $session_id = 29; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
+    $session_id = $_GET["sid"]; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
     $session_name = @"Juggle 2";
     $user_id = 0;
     $user_email = @"lo.mikail@gmail.com";
@@ -542,22 +568,18 @@
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
     echo $final_video_url;
     
-    //Now, delete the temp directory
-    deleteDirectory($temp_path);
-    
-    /*
     //Create 3 thumbnails based on the videos length
     $video_length = $last_end - $first_start;
     $thumb_1 = create_thumbnail($final_video_path, ($video_length * 0.2), $final_video_url);
     $thumb_2 = create_thumbnail($final_video_path, ($video_length * 0.5), $final_video_url);
     $thumb_3 = create_thumbnail($final_video_path, ($video_length * 0.8), $final_video_url);
     
-     //Update the database
-     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-     if (mysqli_connect_errno($con)) {
-     echo "Failed to connect to MySQL: " . mysqli_connect_error();
-     } else {
-     
+    //Update the database
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
@@ -571,11 +593,11 @@
             $query = "UPDATE media_master SET thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
-     
-     }
-     mysqli_close($con);
+        
+    }
+    mysqli_close($con);
     
-    
+    /*
     //Finally, email the user the final video
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
