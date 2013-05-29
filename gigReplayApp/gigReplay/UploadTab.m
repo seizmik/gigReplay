@@ -220,7 +220,7 @@
         [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
     }
     
-    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_file.php"];
+    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_one.php"];
     
     __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
@@ -273,9 +273,6 @@
     //[request setUploadProgressDelegate:self];
     //request.showAccurateProgress = YES;
     [request startAsynchronous];
-    
-    //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
-    //NSLog(@"responseString %@",[request responseString]);
     
 }
 

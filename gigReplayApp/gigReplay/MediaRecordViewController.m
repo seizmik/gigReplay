@@ -182,9 +182,6 @@
     NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
     NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     
-    //Save a copy to the camera roll
-    UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
-    
     if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
     {
         
@@ -217,7 +214,8 @@
                      //Since it failed, we save the original video path instead
                      [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
                  }
-                 
+                 //Save a copy to the camera roll
+                 UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
                  [[UIApplication sharedApplication] endBackgroundTask:bgTask];
              }];
         });

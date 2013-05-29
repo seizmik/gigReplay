@@ -381,6 +381,14 @@
         }
         return rmdir($dir);
     }
+    
+    function flush_buffers()
+    {
+        ob_end_flush();
+        ob_flush();
+        flush();
+        ob_start();
+    }
 
 //End function list--------------------------------------------------------
     
@@ -481,7 +489,7 @@
     exec("ffmpeg -i ".$concat_files." -c copy ".$combined_video_path);
     
     //Video edit complete---------------------------------------------------
-    
+    flush_buffers();
     
     
     //Now that the video has been completed, let's head to make the audio for the video.
@@ -547,7 +555,7 @@
     $combined_audio_path = join_all_audio($cut_audio_array);
     
     //Audio edit complete-----------------------------------------------------
-    
+    flush_buffers();
     
     
     //Here's where we combine the video with the audio

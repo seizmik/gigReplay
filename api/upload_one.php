@@ -1,5 +1,5 @@
 <?php
-
+    
     function replace_extension($filename, $new_extension)
     {
         $info = pathinfo($filename);
@@ -12,7 +12,7 @@
         $info = pathinfo($filename);
         return $info['filename'] . '_' . $random_string . '.' . $info['extension'];
     }
-
+    
     function calculate_content_length($media_path)
     {
         //Calculate the length
@@ -38,7 +38,7 @@
     
     
     //End of function list--------------------------------------------------
-
+    
     //Retrieve the POST-ed metadata
     $user_id = $_POST['user_id'];
     $session_id = $_POST['session_id'];
@@ -51,7 +51,7 @@
     $low_res_path = nil;
     $file_url = nil;
     $low_res_url = nil;
-        
+    
     //If audio, rename into mp3. If video, rename into mp4.
     if ($media_type==1) {
         
@@ -71,7 +71,7 @@
         $video = create_random_name(basename($_FILES['uploadedfile']['name']));
         //$ext = end(explode(".", $video));
         $mp4 = replace_extension($video, mp4);
-
+        
         //Variables to feed into ffmpeg commands
         $original_target_path = $target_path . $video;
         $low_res_path = "../uploads/low_res/" . $mp4;
@@ -86,52 +86,11 @@
         //If the file has been moved and created, update the database
         //I believe that this is the part where we would be putting it into a queue using RabbitMQ
         echo "SUCCESS";
-        
-        //I need it to reply here already without the user needing to see the rest of this.
-        
-        //Convert the uploaded file.
-        //If it's audio, convert to mp3. If it's video, convert to 640x360 mp4.
-        if ($media_type==1) {
-            exec("ffmpeg -i " . $original_target_path . " " . $low_res_path);
-        } else if ($media_type==2) {
-            //This command creates the low res video file. I'm not sure why we need it now, but...
-            exec("ffmpeg -i " . $original_target_path . " -s 640x360 " . $low_res_path);
-            
-            //This command strips the audio from the video
-            $audio_only = pathinfo($original_target_path);
-            $audio_only_path = $target_path . $audio_only['filename'] . "_audio.aac";
-            $file_audio_url = "http://www.lipsync.sg/uploads/original/".$audio_only['filename'] . "_audio.aac";
-            exec("ffmpeg -i " . $original_target_path . " -ab 512k -ac 2 -acodec libvo_aacenc -vn " . $audio_only_path);
-            
-        }
-        
-        $media_length = calculate_content_length($low_res_path);
-        if ($media_type == 2) {
-            //Due to electronic lag, we took the start time of the video to be the end of the video. So need to subtract the media length from it.
-            $start_time = $start_time - $media_length;
-        }
-        
-        if ($_POST['session_id']) {
-            $con = mysql_connect("localhost","mik","rivalries");
-            if (!$con) {
-                die('Could not connect: ' . mysql_error());
-            } else {
-                mysql_select_db("gigreplay", $con);
-                $query = "INSERT INTO media_original (user_id, session_id, start_time, media_type, media_url, low_res_url, media_length) VALUES ('$user_id', '$session_id', '$start_time', '$media_type', '$file_url', '$low_res_url', '$media_length')";
-                mysql_query($query);
-            }
-            
-            //If it was a video, you'd need to make another entry for the audio file that was created
-            if ($media_type==2) {
-                //Difference is that media_type is now 3, and there is no low_res_url
-                $query = "INSERT INTO media_original (user_id, session_id, start_time, media_type, media_url, media_length) VALUES ('$user_id', '$session_id', '$start_time', 3, '$file_audio_url', '$media_length')";
-                mysql_query($query);
-            }
-            
-            mysql_close($con);
-        }
     } else{
         echo "FAIL";
     }
     
-?>
+    //Execute the command to run another script from command line
+    exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url > /dev/null 2>&1");
+    
+    ?>
