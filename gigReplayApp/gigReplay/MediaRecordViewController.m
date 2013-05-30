@@ -243,7 +243,7 @@
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
     //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
     //CGAffineTransform txf = [videoTrack preferredTransform];
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset960x540];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
     exportSession.outputURL = videoOutputURL;
     exportSession.outputFileType = AVFileTypeMPEG4;
     NSLog (@"%@", exportSession.supportedFileTypes);

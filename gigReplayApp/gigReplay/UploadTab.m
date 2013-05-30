@@ -105,7 +105,11 @@
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
-    cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    if (fileDetails.contentType == 2) {
+        cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    } else {
+        cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
+    }
     cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
     
     return cell;
