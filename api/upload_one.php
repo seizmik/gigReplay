@@ -86,11 +86,11 @@
         //If the file has been moved and created, update the database
         //I believe that this is the part where we would be putting it into a queue using RabbitMQ
         echo "SUCCESS";
+        
+        //Execute the command to run another script from command line. Fork
+        exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url > /dev/null 2>&1");
     } else{
         echo "FAIL";
     }
-    
-    //Execute the command to run another script from command line
-    exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url > /dev/null 2>&1");
     
     ?>

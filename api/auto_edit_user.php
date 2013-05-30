@@ -59,10 +59,13 @@
     
     function generate_duration() {
         //return rand(300, 600)/100;
+        
+        
         //Creates the duration for a set number of frames
         $frames = rand(150, 300);
         $time = $frames * (1/30);
         return round($time, 3);
+        
     }
     
     function seek_to_check($content_details, $seek_to)
@@ -96,7 +99,7 @@
     {
         global $first_start, $last_end, $current_time;
         $new_array = array();
-                
+        
         while ($current_time < $last_end) {
             //As long as the current time is less than the last_end, it will continue cutting
             //First, sort the videos and check if there is a gap in the videos
@@ -146,11 +149,15 @@
                 //We put in duration_check here as we might need to add some numbers later
                 $cut_details['duration'] = $duration_check;
                 
+                echo "Cutting ".$video_url." from ".$cut_details['seek_to']." for ".$cut_details['duration']."s duration", "</br>";
+                
             }
             //Add the cut details into new array
             $new_array[] = $cut_details;
             //Update the current time
             $current_time += $duration_check;
+            echo "Current time is " . $current_time, "</br>";
+            
             //Remove video details that don't exist
             $array = remove_useless_details($array);
         } //This ends the while loop to generate the details for cutting
@@ -159,8 +166,8 @@
         $return_array = array();
         $count = 0;
         for ($i =0; $i < count($new_array); $i++) {
-            echo "New array source: ", $new_array[$i]['src'], "<br/>";
-            echo "Return array source: ", $return_array[$count]['src'], "<br/>";
+            //echo "New array source: ", $new_array[$i]['src'], "<br/>";
+            //echo "Return array source: ", $return_array[$count]['src'], "<br/>";
             if ($i == 0) {
                 //First case, just add it into the returning array
                 $return_array[] = $new_array[$i];
@@ -177,6 +184,7 @@
         //A foreach loop does not work here. Converting duration check which is a float to something that ffmpeg can read later
         for ($i = 0; $i < count($return_array); $i++) {
             $return_array[$i]['duration'] = fftime($return_array[$i]['duration']);
+            echo "Duration: ".$return_array[$i]['duration'], "</br>";
         }
         
         return $return_array;
@@ -358,7 +366,7 @@
         $output_path = $pathinfo['dirname'];
         $output_path .= "/".generate_random_string().".png";
         $seek_to = fftime($time);
-        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=320:-1 -vframes 1 ".$output_path);
+        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=-1:360 -vframes 1 ".$output_path);
         
         //Create the URL
         $url_pathinfo = pathinfo($video_url);
@@ -389,8 +397,8 @@
         flush();
         ob_start();
     }
-
-//End function list--------------------------------------------------------
+    
+    //End function list----------------------------------------------------------------------------------
     
     //Establish the session that we want to make the video for
     $session_id = $_POST['session_id']; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
@@ -438,7 +446,9 @@
         $video_array[] = $row;
         
     }
-        
+    
+    echo "First start is ".$first_start." and last end is ".$last_end, "<br/>";
+    
     //Create a temp folder and master folder
     $temp_path = "../uploads/temp/".$session_id."/";
     if (!is_dir($temp_path)) {
@@ -478,6 +488,7 @@
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
         exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
+        
         $temp_trim_array[] = $temp_trim_path;
     }
     
@@ -563,7 +574,7 @@
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
-    echo $final_video_url, "<br>";
+    echo $final_video_url;
     
     //Create 3 thumbnails based on the videos length
     $video_length = $last_end - $first_start;
@@ -580,7 +591,7 @@
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
-                
+        
         if (mysqli_num_rows($result_master) == 0) {
             $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
             mysqli_query($con, $query);
@@ -595,31 +606,28 @@
     mysqli_close($con);
     
     
-    //Now, delete the temp directory
-    deleteDirectory($temp_path);
-    
-    
-    //Finally, email the user the final video
-    $mail = new PHPMailer;
-    $mail->SetFrom('info@gigreplay.com', 'GigReplay');
-    $address = $user_email;
-    $mail->AddAddress($address);
-    
-    $mail->Subject = 'Your Video Has Been Completed';
-    $body = "<br><hr><br>
-    Dear ".$user_name.",<br>
-    <br>
-    Your video for session $session_name has been completed. You can view your video at the following address: <br>
-    <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
-    Remember, keep those videos rolling in.<br><br>
-    
-    GigReplay. Performances with a different angle.
-    
-    <br><hr><br>This is an automatically generated email. Please do not reply.";
-    $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
-    $mail->MsgHTML($body);
-    if(!$mail->Send()) {
-        echo "Mailer Error: " . $mail->ErrorInfo;
-    }
+     //Finally, email the user the final video
+     $mail = new PHPMailer;
+     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+     $address = $user_email;
+     $mail->AddAddress($address);
+     
+     $mail->Subject = 'Your Video Has Been Completed';
+     $body = "<br><hr><br>
+     Dear ".$user_name.",<br>
+     <br>
+     Your video for session $session_name has been completed. You can view your video at the following address: <br>
+     <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
+     Remember, keep those videos rolling in.<br><br>
+     
+     GigReplay. Performances with a different angle.
+     
+     <br><hr><br>This is an automatically generated email. Please do not reply.";
+     $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+     $mail->MsgHTML($body);
+     if(!$mail->Send()) {
+     echo "Mailer Error: " . $mail->ErrorInfo;
+     }
+     
     
 ?>
