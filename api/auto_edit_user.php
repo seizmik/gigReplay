@@ -1,4 +1,5 @@
 <?php
+    /*
     set_include_path('../api/PHPMailer');
     require 'class.phpmailer.php';
     
@@ -397,7 +398,7 @@
         flush();
         ob_start();
     }
-    
+    */
     //End function list----------------------------------------------------------------------------------
     
     //Establish the session that we want to make the video for
@@ -407,6 +408,13 @@
     $user_email = $_POST['user_email'];
     $user_name = $_POST['user_name'];
     
+    if (isset($session_id, $session_name, $user_id, $user_email, $user_name)) {
+        exec("php auto_edit_fork.php $session_id $session_name $user_id $user_email $user_name > /dev/null 2>&1");
+    } else {
+        echo "Error!";
+    }
+    
+    /*
     $video_array = array();
     
     //First query the database and get all the details
@@ -500,7 +508,7 @@
     exec("ffmpeg -i ".$concat_files." -c copy ".$combined_video_path);
     
     //Video edit complete---------------------------------------------------
-    flush_buffers();
+    //flush_buffers();
     
     
     //Now that the video has been completed, let's head to make the audio for the video.
@@ -566,7 +574,7 @@
     $combined_audio_path = join_all_audio($cut_audio_array);
     
     //Audio edit complete-----------------------------------------------------
-    flush_buffers();
+    //flush_buffers();
     
     
     //Here's where we combine the video with the audio
@@ -605,29 +613,31 @@
     }
     mysqli_close($con);
     
+    //Delete the temporary directory
+    deleteDirectory($temp_path);
     
-     //Finally, email the user the final video
-     $mail = new PHPMailer;
-     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
-     $address = $user_email;
-     $mail->AddAddress($address);
-     
-     $mail->Subject = 'Your Video Has Been Completed';
-     $body = "<br><hr><br>
-     Dear ".$user_name.",<br>
-     <br>
-     Your video for session $session_name has been completed. You can view your video at the following address: <br>
-     <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
-     Remember, keep those videos rolling in.<br><br>
-     
-     GigReplay. Performances with a different angle.
-     
-     <br><hr><br>This is an automatically generated email. Please do not reply.";
-     $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
-     $mail->MsgHTML($body);
-     if(!$mail->Send()) {
-     echo "Mailer Error: " . $mail->ErrorInfo;
-     }
-     
+    //Finally, email the user the final video
+    $mail = new PHPMailer;
+    $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+    $address = $user_email;
+    $mail->AddAddress($address);
+    
+    $mail->Subject = 'Your Video Has Been Completed';
+    $body = "<br><hr><br>
+    Dear ".$user_name.",<br>
+    <br>
+    Your video for session $session_name has been completed. You can view your video at the following address: <br>
+    <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
+    Remember, keep those videos rolling in.<br><br>
+    
+    GigReplay. Performances with a different angle.
+    
+    <br><hr><br>This is an automatically generated email. Please do not reply.";
+    $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+    $mail->MsgHTML($body);
+    if(!$mail->Send()) {
+        echo "Mailer Error: " . $mail->ErrorInfo;
+    }
+    */
     
 ?>

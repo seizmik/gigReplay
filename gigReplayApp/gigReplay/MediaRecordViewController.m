@@ -219,6 +219,7 @@
                  [[UIApplication sharedApplication] endBackgroundTask:bgTask];
              }];
         });
+        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
         
     }
 }

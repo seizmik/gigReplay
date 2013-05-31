@@ -82,7 +82,17 @@
         
     }
     
-    if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
+    //Check if file had been uploaded before
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        //Find out if the video has already been created once before
+        $query = "SELECT * FROM media_original WHERE session_id=".$session_id." AND user_id=".$user_id." AND start_time=".$start_time;
+        $result = mysqli_query($con, $query);
+    }
+    
+    if (mysqli_num_rows($result) > 0 || move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
         //If the file has been moved and created, update the database
         //I believe that this is the part where we would be putting it into a queue using RabbitMQ
         echo "SUCCESS";

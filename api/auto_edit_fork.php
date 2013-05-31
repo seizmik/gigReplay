@@ -99,7 +99,7 @@
     {
         global $first_start, $last_end, $current_time;
         $new_array = array();
-                
+        
         while ($current_time < $last_end) {
             //As long as the current time is less than the last_end, it will continue cutting
             //First, sort the videos and check if there is a gap in the videos
@@ -397,15 +397,15 @@
         flush();
         ob_start();
     }
-
-//End function list----------------------------------------------------------------------------------
+    
+    //End function list----------------------------------------------------------------------------------
     
     //Establish the session that we want to make the video for
-    $session_id = $_GET["sid"]; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
-    $session_name = @"Juggle 2";
-    $user_id = 0;
-    $user_email = @"lo.mikail@gmail.com";
-    $user_name = @"Mikail Lo";
+    $session_id = $_SERVER['argv'][1]; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
+    $session_name = $_SERVER['argv'][2];
+    $user_id = $_SERVER['argv'][3];
+    $user_email = $_SERVER['argv'][4];
+    $user_name = $_SERVER['argv'][5];
     
     $video_array = array();
     
@@ -448,7 +448,7 @@
     }
     
     echo "First start is ".$first_start." and last end is ".$last_end, "<br/>";
-        
+    
     //Create a temp folder and master folder
     $temp_path = "../uploads/temp/".$session_id."/";
     if (!is_dir($temp_path)) {
@@ -500,7 +500,7 @@
     exec("ffmpeg -i ".$concat_files." -c copy ".$combined_video_path);
     
     //Video edit complete---------------------------------------------------
-    flush_buffers();
+    //flush_buffers();
     
     
     //Now that the video has been completed, let's head to make the audio for the video.
@@ -566,7 +566,7 @@
     $combined_audio_path = join_all_audio($cut_audio_array);
     
     //Audio edit complete-----------------------------------------------------
-    flush_buffers();
+    //flush_buffers();
     
     
     //Here's where we combine the video with the audio
@@ -605,10 +605,9 @@
     }
     mysqli_close($con);
     
-    //Delete the temp directory
+    //Delete the temporary directory
     deleteDirectory($temp_path);
     
-    /*
     //Finally, email the user the final video
     $mail = new PHPMailer;
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
@@ -631,6 +630,6 @@
     if(!$mail->Send()) {
         echo "Mailer Error: " . $mail->ErrorInfo;
     }
-    */
+    
     
 ?>
