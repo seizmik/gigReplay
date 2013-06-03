@@ -77,6 +77,7 @@
 - (IBAction)generateVideo:(UIButton *)sender
 {
     UIAlertView *videoGenerating = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"This will generate a new video that will replace any previous versions. An email will be sent to you once the video is ready for viewing." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
+    NSLog(@"%i", appDelegateObject.CurrentUserID);
     [videoGenerating show];
 }
 
@@ -103,6 +104,7 @@
             [request setRequestMethod:@"POST"];
             [request setDelegate:self];
             [request setShouldContinueWhenAppEntersBackground:YES];
+            NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
             [request startAsynchronous];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
@@ -122,7 +124,7 @@
     NSData *imageData = UIImagePNGRepresentation(thumbnail);
     
     //Generate a unique name for the image and folder
-    NSString *imageName = [self generateUniqueFilename];
+    NSString *imageName = [self generateRandomString];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -327,7 +329,7 @@
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateRandomString]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
@@ -501,6 +503,17 @@
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     
     return uniqueFileName;
+}
+
+-(NSString *) generateRandomString
+{    
+    NSMutableString *randomString = [NSMutableString string];
+    randomString = [NSMutableString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i=0; i<7; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    return randomString;
 }
 
 @end

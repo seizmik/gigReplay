@@ -88,7 +88,7 @@
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
         //Find out if the video has already been created once before
-        $query = "SELECT * FROM media_original WHERE session_id=".$session_id." AND user_id=".$user_id." AND start_time=".$start_time;
+        $query = "SELECT * FROM media_original WHERE session_id=".$session_id." AND user_id=".$user_id." AND media_url=".$file_url;
         $result = mysqli_query($con, $query);
     }
     

@@ -214,10 +214,10 @@
     NSString *uploadFileName = [NSString string];
     NSString *uploadFileType = [NSString string];
     if (fileDetails.contentType == 1) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [self generateRandomString], [fileDetails.filePath pathExtension]];
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"audio/%@", [fileDetails.filePath pathExtension]];
     } else if (fileDetails.contentType == 2) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [self generateRandomString], [fileDetails.filePath pathExtension]];
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"video/%@", [fileDetails.filePath pathExtension]];
     } else {
         //File is corrupted. Need to do something with the file when returned this.
@@ -369,17 +369,6 @@
     SettingsViewController *set=[[SettingsViewController alloc] init];
     set.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:set animated:YES];
-}
-
--(NSString *) generateRandomString {
-    
-    NSMutableString *randomString = [NSMutableString stringWithCapacity: 7];
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for (int i=0; i<7; i++) {
-        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
-    }
-    
-    return randomString;
 }
 
 @end
