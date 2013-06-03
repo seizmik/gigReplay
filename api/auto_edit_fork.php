@@ -486,7 +486,7 @@
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
         
         $temp_trim_array[] = $temp_trim_path;
@@ -571,7 +571,7 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
     echo $final_video_url;
