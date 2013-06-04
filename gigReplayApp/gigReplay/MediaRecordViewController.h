@@ -33,6 +33,8 @@
     double startTime;
     int currentTime;
     bool isRecording;
+    
+    
 }
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
@@ -51,7 +53,7 @@
 -(BOOL)startCameraController:(UIViewController*)controller usingDelegate:(id )delegate;
 -(void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void*)contextInfo;
 
-@property (strong, nonatomic) UIImagePickerController *cameraUI;
+@property (strong,nonatomic) UIImagePickerController *cameraUI;
 @property (strong, nonatomic) UIAlertView *saveAlert;
 @property (strong, nonatomic) NSTimer *videoTimer;
 

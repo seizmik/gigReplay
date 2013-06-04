@@ -158,7 +158,9 @@
     // trimming movies. To instead show the controls, use YES.
     cameraUI.allowsEditing = NO;
     cameraUI.showsCameraControls = NO;
+    cameraUI.toolbarHidden=YES;
     cameraUI.navigationBarHidden = YES;
+    cameraUI.cameraViewTransform=CGAffineTransformScale(cameraUI.cameraViewTransform, 1.3, 1.3);
     
     //At this point, it should be taken from the options
     cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
@@ -179,18 +181,16 @@
     NSString *thisVideoSession = appDelegateObject.CurrentSessionID;
     NSString *thisSessionName = appDelegateObject.CurrentSession_Name;
     
-    NSString *mediaType = [info objectForKey:UIImagePickerControllerMediaType];
+    
     NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     
     //Save a copy to the camera roll
     UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     
-    if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
-    {
-        
+    
         //Save the video
         //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
-        NSURL *outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
+        //outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
         
         bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
@@ -198,32 +198,9 @@
         }];
         
         //Put this entire process into the background
-        dispatch_queue_t compressQueue = dispatch_queue_create(NULL, 0);
-        dispatch_async(compressQueue, ^{
-            [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
-             {
-                 if (exportSession.status == AVAssetExportSessionStatusCompleted)
-                 {
-                     //At this point, it should reveal that the video has stopped processing and has been saved
-                     [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
-                     //If the conversion was successful, delete the original
-                     [self removeFile:capturedVideoURL];
-                 }
-                 else
-                 {
-                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-                     [compressError dismissWithClickedButtonIndex:0 animated:YES];
-                     [compressError show];
-                     //Since it failed, we save the original video path instead
-                     [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
-                 }
-                 
-                 [[UIApplication sharedApplication] endBackgroundTask:bgTask];
-             }];
-        });
-        
-    }
+        [self convertVideoToLowQuailtyFromURL:capturedVideoURL ];
 }
+
 
 - (void)video:(NSString*)videoPath didFinishSavingWithError:(NSError*)error contextInfo:(void*)contextInfo
 {
@@ -237,78 +214,54 @@
     } //Don't need to do anything if the video was successfully saved
 }
 
-- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
-                                   outputURL:(NSURL*)videoOutputURL
-                                     handler:(void (^)(AVAssetExportSession *))handler  //Used to compress the video
+
+- (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL ;
+                                      
 {
+    NSLog(@"Converting video");
+   NSURL *videoOutputURL = [self getLocalFilePathToSave];
     [[NSFileManager defaultManager] removeItemAtURL:videoOutputURL error:nil];
-    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
-    //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    //CGAffineTransform txf = [videoTrack preferredTransform];
-    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPreset960x540];
-    exportSession.outputURL = videoOutputURL;
-    exportSession.outputFileType = AVFileTypeMPEG4;
-    NSLog (@"%@", exportSession.supportedFileTypes);
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
-    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
-     {
-         handler(exportSession);
-     }];
+    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
+                                                                      presetName:AVAssetExportPresetLowQuality];
+    exporter.outputURL=videoOutputURL;
+    exporter.outputFileType = AVFileTypeMPEG4;
+    exporter.shouldOptimizeForNetworkUse = YES;
+    [exporter exportAsynchronouslyWithCompletionHandler:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self exportDidFinish:exporter input:capturedVideoURL];
+        });
+    }];
+
+   
 }
 
-/*
-- (void)fixOrientation
-{
-    AVMutableVideoCompositionLayerInstruction *FirstlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:firstTrack];
-    AVAssetTrack *FirstAssetTrack = [[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-    UIImageOrientation FirstAssetOrientation_  = UIImageOrientationUp;
-    BOOL  isFirstAssetPortrait_  = NO;
-    CGAffineTransform firstTransform = FirstAssetTrack.preferredTransform;
-    if(firstTransform.a == 0 && firstTransform.b == 1.0 && firstTransform.c == -1.0 && firstTransform.d == 0)  {FirstAssetOrientation_= UIImageOrientationRight; isFirstAssetPortrait_ = YES;}
-    if(firstTransform.a == 0 && firstTransform.b == -1.0 && firstTransform.c == 1.0 && firstTransform.d == 0)  {FirstAssetOrientation_ =  UIImageOrientationLeft; isFirstAssetPortrait_ = YES;}
-    if(firstTransform.a == 1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == 1.0)   {FirstAssetOrientation_ =  UIImageOrientationUp;}
-    if(firstTransform.a == -1.0 && firstTransform.b == 0 && firstTransform.c == 0 && firstTransform.d == -1.0) {FirstAssetOrientation_ = UIImageOrientationDown;}
-    CGFloat FirstAssetScaleToFitRatio = 1.0;
-    if(isFirstAssetPortrait_){
-        FirstAssetScaleToFitRatio = 1.0;
-        CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
-        [FirstlayerInstruction setTransform:CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor) atTime:kCMTimeZero];
-    }else{
-        CGAffineTransform FirstAssetScaleFactor = CGAffineTransformMakeScale(FirstAssetScaleToFitRatio,FirstAssetScaleToFitRatio);
-        [FirstlayerInstruction setTransform:CGAffineTransformConcat(CGAffineTransformConcat(FirstAssetTrack.preferredTransform, FirstAssetScaleFactor),CGAffineTransformMakeTranslation(0, 160)) atTime:kCMTimeZero];
-    }
+-(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL  {
     
-    [FirstlayerInstruction setOpacity:0.0 atTime:videoAsset.duration];
-    
-    AVMutableVideoCompositionLayerInstruction *SecondlayerInstruction = [AVMutableVideoCompositionLayerInstruction videoCompositionLayerInstructionWithAssetTrack:AudioTrack];
-    
-    
-    MainInstruction.layerInstructions = [NSArray arrayWithObjects:FirstlayerInstruction,nil];;
-    
-    AVMutableVideoComposition *MainCompositionInst = [AVMutableVideoComposition videoComposition];
-    MainCompositionInst.instructions = [NSArray arrayWithObject:MainInstruction];
-    MainCompositionInst.frameDuration = CMTimeMake(1, 30);
-    MainCompositionInst.renderSize = CGSizeMake(360.0, 480.0);
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-    NSString *myPathDocs =  [documentsDirectory stringByAppendingPathComponent:[NSString stringWithFormat:@"orientationFixedVideo-%d.mov",arc4random() % 1000]];
-    
-    NSURL *url = [NSURL fileURLWithPath:myPathDocs];
-    
-    AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:mixComposition presetName:AVAssetExportPresetMediumQuality];
-    exporter.outputURL=url;
-    exporter.outputFileType = AVFileTypeQuickTimeMovie;
-    exporter.videoComposition = MainCompositionInst;
-    exporter.shouldOptimizeForNetworkUse = YES;
-    [exporter exportAsynchronouslyWithCompletionHandler:^
-     {
-         dispatch_async(dispatch_get_main_queue(), ^{
-             [self exportDidFinish:exporter];
-         });
-     }];
+    if ( session.status== AVAssetExportSessionStatusCompleted)
+                 {
+                     NSLog(@"export and compression done!");
+                    //At this point, it should reveal that the video has stopped processing and has been saved
+                     NSURL *compressedVideo=session.outputURL;
+                     [self insertIntoDatabaseWithPath:compressedVideo withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+                     //If the conversion was successful, delete the original
+                     [self removeFile:inputURL];
+                 }
+                 else
+                 {
+                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                     [compressError dismissWithClickedButtonIndex:0 animated:YES];
+                     [compressError show];
+                     //Since it failed, we save the original video path instead
+                     [self insertIntoDatabaseWithPath:inputURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+                 }
+             
+[[UIApplication sharedApplication] endBackgroundTask:bgTask];
+ 
 }
-*/
+
+
 
 - (NSURL *)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {
@@ -347,28 +300,34 @@
     //overlay = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 480.0)];
     overlay = [[UIView alloc] initWithFrame:CGRectMake(0, (screenHeight - 50), screenWidth, 50.0)];
     //NSLog(@"setX is %f. setY is %f", setX, setY);
-    overlay.backgroundColor = [UIColor clearColor];
-    overlay.opaque = NO;
+    overlay.backgroundColor=[UIColor clearColor];
+    overlay.opaque = YES;
     
     //Back button
-    backButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [backButton setTitle:@"Back" forState:UIControlStateNormal];
+    backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.backgroundColor=[UIColor clearColor];
+    backButton.highlighted=YES;
+    [backButton setImage:[UIImage imageNamed:@"recording_overlay_back_icon"] forState:UIControlStateNormal];
+//    [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton setFrame:CGRectMake(5.0, 0.0, 60.0, 50.0)];
     [backButton addTarget:self action:@selector(imagePickerControllerDidCancel:) forControlEvents:UIControlEventTouchUpInside];
     backButton.enabled = YES;
     [overlay addSubview:backButton];
     
     //Help button
-    helpButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [helpButton setTitle:@"Help" forState:UIControlStateNormal];
+    helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    helpButton.backgroundColor=[UIColor clearColor];
+    helpButton.highlighted=YES;
+    [helpButton setImage:[UIImage imageNamed:@"recording_overlay_help_icon"] forState:UIControlStateNormal];
+//    [helpButton setTitle:@"Help" forState:UIControlStateNormal];
     [helpButton setFrame:CGRectMake((screenWidth - 45.0), 0.0, 40.0, 40.0)];
     [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     helpButton.enabled = YES;
     [overlay addSubview:helpButton];
     
     //Recording button
-    cameraRecButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+    cameraRecButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
     [cameraRecButton setFrame:CGRectMake((screenWidth/2 - 60.0), 0, 120.0, 50.0)];
     [cameraRecButton addTarget:self action:@selector(recordButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     cameraRecButton.enabled = YES;
@@ -399,7 +358,7 @@
         //Start recording
         isRecording = YES;
         [backButton setHidden:YES];
-        [cameraRecButton setTitle:@"STOP" forState:UIControlStateNormal];
+        [cameraRecButton setImage:[UIImage imageNamed:@"Recording_overlay_on_icon"] forState:UIControlStateNormal];
         [self timerStartStop];
         [cameraUI startVideoCapture];
         
@@ -410,7 +369,7 @@
         [cameraUI stopVideoCapture];
         isRecording = NO;
         [backButton setHidden:NO];
-        [cameraRecButton setTitle:@"Record" forState:UIControlStateNormal];
+        [cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
     }
     
 }

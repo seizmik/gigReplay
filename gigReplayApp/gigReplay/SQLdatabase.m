@@ -299,25 +299,25 @@
 			// Loop through the results and add them to the feeds array
 			while(sqlite3_step(compiledStatement) == SQLITE_ROW)
 			{				// Read the data from the result row
-                
-                NSString *session_Id=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
-                NSString *sessionExpiredStatus=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
-                NSString *sessionExpiredTime=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
-                NSString *sessionExpiredDate=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
-                
-                
-                NSString *Created_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,4)];
-                NSString *Session_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,5)];
-                NSString *ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,6)];
-                NSString *User_ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,7)];
+                NSString *facebook_Id=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
+                NSString *session_Id=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                NSString *sessionExpiredStatus=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                NSString *sessionExpiredTime=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
+                NSString *sessionExpiredDate=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,4)];
                 
                 
-                NSString *Time =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,8)];
+                NSString *Created_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,5)];
+                NSString *Session_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,6)];
+                NSString *ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,7)];
+                NSString *User_ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,8)];
+                
+                
+                NSString *Time =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,10)];
                 NSString *Date =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,9)];
-                NSString *Session_Code =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,10)];
+                NSString *Session_Code =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,11)];
                 
                 
-                NSArray *Details = [[NSArray alloc]initWithObjects:ID,User_ID,Time,Date,Session_Code,Session_Name,Created_Name,sessionExpiredDate,sessionExpiredTime,sessionExpiredStatus,session_Id,nil];
+                NSArray *Details = [[NSArray alloc]initWithObjects:ID,User_ID,Time,Date,Session_Code,Session_Name,Created_Name,sessionExpiredDate,sessionExpiredTime,sessionExpiredStatus,session_Id,facebook_Id,nil];
                 
                 
                 [UserDetails addObject:Details];

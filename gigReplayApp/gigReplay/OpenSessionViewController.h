@@ -13,11 +13,14 @@
 #import "SQLdatabase.h"
 #import "Common.h"
 #import "MediaRecordViewController.h"
+#define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
 
 @interface OpenSessionViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     NSMutableArray      *OpenedSessionDetailsHolder;
     BOOL                 ViewWillAppeared;
     MediaRecordViewController *mediaObject;
+    NSString *fb_user_ID;
+    
 }
 
 @property(strong,nonatomic) NSMutableArray  *OpenedSessionDetailsHolder;

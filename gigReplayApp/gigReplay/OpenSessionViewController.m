@@ -42,6 +42,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [self OpenSessionDetailsFromAPI];
+    
 }
 
 
@@ -76,10 +77,22 @@
 		}
 	}
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    //NSLog(@"leonism %@",Details);
+    NSLog(@"leonism %@",Details);
     cell.SceneName.text=[Details objectAtIndex:5];
     cell.directorName.text=[Details objectAtIndex:6];
     cell.SceneTake.text=[Details objectAtIndex:4];
+    
+    dispatch_async(kBgQueue, ^{
+        fb_user_ID=[Details objectAtIndex:11];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            cell.fbProfilePictureView.profileID=fb_user_ID;
+        });
+
+    });
+   
+    cell.fbProfilePictureView.backgroundColor=[UIColor clearColor];
+   
+   
     
     
     return cell;

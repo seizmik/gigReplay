@@ -315,6 +315,10 @@ didStartElement:(NSString *)elementName
         }
         if (SessionPrefixFound)
         {
+            if ([elementName isEqualToString:@"fb_Id"])
+            {
+                OpenSessionFbId=TRUE;
+            }
             if ([elementName isEqualToString:@"data"])
             {
                 OpenSessionId=TRUE;
@@ -491,6 +495,11 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if(OpenSessionFbId)
+            {
+                self.fbId=string;
+                
+            }
             if(OpenSessionId)
             {
                 self.openSessionIdData=string;
@@ -659,6 +668,11 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if (([elementName isEqualToString:@"fb_Id"])&&(OpenSessionFbId))
+            {
+                OpenSessionFbId=FALSE;
+            }
+
             if (([elementName isEqualToString:@"data"])&&(OpenSessionId))
             {
                 OpenSessionId=FALSE;
@@ -693,9 +707,9 @@ didStartElement:(NSString *)elementName
             if (([elementName hasPrefix:@"session_"])&& (SessionPrefixFound)&&(![elementName isEqualToString:@"session_name"]))
             {
                 
-                NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,self.openSessionIdData,nil];
+                NSArray *Details=[[NSArray alloc]initWithObjects:self.Created_SessionCode_Open,self.Created_SessionName_Open,self.SessionCreatedDateForOpen,  self.Created_UserName_Open,self.SessionExpiryDateAndTime,self.SessionExpiryStatus,self.openSessionIdData,self.fbId,nil];
                 [self.OpenSessionDetailsHolder addObject:Details];
-                //NSLog(@"%@ opened sessions details here",Details);
+              //  NSLog(@"%@ opened sessions details here",Details);
                 SessionPrefixFound=FALSE;
                 
                 
@@ -920,6 +934,7 @@ didStartElement:(NSString *)elementName
         {
             
             NSArray *details=[self.OpenSessionDetailsHolder objectAtIndex:i];
+            NSLog(@"%@ HELLO",details);
             NSString *Session_ID=[details objectAtIndex:0];
             NSString *DateDetails=[details objectAtIndex:2];
             
@@ -937,11 +952,12 @@ didStartElement:(NSString *)elementName
            
             NSString *ExpiryStatus=[details objectAtIndex:5];
             NSString *Session_Data=[details objectAtIndex:6];
+            NSString *Facebook_Id=[details objectAtIndex:7];
             
             
             
             
-            NSString *query=[NSString stringWithFormat:@"insert into OpenSession_Details ('Time','Date','User_ID','Session_Code','Session_Name','Created_User_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status','Session_ID') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@','%@')",Time,Date,appDelegateObject.CurrentUserID,Session_ID,session_Name,Created_Name,ExpiryDate,ExpiryTime,ExpiryStatus,Session_Data];
+            NSString *query=[NSString stringWithFormat:@"insert into OpenSession_Details ('Time','Date','User_ID','Session_Code','Session_Name','Created_User_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status','Session_ID','facebook_Id') values ('%@','%@','%d','%@','%@','%@','%@','%@','%@','%@','%@')",Time,Date,appDelegateObject.CurrentUserID,Session_ID,session_Name,Created_Name,ExpiryDate,ExpiryTime,ExpiryStatus,Session_Data,Facebook_Id];
             
             
             [appDelegateObject.databaseObject insertIntoDatabase:query];

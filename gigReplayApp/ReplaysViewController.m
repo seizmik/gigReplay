@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self obtainDataFromURL];
     self.title=@"Replays";
     [self.view addSubview:img1];
     [img1 setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Applications/79421FB7-C6E4-4DF5-9229-E7F8583833EC/Documents/leon"]];
@@ -59,7 +60,7 @@
 
 
 -(void)viewDidAppear:(BOOL)animated{
-    [self obtainDataFromURL];
+    
         SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
     NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
     videoDetails = [sql readFromDatabaseVideos:strQuery];

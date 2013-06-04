@@ -82,7 +82,7 @@
     BOOL                Iscreated_user_Name;
     BOOL                Iscreated_user_id;
     BOOL                IsCreated_timeandDate;
-    
+    BOOL                OpenSessionFbId;
     BOOL                Iscreated_Date;
     
     
@@ -106,6 +106,7 @@
     
     /******* OPEN SESSION DETAILS ***********************************/
 }
+@property(strong,nonatomic)NSString *fbId;
 @property (nonatomic, retain) NSString  *Session_Name;
 @property (nonatomic, retain)  NSString *SessionCode;
 @property (nonatomic, retain)  NSString *Session_Id;

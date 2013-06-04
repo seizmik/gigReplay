@@ -47,9 +47,7 @@
 												 name:@"JoinSearchParsingCompleted"
 											   object:nil];
     [self loadSettingsButton];
-    //UITapGestureRecognizer *tapToDismiss = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(resignTextField:)];
-    //[self.view addGestureRecognizer:tapToDismiss];
-    // Do any additional setup after loading the view from its nib.
+    
 }
 
 -(void)RemoveLoadingView:(NSNotification *)notification
@@ -59,9 +57,7 @@
     
     if ([status isEqualToString:@"Success"])
     {
-//        [self ShowAlertMessage:@"Warning" Message:@"Do you want to Reset the Search result....?" Identifier:3];
-//        [self.view addSubview:DisplayView];
-       // DisplayView.backgroundColor=[UIColor colorWithPatternImage: [UIImage imageNamed:@"body-bg.png"]];
+
         [self LoadSessionDetailsFromDB];
         
     }
@@ -89,7 +85,7 @@
        
         
     }
-    else //bgBLwrplyCkJYtG3
+    else 
     {
         [self ShowAlertMessage:@"Warning" Message:@" SessionCode doesnot exist" ];
         
@@ -205,29 +201,6 @@
     
     return cell;
 }
-//-(void)ClickedButtonForSelection:(id)sender
-//{
-//    UIButton *btn=(UIButton*)sender;
-//    [tableViewScenes reloadData];
-//    NSIndexPath *myIndexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
-//    CustomCell *cell=[tableViewScenes cellForRowAtIndexPath:myIndexPath];
-//    
-//    if(SelectionButtonSeleted)
-//    {
-//        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"File-Unselect.png"]  forState:UIControlStateNormal];
-//        SelectionButtonSeleted=FALSE;
-//        
-//    }
-//    else
-//    {
-//        [cell.sceneSelectionButton setBackgroundImage:[UIImage imageNamed:@"tick.png"]  forState:UIControlStateNormal];
-//        SelectionButtonSeleted=TRUE;
-//        currentSelectedSession=btn.tag;
-//        
-//    }
-//    
-//    
-//}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -257,85 +230,12 @@
 }
 
 
-/////////////////////End of TableViewCell Implementation////////////////////////
 
-//////////////// Joining Sessions Implementation methods////////////////////////
-//-(void)JoinToSessions:(NSString *)session_pass
-//{
-//    
-//  
-//    NSArray *Details=[sessionDetailsHolder objectAtIndex:currentSelectedSession];
-//    NSString *Session_Code= [Details objectAtIndex:5];
-//    
-//    //PROBLEM LIES HERE WHEN POSTING TO SERVER USERID CANT BE 0!
-//    ////////////// //////////// //////////// /////////// ////////////
-//    
-//    NSString *userID=[Details objectAtIndex:1];
-//    NSString *SessionName=[Details objectAtIndex:4];
-//    NSString  *createdby=[Details objectAtIndex:0];
-//    
-//    if ([Session_Code isEqualToString:session_pass]) {
-//        appDelegateObject.CurrentSession_Code=Session_Code;
-//        appDelegateObject.CurrentSession_Name=SessionName;
-//        [apiWrapperObject postJoinSessionDetails:userID SesssionName:SessionName SessionID:Session_Code Created_User_Id:createdby APIIdentifier:API_IDENTIFIER_SESSION_JOIN];
-//        
-//    }
-//    
-//    else
-//    {
-//        [self ShowAlertMessage:@"Error" Message:@"Session Code Doesn't Match"];
-//    }
-//}
-//-(IBAction)start:(id)sender
-//{
-//    if (!SelectionButtonSeleted)
-//    {
-//        [self ShowAlertMessage:@"Warning" Message:@"Please select a session to start"];
-//        return;
-//    }
-//    else
-//    {
-//        [self CheckPasswordAndJoinToSession];
-//    }
-//    
-//    
-//}
-//-(void)CheckPasswordAndJoinToSession
-//{
-//    
-//    [self showAlertWithTextField];
-//    
-//    
-//}
-//-(void)showAlertWithTextField{
-//    UIAlertView* dialog = [[UIAlertView alloc] initWithTitle:@"SessionCode Needed" message:@"Enter SessionCode" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Join", nil];
-//    [dialog setAlertViewStyle:UIAlertViewStylePlainTextInput];
-//    
-//    
-//    [dialog show];
-//    
-//}
-//
-//
-//-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-//{
-//            if (buttonIndex == 1)
-//        {
-//            
-//            NSString *UserTypedSessioncode=[[alertView textFieldAtIndex:0]text];
-//            [self JoinToSessions:UserTypedSessioncode];
-//        }
-//        
-//        
-//    
-//    
-//    
-//}
 
 
 #pragma mark End of join session methods
 #pragma mark -
-////////////////////////////end of joining Sessions methods/////////////////////////
+
 
 - (void)loadSettingsButton
 {
