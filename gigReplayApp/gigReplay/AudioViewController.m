@@ -179,7 +179,7 @@ float currentTime;
     NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
     [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateRandomString]];
+    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateUniqueFilename]];
     NSLog(@"Original audio path: %@", soundFileName);
     NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
     soundFileURL = [NSURL fileURLWithPath:soundFilePath];
@@ -233,16 +233,22 @@ float currentTime;
     return uniqueFileName;
 }
 
--(NSString *) generateRandomString
+/*
+- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
+                                   outputURL:(NSURL*)audioOutputURL
+                                     handler:(void (^)(TPAACAudioConverter *))handler  //Used to compress the video
 {
-    NSMutableString *randomString = [NSMutableString string];
-    randomString = [NSMutableString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
-    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    for (int i=0; i<7; i++) {
-        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
-    }
-    return randomString;
-}
+    //Using TPAACAudioConverter to convert file to AAC format
+    audioConverter = [[TPAACAudioConverter alloc] initWithDelegate:self
+                                                            source:[inputURL path]
+                                                       destination:[audioOutputURL path]];
+    [audioConverter start];
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+     }];
+}*/
 
 - (NSURL *)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {
@@ -262,7 +268,7 @@ float currentTime;
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.aac", newDir, [self generateRandomString]];
+    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.aac", newDir, [self generateUniqueFilename]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }

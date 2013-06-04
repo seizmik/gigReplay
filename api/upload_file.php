@@ -87,8 +87,6 @@
         //I believe that this is the part where we would be putting it into a queue using RabbitMQ
         echo "SUCCESS";
         
-        //I need it to reply here already without the user needing to see the rest of this.
-        
         //Convert the uploaded file.
         //If it's audio, convert to mp3. If it's video, convert to 640x360 mp4.
         if ($media_type==1) {
