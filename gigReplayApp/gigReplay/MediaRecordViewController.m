@@ -77,6 +77,7 @@
 - (IBAction)generateVideo:(UIButton *)sender
 {
     UIAlertView *videoGenerating = [[UIAlertView alloc] initWithTitle:@"Warning" message:@"This will generate a new video that will replace any previous versions. An email will be sent to you once the video is ready for viewing." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Continue", nil];
+    NSLog(@"%i", appDelegateObject.CurrentUserID);
     [videoGenerating show];
 }
 
@@ -103,6 +104,7 @@
             [request setRequestMethod:@"POST"];
             [request setDelegate:self];
             [request setShouldContinueWhenAppEntersBackground:YES];
+            NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
             [request startAsynchronous];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
@@ -122,7 +124,7 @@
     NSData *imageData = UIImagePNGRepresentation(thumbnail);
     
     //Generate a unique name for the image and folder
-    NSString *imageName = [self generateUniqueFilename];
+    NSString *imageName = [self generateRandomString];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -184,10 +186,16 @@
     
     NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
     
+<<<<<<< HEAD
     //Save a copy to the camera roll
     UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     
     
+=======
+    if([mediaType isEqualToString:(NSString *)kUTTypeMovie])
+    {
+        
+>>>>>>> 47435508447f51d9bc489bf6e0147b60042e8089
         //Save the video
         //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
         //outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
@@ -198,7 +206,37 @@
         }];
         
         //Put this entire process into the background
+<<<<<<< HEAD
         [self convertVideoToLowQuailtyFromURL:capturedVideoURL ];
+=======
+        dispatch_queue_t compressQueue = dispatch_queue_create(NULL, 0);
+        dispatch_async(compressQueue, ^{
+            [self convertVideoToLowQuailtyWithInputURL:capturedVideoURL outputURL:outputURL handler:^(AVAssetExportSession *exportSession)
+             {
+                 if (exportSession.status == AVAssetExportSessionStatusCompleted)
+                 {
+                     //At this point, it should reveal that the video has stopped processing and has been saved
+                     [self insertIntoDatabaseWithPath:outputURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
+                     //If the conversion was successful, delete the original
+                     [self removeFile:capturedVideoURL];
+                 }
+                 else
+                 {
+                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                     [compressError dismissWithClickedButtonIndex:0 animated:YES];
+                     [compressError show];
+                     //Since it failed, we save the original video path instead
+                     [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:thisVideoStartTime forSession:thisVideoSession sessionNamed:thisSessionName];
+                 }
+                 //Save a copy to the camera roll
+                 UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+                 [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+             }];
+        });
+        UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+        
+    }
+>>>>>>> 47435508447f51d9bc489bf6e0147b60042e8089
 }
 
 
@@ -221,6 +259,7 @@
     NSLog(@"Converting video");
    NSURL *videoOutputURL = [self getLocalFilePathToSave];
     [[NSFileManager defaultManager] removeItemAtURL:videoOutputURL error:nil];
+<<<<<<< HEAD
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
@@ -235,6 +274,20 @@
     }];
 
    
+=======
+    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:inputURL options:nil];
+    //AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+    //CGAffineTransform txf = [videoTrack preferredTransform];
+    AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:asset presetName:AVAssetExportPresetMediumQuality];
+    exportSession.outputURL = videoOutputURL;
+    exportSession.outputFileType = AVFileTypeMPEG4;
+    NSLog (@"%@", exportSession.supportedFileTypes);
+    
+    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
+     {
+         handler(exportSession);
+     }];
+>>>>>>> 47435508447f51d9bc489bf6e0147b60042e8089
 }
 
 -(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL  {
@@ -281,7 +334,7 @@
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateRandomString]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
@@ -461,6 +514,17 @@
     NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
     
     return uniqueFileName;
+}
+
+-(NSString *) generateRandomString
+{    
+    NSMutableString *randomString = [NSMutableString string];
+    randomString = [NSMutableString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i=0; i<7; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    return randomString;
 }
 
 @end

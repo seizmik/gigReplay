@@ -105,7 +105,11 @@
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
-    cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    if (fileDetails.contentType == 2) {
+        cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    } else {
+        cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
+    }
     cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
     
     return cell;
@@ -210,17 +214,17 @@
     NSString *uploadFileName = [NSString string];
     NSString *uploadFileType = [NSString string];
     if (fileDetails.contentType == 1) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath pathExtension]];
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"audio/%@", [fileDetails.filePath pathExtension]];
     } else if (fileDetails.contentType == 2) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i.%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath pathExtension]];
+        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"video/%@", [fileDetails.filePath pathExtension]];
     } else {
         //File is corrupted. Need to do something with the file when returned this.
         [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
     }
     
-    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_file.php"];
+    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_one.php"];
     
     __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
@@ -273,9 +277,6 @@
     //[request setUploadProgressDelegate:self];
     //request.showAccurateProgress = YES;
     [request startAsynchronous];
-    
-    //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
-    //NSLog(@"responseString %@",[request responseString]);
     
 }
 
