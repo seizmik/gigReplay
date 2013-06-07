@@ -57,8 +57,8 @@
                 double startTime = sqlite3_column_double(compiledStatement, 4);
                 int contentType = sqlite3_column_int(compiledStatement, 5);
                 int uploadStatus = sqlite3_column_int(compiledStatement, 6);
-                NSString *thumbnailPath = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 7)];
-                NSString *sessionName = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 8)];
+                NSString *thumbnailPath = ((char *)sqlite3_column_text(compiledStatement, 7)) ? [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 7)] : nil;
+                NSString *sessionName = ((char *)sqlite3_column_text(compiledStatement, 8)) ? [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 8)] : nil;
                 
                 UploadObject *uploadObject = [[UploadObject alloc] initWithFilePath:filePath entryid:entryid sessionid:sessionid startTime:startTime contentType:contentType uploadStatus:uploadStatus fromUser:userid thumbnail:thumbnailPath fromSession:sessionName];
                 [uploadDetails addObject:uploadObject];
