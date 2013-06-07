@@ -220,10 +220,10 @@
     NSString *uploadFileName = [NSString string];
     NSString *uploadFileType = [NSString string];
     if (fileDetails.contentType == 1) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
+        uploadFileName = [NSString stringWithFormat:@"%@", [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"audio/%@", [fileDetails.filePath pathExtension]];
     } else if (fileDetails.contentType == 2) {
-        uploadFileName = [NSString stringWithFormat:@"%i_%i_%i_%@", fileDetails.sessionid, fileDetails.userid, fileDetails.entryNumber, [fileDetails.filePath lastPathComponent]];
+        uploadFileName = [NSString stringWithFormat:@"%@", [fileDetails.filePath lastPathComponent]];
         uploadFileType = [NSString stringWithFormat:@"video/%@", [fileDetails.filePath pathExtension]];
     } else {
         //File is corrupted. Need to do something with the file when returned this.
