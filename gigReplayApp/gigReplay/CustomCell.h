@@ -23,7 +23,9 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *sceneSelectionButton;
 
+@property (strong, nonatomic) IBOutlet UIImageView *facebookimageview;
 
+@property (strong, nonatomic) IBOutlet UILabel *dateLabel;
 
 
 @end

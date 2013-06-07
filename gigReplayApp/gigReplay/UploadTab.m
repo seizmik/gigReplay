@@ -11,6 +11,7 @@
 #import "ASIFormDataRequest.h"
 #import "UploadCell.h"
 #import "SettingsViewController.h"
+#import "UploadTabDetailViewController.h"
 
 @interface UploadTab ()
 
@@ -99,6 +100,7 @@
     
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
+    NSLog(@"%@gay",fileDetails);
     NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:fileDetails.startTime];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
@@ -107,6 +109,7 @@
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
     cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
     cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
+    
     
     return cell;
 }
@@ -155,19 +158,23 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
+    
+//      UploadTabDetailViewController *detailViewController = [[UploadTabDetailViewController alloc] initWithNibName:@"UploadTabDetailViewController" bundle:[NSBundle mainBundle]];
      // ...
      // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-    
-    //Call the upload object to get the fileDetails
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
     
-    //Remove the data from the table and reload the data
-    //Status 9 means uploading. I've set this in case the app was closed halfway. When the app loads up again, if checks if there were any that were still uploading when the app crashed, and will change upload status back to 0
+//    [detailViewController setVideoURL:fileDetails.thumbnailPath];
+//    [detailViewController setVideoPath:fileDetails.filePath];
+//     [self.navigationController pushViewController:detailViewController animated:YES];
+    
+    
+    //Call the upload object to get the fileDetails
+    
+//    
+//    //Remove the data from the table and reload the data
+//    //Status 9 means uploading. I've set this in case the app was closed halfway. When the app loads up again, if checks if there were any that were still uploading when the app crashed, and will change upload status back to 0
     [self updateTrackerWithFileDetails:fileDetails toStatus:9];
     [self refreshDatabaseObjects];
     [tableView reloadData];

@@ -9,10 +9,14 @@
 #import "ReplaysViewController.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "ASIHTTPRequest.h"
+#import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
+#import "SDWebImageCompat.h"
 
 
 
 @interface ReplaysViewController ()
+
 
 @end
 
@@ -31,7 +35,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self obtainDataFromURL];
+     
+    
     self.title=@"Replays";
     [self.view addSubview:img1];
     [img1 setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Applications/79421FB7-C6E4-4DF5-9229-E7F8583833EC/Documents/leon"]];
@@ -69,6 +74,8 @@
     [self.view addSubview:img2];
     //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
      NSLog(@"%d",[videoDetails count]);
+    [self obtainDataFromURL];
+    
     
    
    
@@ -119,18 +126,22 @@
     NSMutableDictionary *info=[videoArray objectAtIndex:indexPath.row];
     cell.media_url.text=[info objectForKey:@"media_url"];
     cell.thumb_url .text=[info objectForKey:@"thumb_1_url"];
-    dispatch_async(kBgQueue, ^{
+//    dispatch_async(kBgQueue, ^{
          videoImage=[info objectForKey:@"thumb_1_url"];
-         UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoImage]]];
-        dispatch_sync(dispatch_get_main_queue(),^{
-            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-            cell.imageView.image=image;
-            
-          });
-    });
-    cell.imageView.image =[UIImage imageNamed:@"placeholder.png"];
-    
-      
+        // UIImage *image=[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:videoImage]]];
+//       
+//        
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//            cell.imageView.image=image;
+//            
+//          });
+//    });
+//    
+//    cell.imageView.image =[UIImage imageNamed:@"placeholder.png"];
+
+    [cell.imageView setImageWithURL:[NSURL URLWithString:videoImage]
+                   placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     return cell;
 }
 
@@ -191,5 +202,8 @@
     
     
     [self playMovie];
+    
+    
+    
 }
 @end

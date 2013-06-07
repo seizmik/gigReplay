@@ -8,6 +8,7 @@
 
 #import "OpenSessionViewController.h"
 #import "SettingsViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface OpenSessionViewController ()
 
@@ -59,8 +60,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
     static NSString* CellIdentifier = @"CustomCell";
-	
-	
+    	
 	CustomCell *cell = (CustomCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
@@ -76,25 +76,31 @@
 			}
 		}
 	}
+
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
     NSLog(@"leonism %@",Details);
     cell.SceneName.text=[Details objectAtIndex:5];
     cell.directorName.text=[Details objectAtIndex:6];
     cell.SceneTake.text=[Details objectAtIndex:4];
-    
-    dispatch_async(kBgQueue, ^{
-        fb_user_ID=[Details objectAtIndex:11];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            cell.fbProfilePictureView.profileID=fb_user_ID;
-        });
+     fb_user_ID=[Details objectAtIndex:11];
+    [cell.dateLabel setTransform:CGAffineTransformMakeRotation(-M_PI/2)];
+    cell.dateLabel.text=[Details objectAtIndex:3];
+    //obtain by using a string with the facebook profile pic id
+    NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_ID];
 
-    });
+//    dispatch_async(kBgQueue, ^{
+       
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//           cell.fbProfilePictureView.profileID=fb_user_ID;
+            [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL]];
+           
+//        });
+
+//    });
    
-    cell.fbProfilePictureView.backgroundColor=[UIColor clearColor];
+//    cell.fbProfilePictureView.backgroundColor=[UIColor clearColor];
    
-   
-    
-    
+
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

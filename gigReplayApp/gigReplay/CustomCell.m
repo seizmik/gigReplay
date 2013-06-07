@@ -13,13 +13,13 @@
 
 
 @implementation CustomCell
-@synthesize sceneSelectionButton,fbProfilePictureView,SceneName,SceneTake,directorName;
+@synthesize sceneSelectionButton,fbProfilePictureView,SceneName,SceneTake,directorName,facebookimageview,dateLabel;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
-        
+       
         
     }
     return self;
