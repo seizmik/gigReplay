@@ -198,6 +198,8 @@
     cell.SceneName.text=[Details objectAtIndex:4];
     cell.directorName.text=[Details objectAtIndex:3];
     cell.SceneTake.text=[Details objectAtIndex:2];
+    [cell.dateLabel setTransform:CGAffineTransformMakeRotation(-M_PI/2)];
+    cell.dateLabel.text=[Details objectAtIndex:7];
     
     return cell;
 }
