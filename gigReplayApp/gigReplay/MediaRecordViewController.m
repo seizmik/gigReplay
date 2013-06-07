@@ -103,6 +103,7 @@
             [request setRequestMethod:@"POST"];
             [request setDelegate:self];
             [request setShouldContinueWhenAppEntersBackground:YES];
+            NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
             [request startAsynchronous];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
@@ -122,7 +123,7 @@
     NSData *imageData = UIImagePNGRepresentation(thumbnail);
     
     //Generate a unique name for the image and folder
-    NSString *imageName = [self generateUniqueFilename];
+    NSString *imageName = [self generateRandomString];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -224,7 +225,7 @@
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
-                                                                      presetName:AVAssetExportPreset640x480];
+                                                                      presetName:AVAssetExportPresetMediumQuality];
     exporter.outputURL=videoOutputURL;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;
@@ -239,25 +240,22 @@
 
 -(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL  {
     
-    if ( session.status== AVAssetExportSessionStatusCompleted)
-                 {
-                     NSLog(@"export and compression done!");
-                    //At this point, it should reveal that the video has stopped processing and has been saved
-                     NSURL *compressedVideo=session.outputURL;
-                     [self insertIntoDatabaseWithPath:compressedVideo withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
-                     //If the conversion was successful, delete the original
-                     [self removeFile:inputURL];
-                 }
-                 else
-                 {
-                     UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-                     [compressError dismissWithClickedButtonIndex:0 animated:YES];
-                     [compressError show];
-                     //Since it failed, we save the original video path instead
-                     [self insertIntoDatabaseWithPath:inputURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
-                 }
+    if ( session.status== AVAssetExportSessionStatusCompleted){
+        NSLog(@"export and compression done!");
+        //At this point, it should reveal that the video has stopped processing and has been saved
+        NSURL *compressedVideo=session.outputURL;
+        [self insertIntoDatabaseWithPath:compressedVideo withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+        //If the conversion was successful, delete the original
+        [self removeFile:inputURL];
+    } else {
+        UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [compressError dismissWithClickedButtonIndex:0 animated:YES];
+        [compressError show];
+        //Since it failed, we save the original video path instead
+        [self insertIntoDatabaseWithPath:inputURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+    }
              
-[[UIApplication sharedApplication] endBackgroundTask:bgTask];
+    [[UIApplication sharedApplication] endBackgroundTask:bgTask];
  
 }
 
@@ -281,7 +279,7 @@
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateUniqueFilename]];
+    NSString *videoFilePath = [NSString stringWithFormat:@"/%@/%@.mp4", newDir, [self generateRandomString]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
@@ -425,7 +423,6 @@
 
 - (NSString *)timeFormatted:(int)totalSeconds
 {
-    
     int seconds = totalSeconds % 60;
     int minutes = (totalSeconds / 60) % 60;
     
@@ -454,13 +451,15 @@
     
 }*/
 
-- (NSString *)generateUniqueFilename
+-(NSString *) generateRandomString
 {
-    NSString *prefixString = [NSString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
-    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString];
-    NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
-    
-    return uniqueFileName;
+    NSMutableString *randomString = [NSMutableString string];
+    randomString = [NSMutableString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i=0; i<7; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    return randomString;
 }
 
 @end

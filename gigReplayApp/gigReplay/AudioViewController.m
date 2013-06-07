@@ -179,7 +179,7 @@ float currentTime;
     NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
     [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateUniqueFilename]];
+    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateRandomString]];
     NSLog(@"Original audio path: %@", soundFileName);
     NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
     soundFileURL = [NSURL fileURLWithPath:soundFilePath];
@@ -224,13 +224,15 @@ float currentTime;
     startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
 }
 
-- (NSString *)generateUniqueFilename
+- (NSString *)generateRandomString
 {
-    NSString *prefixString = [NSString stringWithFormat:@"%@_%d", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
-    NSString *guid = [[NSProcessInfo processInfo] globallyUniqueString] ;
-    NSString *uniqueFileName = [NSString stringWithFormat:@"%@_%@", prefixString, guid];
-    
-    return uniqueFileName;
+    NSMutableString *randomString = [NSMutableString string];
+    randomString = [NSMutableString stringWithFormat:@"%@_%d_", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentUserID];
+    NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int i=0; i<7; i++) {
+        [randomString appendFormat: @"%C", [letters characterAtIndex: arc4random() % [letters length]]];
+    }
+    return randomString;
 }
 
 /*
@@ -268,7 +270,7 @@ float currentTime;
         [filemgr createDirectoryAtPath:m_strFilepath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.aac", newDir, [self generateUniqueFilename]];
+    NSString *audioFilePath = [NSString stringWithFormat:@"/%@/%@.aac", newDir, [self generateRandomString]];
     if (m_strFilepath!=Nil) {
         m_strFilepath=Nil;
     }
