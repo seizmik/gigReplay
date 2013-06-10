@@ -117,11 +117,27 @@
         sqlite3_exec(database, [[NSString stringWithFormat:@"%@", strQuery] UTF8String], NULL, NULL, NULL);
         sqlite3_finalize(compiledStatement);
         NSLog(@"Database entry executed");
+        sqlite3_close(database);
         return TRUE;
     } else {
+        sqlite3_close(database);
         return FALSE;
     }
-    sqlite3_close(database);
+}
+
+- (int)preliminaryInsertToDatabase:(NSString *)strQuery
+{
+    sqlite3 *database;
+    if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
+        static sqlite3_stmt *compiledStatement;
+        sqlite3_exec(database, [[NSString stringWithFormat:@"%@", strQuery] UTF8String], NULL, NULL, NULL);
+        sqlite3_finalize(compiledStatement);
+        NSLog(@"Database entry executed");
+        NSLog(@"Last inserted row id was: %lli", sqlite3_last_insert_rowid(database));
+        return sqlite3_last_insert_rowid(database);
+    } else {
+        return nil;
+    }
 }
 
 - (BOOL)updateDatabase:(NSString *)strQuery
