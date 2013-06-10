@@ -213,6 +213,7 @@
 
 - (void)uploadThisFile:(UploadObject *)fileDetails
 {
+        
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     // First, turn the file into an NSData object
     NSData *fileToUpload = [NSData dataWithContentsOfURL:[NSURL URLWithString:fileDetails.filePath]];
@@ -230,62 +231,85 @@
         [self updateTrackerWithFileDetails:fileDetails toStatus:-1];
     }
     
-    NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_file.php"];
+    //This part, it should ask the server whether the file had been uploaded already. Just upload the filename and check if it is already there
+    NSURL *uploadCheckURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_yesno.php"];
+    ASIFormDataRequest *uploadRequest = [ASIFormDataRequest requestWithURL:uploadCheckURL];
+    [uploadRequest addPostValue:uploadFileName forKey:@"file_name"];
+    [uploadRequest setRequestMethod:@"POST"];
+    [uploadRequest setDelegate:self];
+    [uploadRequest startSynchronous];
     
-    __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
-    [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
-    //Now add the metadata
-    [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
-    [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
-    [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
-    [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
+    NSString *yesNoReply = [uploadRequest responseString];
+    NSLog(@"Upload Check Reply: %@", yesNoReply);
+    if ([yesNoReply isEqualToString:@"UPLOAD"]) {
+        //Commence upload of file
+        NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_one.php"];
+        
+        __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
+        [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
+        //Now add the metadata
+        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
+        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
+        [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
+        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
+        
+        [request setRequestMethod:@"POST"];
+        [request setDelegate:self];
+        
+        //This will allow the request to continue even upon entering the background
+        [request setShouldContinueWhenAppEntersBackground:YES];
+        
+        //The following block will run the background
+        [request setCompletionBlock:^{
+            // Use when fetching text data
+            //If returnString is TRUE, then update the database
+            if ([[request responseString] isEqual: @"SUCCESS"]) {
+                UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                [alertUpload show];
+                
+                [self updateTrackerWithFileDetails:fileDetails toStatus:1];
+                [self refreshDatabaseObjects];
+                [uploadTable reloadData];
+                
+                [self removeFile:fileDetails];
+                
+            } else {
+                UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                [alertUpload show];
+                
+                //If the uplaod was not successful, then have to update the upload tracker that the file has not been sent
+                [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+                [self refreshDatabaseObjects];
+                [uploadTable reloadData];
+                
+            }
+        }];
+        
+        [request setFailedBlock:^{
+            NSError *error = [request error];
+            if (error) {
+                [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+            }
+        }];
+        
+        //[request setUploadProgressDelegate:self];
+        //request.showAccurateProgress = YES;
+        [request startAsynchronous];
+        
+        //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
+        //NSLog(@"responseString %@",[request responseString]);
+    } else {
+        //Update the database for that object to say that it has already been uploaded
+        UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [alertUpload show];
+        
+        [self updateTrackerWithFileDetails:fileDetails toStatus:1];
+        [self refreshDatabaseObjects];
+        [uploadTable reloadData];
+        
+        [self removeFile:fileDetails];
+    }
     
-    [request setRequestMethod:@"POST"];
-    [request setDelegate:self];
-    
-    //This will allow the request to continue even upon entering the background
-    [request setShouldContinueWhenAppEntersBackground:YES];
-    
-    //The following block will run the background
-    [request setCompletionBlock:^{
-        // Use when fetching text data
-        NSString *responseString = [request responseString];
-        //If returnString is TRUE, then update the database
-        if ([responseString isEqual: @"SUCCESS"]) {
-            UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-            [alertUpload show];
-            
-            [self updateTrackerWithFileDetails:fileDetails toStatus:1];
-            [self refreshDatabaseObjects];
-            [uploadTable reloadData];
-            
-            [self removeFile:fileDetails];
-            
-        } else {
-            UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
-            [alertUpload show];
-            
-            //If the uplaod was not successful, then have to update the upload tracker that the file has not been sent
-            [self updateTrackerWithFileDetails:fileDetails toStatus:0];
-            [self refreshDatabaseObjects];
-            [uploadTable reloadData];
-            
-        }
-    }];
-    
-    [request setFailedBlock:^{
-        NSError *error = [request error];
-        if (error) {
-            [self updateTrackerWithFileDetails:fileDetails toStatus:0];
-        }
-    }];
-    
-    //[request setUploadProgressDelegate:self];
-    //request.showAccurateProgress = YES;
-    [request startAsynchronous];
-    
-    //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
-    //NSLog(@"responseString %@",[request responseString]);
     
 }
 

@@ -6,11 +6,10 @@
         return $info['filename'] . '.' . $new_extension;
     }
     
-    function create_random_name ($filename)
+    function create_name ($filename)
     {
-        $random_string = generate_random_string();
         $info = pathinfo($filename);
-        return $info['filename'] . '_' . $random_string . '.' . $info['extension'];
+        return $info['filename'] . '.' . $info['extension'];
     }
     
     function calculate_content_length($media_path)
@@ -24,17 +23,6 @@
         $media_length = strval($total_seconds);
         return $media_length;
     }
-    
-    function generate_random_string($length = 10) {
-        //Can set length by making length a fixed number
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randomString;
-    }
-    
     
     
     //End of function list--------------------------------------------------
@@ -55,7 +43,7 @@
     //If audio, rename into mp3. If video, rename into mp4.
     if ($media_type==1) {
         
-        $caf = create_random_name(basename($_FILES['uploadedfile']['name']));
+        $caf = create_name(basename($_FILES['uploadedfile']['name']));
         $mp3 = replace_extension($caf, mp3);
         
         //Variables to feed into ffmpeg commands
@@ -68,7 +56,7 @@
         
     } else if ($media_type==2) {
         
-        $video = create_random_name(basename($_FILES['uploadedfile']['name']));
+        $video = create_name(basename($_FILES['uploadedfile']['name']));
         //$ext = end(explode(".", $video));
         $mp4 = replace_extension($video, mp4);
         
@@ -82,17 +70,7 @@
         
     }
     
-    //Check if file had been uploaded before
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        //Find out if the video has already been created once before
-        $query = "SELECT * FROM media_original WHERE session_id=".$session_id." AND user_id=".$user_id." AND media_url=".$file_url;
-        $result = mysqli_query($con, $query);
-    }
-    
-    if (mysqli_num_rows($result) > 0 || move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
+    if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
         //If the file has been moved and created, update the database
         //I believe that this is the part where we would be putting it into a queue using RabbitMQ
         echo "SUCCESS";
