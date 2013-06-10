@@ -100,10 +100,11 @@
     
     UploadObject *fileDetails = [[UploadObject alloc] init];
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
-    NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:fileDetails.startTime];
+    NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:(fileDetails.startTime + 28800)]; //This should be time difference between current locale and GMT
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [dateFormatter setLocale:[NSLocale currentLocale]];
     
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
     if (fileDetails.contentType == 2) {

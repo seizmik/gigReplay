@@ -21,5 +21,6 @@
 - (SyncObject *)syncCheck;
 - (BOOL)insertToDatabase:(NSString *)strQuery;
 - (BOOL)updateDatabase:(NSString *)strQuery;
+- (int)preliminaryInsertToDatabase:(NSString *)strQuery;
 
 @end

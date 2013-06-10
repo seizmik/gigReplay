@@ -136,7 +136,7 @@
         NSLog(@"Last inserted row id was: %lli", sqlite3_last_insert_rowid(database));
         return sqlite3_last_insert_rowid(database);
     } else {
-        return nil;
+        return 0;
     }
 }
 
