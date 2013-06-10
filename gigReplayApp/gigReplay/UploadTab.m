@@ -107,10 +107,10 @@
     
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
     if (fileDetails.contentType == 2) {
-            cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
-        } else {
-                cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
-            }
+        cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+    } else {
+        cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
+    }
     cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
     
     

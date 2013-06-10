@@ -22,6 +22,10 @@
 @synthesize cameraUI, saveAlert;
 @synthesize videoRecordButton, audioRecordButton;
 
+double startTime;
+int currentTime;
+bool isRecording;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -187,19 +191,15 @@
     
     //Save a copy to the camera roll
     UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+    //Save the video
     
-    
-        //Save the video
-        //capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
-        //outputURL = [self getLocalFilePathToSave]; //Getting Document Directory Path, There's a problem here
-        
-        bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+    bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
             bgTask = UIBackgroundTaskInvalid;
-        }];
-        
-        //Put this entire process into the background
-        [self convertVideoToLowQuailtyFromURL:capturedVideoURL ];
+    }];
+    //Put this entire process into the background
+    //Dispatch async should be here
+    [self convertVideoToLowQuailtyFromURL:capturedVideoURL withStartTime:thisVideoStartTime fromSession:thisVideoSession withName:thisSessionName];
 }
 
 
@@ -216,7 +216,7 @@
 }
 
 
-- (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL ;
+- (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL withStartTime:(double)start fromSession:(NSString *)sessionID withName:(NSString *)sessionName;
                                       
 {
     NSLog(@"Converting video");
@@ -231,14 +231,14 @@
     exporter.shouldOptimizeForNetworkUse = YES;
     [exporter exportAsynchronouslyWithCompletionHandler:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self exportDidFinish:exporter input:capturedVideoURL];
+            [self exportDidFinish:exporter input:capturedVideoURL withStartTime:start fromSession:sessionID withName:sessionName];
         });
     }];
 
    
 }
 
--(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL  {
+-(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL withStartTime:(double)start fromSession:(NSString *)sessionID withName:(NSString *)sessionName{
     
     if ( session.status== AVAssetExportSessionStatusCompleted){
         NSLog(@"export and compression done!");
@@ -252,9 +252,8 @@
         [compressError dismissWithClickedButtonIndex:0 animated:YES];
         [compressError show];
         //Since it failed, we save the original video path instead
-        [self insertIntoDatabaseWithPath:inputURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+        [self insertIntoDatabaseWithPath:inputURL withStartTime:start forSession:sessionID sessionNamed:sessionName];
     }
-             
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
  
 }

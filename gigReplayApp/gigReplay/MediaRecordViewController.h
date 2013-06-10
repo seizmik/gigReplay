@@ -30,12 +30,8 @@
     UIView      *overlay;
     UILabel     *timerLabel;
     UIBackgroundTaskIdentifier bgTask;
-    double startTime;
-    int currentTime;
-    bool isRecording;
-    
-    
 }
+
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
 
