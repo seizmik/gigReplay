@@ -165,7 +165,8 @@ bool isRecording;
     cameraUI.showsCameraControls = NO;
     cameraUI.toolbarHidden=YES;
     cameraUI.navigationBarHidden = YES;
-    cameraUI.cameraViewTransform=CGAffineTransformScale(cameraUI.cameraViewTransform, 1.3, 1.3);
+    [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+//    cameraUI.cameraViewTransform=CGAffineTransformScale(cameraUI.cameraViewTransform, 1.3, 1.3);
     
     //At this point, it should be taken from the options
     cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
@@ -312,15 +313,21 @@ bool isRecording;
     [overlay addSubview:backButton];
     
     //Help button
-    helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    helpButton.backgroundColor=[UIColor clearColor];
-    helpButton.highlighted=YES;
-    [helpButton setImage:[UIImage imageNamed:@"recording_overlay_help_icon"] forState:UIControlStateNormal];
+//    helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    helpButton.backgroundColor=[UIColor clearColor];
+//    helpButton.highlighted=YES;
+//    [helpButton setImage:[UIImage imageNamed:@"recording_overlay_help_icon"] forState:UIControlStateNormal];
 //    [helpButton setTitle:@"Help" forState:UIControlStateNormal];
-    [helpButton setFrame:CGRectMake((screenWidth - 45.0), 0.0, 40.0, 40.0)];
-    [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    helpButton.enabled = YES;
-    [overlay addSubview:helpButton];
+    //flash toggle
+    flashtoggle=[[UISwitch alloc]initWithFrame:CGRectMake((screenWidth - 80.0), 10.0, 40.0, 40.0)];
+    flashtoggle.backgroundColor=[UIColor clearColor];
+    flashtoggle.highlighted=YES;
+    [flashtoggle addTarget:self action:@selector(flashtoggle) forControlEvents:UIControlEventValueChanged];
+    [overlay  addSubview:flashtoggle];
+//    [helpButton setFrame:CGRectMake((screenWidth - 45.0), 0.0, 40.0, 40.0)];
+//    [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+//    helpButton.enabled = YES;
+//    [overlay addSubview:helpButton];
     
     //Recording button
     cameraRecButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -347,6 +354,19 @@ bool isRecording;
     
     [overlay addSubview:timerLabel];
 }
+
+-(void)flashtoggle{
+    if (flashtoggle.on){
+        [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
+        
+                              
+    }
+    else {
+        [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
+        
+    }
+}
+
 
 - (void)recordButtonPressed
 {

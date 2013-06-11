@@ -24,6 +24,7 @@
 
 @interface MediaRecordViewController : UIViewController<UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 {
+    UISwitch    *flashtoggle;
     UIButton    *cameraRecButton;
     UIButton    *backButton;
     UIButton    *helpButton;
