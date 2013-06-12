@@ -394,21 +394,20 @@
     $video_array = array();
     
     //First query the database and get all the details
-    $con = mysql_connect("localhost", "default", "thesmosinc");
-    if (!$con) {
-        die(mysql_error());
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
-        mysql_select_db("gigreplay", $con);
         //First, select all the videos from the table
         $query_2 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=2";
         $query_1 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=1";
         $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
         //These are the results for all the videos for this session
-        $result_2 = mysql_query($query_2);
+        $result_2 = mysqli_query($con, $query_2);
         //These are the results for all the audio for this session
-        $result_1 = mysql_query($query_1);
-        $result_3 = mysql_query($query_3);
-        mysql_close($con);
+        $result_1 = mysqli_query($con, $query_1);
+        $result_3 = mysqli_query($con, $query_3);
+        mysqli_close($con);
     }
     
     //These two variables will define the length of the video generated. These are to be used as constants
@@ -416,7 +415,7 @@
     $last_end = 0;
     
     //Load up the video details in the video array, and get the first and last times
-    while ($row = mysql_fetch_array($result_2)) {
+    while ($row = mysqli_fetch_array($result_2)) {
         if ($row['start_time'] < $first_start) {
             $first_start = $row['start_time'];
         }
@@ -430,22 +429,24 @@
         $video_array[] = $row;
         
     }
-        
+    
+    $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
+    $user_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $user_name)), 'strlen'));
     //Create a temp folder and master folder
-    $temp_path = "../uploads/temp/".$session_id."/";
+    $temp_path = "../uploads/temp/".$session_id."-".$session_add_on."/";
     if (!is_dir($temp_path)) {
         mkdir($temp_path);
     }
-    $temp_path .= $user_id."/";
+    $temp_path .= $user_id."-".$user_add_on."/";
     if (!is_dir($temp_path)) {
         mkdir($temp_path);
     }
     
-    $master_path = "../uploads/master/".$session_id."/";
+    $master_path = "../uploads/master/".$session_id."-".$session_add_on."/";
     if (!is_dir($master_path)) {
         mkdir($master_path);
     }
-    $master_path .= $user_id."/";
+    $master_path .= $user_id."-".$user_add_on."/";
     if (!is_dir($master_path)) {
         //If master_path is already present, delete everything that is there
         mkdir($master_path);
@@ -488,12 +489,12 @@
     //Audio results were grabbed earlier already
     $audio_1_array = array(); //This is dedicated audio
     $audio_3_array = array(); //This is audio from video
-    while ($row = mysql_fetch_array($result_1)) {
+    while ($row = mysqli_fetch_array($result_1)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_1_array[] = $row;
         echo "Audio 1 end time is ", $row['end_time'], "<br/>";
     }
-    while ($row = mysql_fetch_array($result_3)) {
+    while ($row = mysqli_fetch_array($result_3)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_3_array[] = $row;
         echo "Audio 3 end time is ", $row['end_time'], "<br/>";
@@ -568,7 +569,6 @@
     if (mysqli_connect_errno($con)) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
-        
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
