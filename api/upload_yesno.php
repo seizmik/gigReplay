@@ -24,10 +24,15 @@
     //Create the path for the filename and check it
     $target_path .= $file_name;
     
-    if (file_exists($target_path)) {
-        echo "COMPLETED";
+    //Only if it sends up valid data then will it check if the file exists
+    if (isset($_POST['file_name']) && !empty($_POST['file_name'])) {
+        if (file_exists($target_path)) {
+            echo "COMPLETED";
+        } else {
+            echo "UPLOAD";
+        }
     } else {
-        echo "UPLOAD";
+        echo "ERROR";
     }
     
 ?>

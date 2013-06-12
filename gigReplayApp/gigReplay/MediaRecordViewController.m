@@ -197,10 +197,9 @@ bool isRecording;
     cameraUI.toolbarHidden=YES;
     cameraUI.navigationBarHidden = YES;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
-//    cameraUI.cameraViewTransform=CGAffineTransformScale(cameraUI.cameraViewTransform, 1.3, 1.3);
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeHigh;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -487,7 +486,8 @@ bool isRecording;
     NSString *thumbnailPath = [self generateImageFromURL:videoURL];
     
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path, session_name) VALUES (%i, '%@', '%@', %f, 2, 0, '%@', '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath, sessionName];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path, session_name) VALUES (%i, '%@', '%@', %f, 2, 9, '%@', '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath, sessionName];
+    //Status 8 is converting
     while (![dbObject insertToDatabase:strQuery]) {
         NSLog(@"Unable to insert into the database");
     }
@@ -496,7 +496,7 @@ bool isRecording;
 - (void)updateDatabaseWithNewPath:(NSURL *)newPath fromOldPath:(NSURL *)oldPath
 {
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET file_path='%@' WHERE file_path='%@'", newPath, [NSString stringWithFormat:@"%@", oldPath]];
+    NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET file_path='%@',upload_status=0 WHERE file_path='%@'", newPath, [NSString stringWithFormat:@"%@", oldPath]];
     while (![dbObject updateDatabase:strQuery]) {
         NSLog(@"Unable to update database");
     }

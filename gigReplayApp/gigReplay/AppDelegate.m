@@ -377,6 +377,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 0) {
+        [alertView dismissWithClickedButtonIndex:-1 animated:YES];
         [self syncWithServer];
     } else if (buttonIndex == 1) {
         //Let's try to avoid the cancel button. Instead lead them out with the settings button
