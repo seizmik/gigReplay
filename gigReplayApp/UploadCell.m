@@ -13,6 +13,7 @@
 @synthesize thumbnail = _thumbnail;
 @synthesize sessionName = _sessionName;
 @synthesize dateTaken = _dateTaken;
+@synthesize customButton;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

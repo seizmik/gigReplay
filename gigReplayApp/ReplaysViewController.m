@@ -66,22 +66,17 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     
-        SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
-    NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
-    videoDetails = [sql readFromDatabaseVideos:strQuery];
-    NSLog(@"%@",videoDetails);
-    //NSArray *firstItem=[videoDetails objectAtIndex:3];
-    [self.view addSubview:img2];
-    //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
-     NSLog(@"%d",[videoDetails count]);
+//        SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
+//    NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
+//    videoDetails = [sql readFromDatabaseVideos:strQuery];
+//    NSLog(@"%@",videoDetails);
+//    //NSArray *firstItem=[videoDetails objectAtIndex:3];
+//    [self.view addSubview:img2];
+//    //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
+//     NSLog(@"%d",[videoDetails count]);
     [self obtainDataFromURL];
     
-    
-   
-   
-   
-     
-    
+  
 }
 
 

@@ -19,7 +19,7 @@
 
 @implementation UploadTab
 @synthesize uploadTable, uploadArray, dbObject;
-@synthesize detailsToDelete;
+@synthesize detailsToDelete,movieplayer,uploadVideoFilePath;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -38,16 +38,23 @@
     
     UILongPressGestureRecognizer *lpgr = [[UILongPressGestureRecognizer alloc]
                                           initWithTarget:self action:@selector(handleLongPress:)];
-    lpgr.minimumPressDuration = 1.0; //seconds
+    lpgr.minimumPressDuration = 0.5; //seconds
     lpgr.delegate = self;
     [self.uploadTable addGestureRecognizer:lpgr];
     [self loadSettingsButton];
-    
+        
 }
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [self refreshDatabaseObjects];
+    ConnectToDatabase *sql=[[ConnectToDatabase alloc]initDB];
+    NSString *query=@"SELECT * from upload_tracker where upload_status=0";
+    uploadVideoFilePath = [sql readFromDatabaseVideos:query];
+    NSLog(@"%@ YOLO",uploadVideoFilePath);
+
     [uploadTable reloadData];
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -93,18 +100,42 @@
     UploadCell *cell = (UploadCell *)[tableView dequeueReusableCellWithIdentifier:UploadTableIdentifier];
     
     if (cell == nil)
-    {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"UploadCell" owner:self options:nil];
-        cell = [nib objectAtIndex:0];
-    }
+	{
+		
+		NSArray *topLevelObjects;
+		
+		topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"UploadCell" owner:self options:nil];
+		for (id currentObject in topLevelObjects)
+		{
+			if ([currentObject isKindOfClass:[UITableViewCell class]]){
+				cell = (UploadCell *) currentObject;
+				break;
+			}
+		}
+	}
     
     UploadObject *fileDetails = [[UploadObject alloc] init];
+  
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
+    
+    cell.customButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [cell.customButton setImage:[UIImage imageNamed:@"playicon.png"] forState:UIControlStateNormal];
+    [cell.customButton setFrame:CGRectMake(260, 5, 50, 50)];
+    [cell.contentView addSubview:cell.customButton];
+    [cell.customButton setTag:indexPath.row];
+    [cell.customButton addTarget:self action:@selector(callAction:) forControlEvents:UIControlEventTouchUpInside];
+    
     NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:(fileDetails.startTime + 28800)]; //This should be time difference between current locale and GMT
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    
+    //placed a custom button action for playing videos
+        
+   
+    
     [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setLocale:[NSLocale currentLocale]];
+    
     
     cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
     if (fileDetails.contentType == 2) {
@@ -117,6 +148,47 @@
     
     return cell;
 }
+
+-(void)callAction:(UIButton *)sender
+{
+    //CustomBUtton.tags == filedetails uploadarray index:custombutton.tag
+    int entryNumber = sender.tag;
+    UploadObject *fileDetails = [uploadArray objectAtIndex:entryNumber];
+    
+    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:fileDetails.filePath]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:movieplayer];
+    
+    movieplayer.controlStyle = MPMovieControlStyleDefault;
+    movieplayer.shouldAutoplay = YES;
+    [self.view addSubview:movieplayer.view];
+    [self shouldAutorotate];
+    [movieplayer setFullscreen:YES animated:YES];
+        
+
+    
+}
+
+
+
+- (void) moviePlayBackDidFinish:(NSNotification*)notification {
+    MPMoviePlayerController *player = [notification object];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:MPMoviePlayerPlaybackDidFinishNotification
+     object:player];
+    
+    if ([player
+         respondsToSelector:@selector(setFullscreen:animated:)])
+    {
+        [player.view removeFromSuperview];
+    }
+}
+
+
 
 /*
  // Override to support conditional editing of the table view.
@@ -313,6 +385,8 @@
     
     
 }
+
+
 
 #pragma mark - Delete file methods
 

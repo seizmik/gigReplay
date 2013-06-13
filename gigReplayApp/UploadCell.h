@@ -13,5 +13,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *thumbnail;
 @property (strong, nonatomic) IBOutlet UILabel *sessionName;
 @property (strong, nonatomic) IBOutlet UILabel *dateTaken;
+@property (strong,nonatomic) IBOutlet UIButton *customButton;
 
 @end
