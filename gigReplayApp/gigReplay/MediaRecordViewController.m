@@ -88,12 +88,14 @@ bool isRecording;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex == 1) {
+        
         //Getting the user's email here
         SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
         NSString *strQuery = @"SELECT * FROM Users";
         NSMutableArray *userDetails = [sql readFromDatabaseUsers:strQuery];
         
         if ([userDetails count] == 1) {
+            /*
             //Create the form and post it to the API
             NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
             ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
@@ -109,16 +111,45 @@ bool isRecording;
             [request setShouldContinueWhenAppEntersBackground:YES];
             NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
             [request startAsynchronous];
+            */
+            [self postToGenerateVideo];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
             [generateError show];
         }
     }
+    [alertView dismissWithClickedButtonIndex:0 animated:YES];
+}
+
+- (void)postToGenerateVideo
+{
+    //Getting the user's email here
+    SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
+    NSString *strQuery = @"SELECT * FROM Users";
+    NSMutableArray *userDetails = [sql readFromDatabaseUsers:strQuery];
+    
+    if ([userDetails count] == 1) {
+        //Create the form and post it to the API
+        NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
+        //Now, add the data. In this case, we only send the user id, email and session number
+        [request addPostValue:appDelegateObject.CurrentSessionID forKey:@"session_id"];
+        [request addPostValue:appDelegateObject.CurrentSession_Name forKey:@"session_name"];
+        [request addPostValue:[NSString stringWithFormat:@"%i", appDelegateObject.CurrentUserID] forKey:@"user_id"];
+        NSString *userEmail = [NSString stringWithFormat:@"%@", [[userDetails objectAtIndex:0] objectAtIndex:4]];
+        [request addPostValue:userEmail forKey:@"user_email"];
+        [request addPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
+        [request setRequestMethod:@"POST"];
+        [request setDelegate:self];
+        [request setShouldContinueWhenAppEntersBackground:YES];
+        NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
+        [request startAsynchronous];
+    }
 }
 
 #pragma mark - Generating a thumbnail
 
--(NSString *)generateImageFromURL:(NSURL *)videoURL{
+- (NSString *)generateImageFromURL:(NSURL *)videoURL{
     
     MPMoviePlayerController *player = [[MPMoviePlayerController alloc]initWithContentURL:videoURL];
     //NSLog(@"%@", videoURL);
@@ -166,10 +197,9 @@ bool isRecording;
     cameraUI.toolbarHidden=YES;
     cameraUI.navigationBarHidden = YES;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
-//    cameraUI.cameraViewTransform=CGAffineTransformScale(cameraUI.cameraViewTransform, 1.3, 1.3);
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeHigh;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -183,12 +213,11 @@ bool isRecording;
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
     //This is in case the user becomes snap happy, so we need to record the URL and the startTime of the last video
-    double thisVideoStartTime = startTime;
-    NSString *thisVideoSession = appDelegateObject.CurrentSessionID;
-    NSString *thisSessionName = appDelegateObject.CurrentSession_Name;
-    
-    
     NSURL *capturedVideoURL = [info objectForKey:UIImagePickerControllerMediaURL];
+    
+    //First, save a version of it here. So, if the app crashes, it will still have a video to upload later
+    //Then, once it is done converting, update with the new URL based on the capturedVideoURL
+    [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
     
     //Save a copy to the camera roll
     UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
@@ -200,7 +229,9 @@ bool isRecording;
     }];
     //Put this entire process into the background
     //Dispatch async should be here
-    [self convertVideoToLowQuailtyFromURL:capturedVideoURL withStartTime:thisVideoStartTime fromSession:thisVideoSession withName:thisSessionName];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self convertVideoToLowQuailtyFromURL:capturedVideoURL];
+    });
 }
 
 
@@ -217,8 +248,7 @@ bool isRecording;
 }
 
 
-- (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL withStartTime:(double)start fromSession:(NSString *)sessionID withName:(NSString *)sessionName;
-                                      
+- (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL
 {
     NSLog(@"Converting video");
    NSURL *videoOutputURL = [self getLocalFilePathToSave];
@@ -231,29 +261,29 @@ bool isRecording;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;
     [exporter exportAsynchronouslyWithCompletionHandler:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self exportDidFinish:exporter input:capturedVideoURL withStartTime:start fromSession:sessionID withName:sessionName];
-        });
+        [self exportDidFinish:exporter input:capturedVideoURL];
     }];
 
    
 }
 
--(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL withStartTime:(double)start fromSession:(NSString *)sessionID withName:(NSString *)sessionName{
-    
+-(void)exportDidFinish:(AVAssetExportSession*)session input:(NSURL*)inputURL
+{
     if ( session.status== AVAssetExportSessionStatusCompleted){
-        NSLog(@"export and compression done!");
+        NSLog(@"Export and compression done!");
         //At this point, it should reveal that the video has stopped processing and has been saved
         NSURL *compressedVideo=session.outputURL;
-        [self insertIntoDatabaseWithPath:compressedVideo withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+        
+        //So here, update the database with the new details
+        [self updateDatabaseWithNewPath:compressedVideo fromOldPath:inputURL];
+        
         //If the conversion was successful, delete the original
         [self removeFile:inputURL];
     } else {
         UIAlertView *compressError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Could not compress file properly." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
         [compressError dismissWithClickedButtonIndex:0 animated:YES];
         [compressError show];
-        //Since it failed, we save the original video path instead
-        [self insertIntoDatabaseWithPath:inputURL withStartTime:start forSession:sessionID sessionNamed:sessionName];
+        //Since the original data was saved into the database, don't have to do anything anymore
     }
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
  
@@ -285,7 +315,7 @@ bool isRecording;
     }
     
     NSURL *videopath = [NSURL fileURLWithPath:videoFilePath];
-    NSLog(@"Get file path to save returns: %@", videoFilePath);
+    //NSLog(@"Get file path to save returns: %@", videoFilePath);
     return videopath;
 }
 
@@ -456,19 +486,21 @@ bool isRecording;
     NSString *thumbnailPath = [self generateImageFromURL:videoURL];
     
     ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
-    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path, session_name) VALUES (%i, %@, '%@', %f, 2, 0, '%@', '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath, sessionName];
+    NSString *strQuery = [NSString stringWithFormat:@"INSERT INTO upload_tracker (user_id,session_id,file_path,start_time,content_type,upload_status,thumbnail_path, session_name) VALUES (%i, '%@', '%@', %f, 2, 9, '%@', '%@')", appDelegateObject.CurrentUserID, sessionID, videoURL, videoStartTime, thumbnailPath, sessionName];
+    //Status 8 is converting
     while (![dbObject insertToDatabase:strQuery]) {
-        NSLog(@"Unable to update the database");
+        NSLog(@"Unable to insert into the database");
     }
 }
 
-/* To input into the thesmos.rdb database
--(void) insertIntoDatabaseVideoDetails:(NSURL*)videoURL image:(NSString*)videoThumb name:(NSString*)videoName{
-    
-    NSString *query=[NSString stringWithFormat:@"insert into Video_Details ('Video_URL','Video_Thumb','Video_Name') values ('%@','%@','%@')",videoURL,videoThumb,videoName];
-    [appDelegateObject.databaseObject insertIntoDatabase:query];
-    
-}*/
+- (void)updateDatabaseWithNewPath:(NSURL *)newPath fromOldPath:(NSURL *)oldPath
+{
+    ConnectToDatabase *dbObject = [[ConnectToDatabase alloc] initDB];
+    NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET file_path='%@',upload_status=0 WHERE file_path='%@'", newPath, [NSString stringWithFormat:@"%@", oldPath]];
+    while (![dbObject updateDatabase:strQuery]) {
+        NSLog(@"Unable to update database");
+    }
+}
 
 -(NSString *) generateRandomString
 {

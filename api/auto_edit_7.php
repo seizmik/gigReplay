@@ -366,7 +366,7 @@
         $output_path = $pathinfo['dirname'];
         $output_path .= "/".generate_random_string().".png";
         $seek_to = fftime($time);
-        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -filter:v scale=-1:360 -vframes 1 ".$output_path);
+        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -s 320x180 -vframes 1 ".$output_path);
         
         //Create the URL
         $url_pathinfo = pathinfo($video_url);
@@ -402,29 +402,40 @@
     
     //Establish the session that we want to make the video for
     $session_id = $_GET["sid"]; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
-    $session_name = @"Juggle 2";
+    
+    //Query the thesmos database for the session name
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        //Find out if the video has already been created once before
+        $query = "SELECT * FROM session WHERE id=".$session_id;
+        $result = mysqli_query($con, $query);
+        $row = mysqli_fetch_array($result);
+    }
+    
+    $session_name = $row['session_name'];
     $user_id = 0;
     $user_email = @"lo.mikail@gmail.com";
-    $user_name = @"Mikail Lo";
+    $user_name = @"GigReplay Admin";
     
     $video_array = array();
     
     //First query the database and get all the details
-    $con = mysql_connect("localhost", "default", "thesmosinc");
-    if (!$con) {
-        die(mysql_error());
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
-        mysql_select_db("gigreplay", $con);
         //First, select all the videos from the table
         $query_2 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=2";
         $query_1 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=1";
         $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
         //These are the results for all the videos for this session
-        $result_2 = mysql_query($query_2);
+        $result_2 = mysqli_query($con, $query_2);
         //These are the results for all the audio for this session
-        $result_1 = mysql_query($query_1);
-        $result_3 = mysql_query($query_3);
-        mysql_close($con);
+        $result_1 = mysqli_query($con, $query_1);
+        $result_3 = mysqli_query($con, $query_3);
+        mysqli_close($con);
     }
     
     //These two variables will define the length of the video generated. These are to be used as constants
@@ -432,7 +443,7 @@
     $last_end = 0;
     
     //Load up the video details in the video array, and get the first and last times
-    while ($row = mysql_fetch_array($result_2)) {
+    while ($row = mysqli_fetch_array($result_2)) {
         if ($row['start_time'] < $first_start) {
             $first_start = $row['start_time'];
         }
@@ -449,21 +460,23 @@
     
     echo "First start is ".$first_start." and last end is ".$last_end, "<br/>";
         
+    $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
+    $user_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $user_name)), 'strlen'));
     //Create a temp folder and master folder
-    $temp_path = "../uploads/temp/".$session_id."/";
+    $temp_path = "../uploads/temp/".$session_id."-".$session_add_on."/";
     if (!is_dir($temp_path)) {
         mkdir($temp_path);
     }
-    $temp_path .= $user_id."/";
+    $temp_path .= $user_id."-".$user_add_on."/";
     if (!is_dir($temp_path)) {
         mkdir($temp_path);
     }
     
-    $master_path = "../uploads/master/".$session_id."/";
+    $master_path = "../uploads/master/".$session_id."-".$session_add_on."/";
     if (!is_dir($master_path)) {
         mkdir($master_path);
     }
-    $master_path .= $user_id."/";
+    $master_path .= $user_id."-".$user_add_on."/";
     if (!is_dir($master_path)) {
         //If master_path is already present, delete everything that is there
         mkdir($master_path);
@@ -486,7 +499,7 @@
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
         
         $temp_trim_array[] = $temp_trim_path;
@@ -507,12 +520,12 @@
     //Audio results were grabbed earlier already
     $audio_1_array = array(); //This is dedicated audio
     $audio_3_array = array(); //This is audio from video
-    while ($row = mysql_fetch_array($result_1)) {
+    while ($row = mysqli_fetch_array($result_1)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_1_array[] = $row;
         echo "Audio 1 end time is ", $row['end_time'], "<br/>";
     }
-    while ($row = mysql_fetch_array($result_3)) {
+    while ($row = mysqli_fetch_array($result_3)) {
         $row['end_time'] = $row['start_time'] + $row['media_length'];
         $audio_3_array[] = $row;
         echo "Audio 3 end time is ", $row['end_time'], "<br/>";
@@ -571,9 +584,9 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 960x540 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
-    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."/".$user_id."/".basename($final_video_path);
+    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
     echo $final_video_url;
     
     //Create 3 thumbnails based on the videos length

@@ -336,7 +336,7 @@
         [request setCompletionBlock:^{
             // Use when fetching text data
             //If returnString is TRUE, then update the database
-            if ([[request responseString] isEqual: @"SUCCESS"]) {
+            if ([[request responseString] isEqualToString:@"SUCCESS"]) {
                 UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                 [alertUpload show];
                 
@@ -362,6 +362,8 @@
             NSError *error = [request error];
             if (error) {
                 [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+                [self refreshDatabaseObjects];
+                [uploadTable reloadData];
             }
         }];
         
@@ -371,7 +373,7 @@
         
         //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
         //NSLog(@"responseString %@",[request responseString]);
-    } else {
+    } else if ([[uploadRequest responseString] isEqualToString:@"COMPLETED"]){
         //Update the database for that object to say that it has already been uploaded
         UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
         [alertUpload show];
@@ -381,8 +383,15 @@
         [uploadTable reloadData];
         
         [self removeFile:fileDetails];
+    } else {
+        UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+        [alertUpload show];
+        
+        //If the uplaod was not successful, then have to update the upload tracker that the file has not been sent
+        [self updateTrackerWithFileDetails:fileDetails toStatus:0];
+        [self refreshDatabaseObjects];
+        [uploadTable reloadData];
     }
-    
     
 }
 
