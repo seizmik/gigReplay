@@ -17,7 +17,7 @@
 
 @implementation AudioViewController
 @synthesize timeLabel;
-@synthesize recordButton, playButton, uploadButton;
+@synthesize recordButton, playButton, uploadButton, volumeLabel;
 
 double startTime;
 float currentTime;
@@ -37,11 +37,11 @@ float currentTime;
     // Do any additional setup after loading the view from its nib.
     
     self.title = @"Audio Record";
-    //[self setupAudioRecorder];
     [self checkRecording];
     [self checkPlaying];
     
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
+    //levelTimer = [NSTimer scheduledTimerWithTimeInterval: 0.03 target: self selector: @selector(levelTimerCallback:) userInfo: nil repeats: YES];
         
 }
 
@@ -158,6 +158,12 @@ float currentTime;
     }
 }
 
+- (void)levelTimerCallback:(NSTimer *)timer {
+	[audioRecorder updateMeters];
+	//NSLog(@"Average input: %f Peak input: %f", [audioRecorder averagePowerForChannel:0], [audioRecorder peakPowerForChannel:0]);
+    volumeLabel.text = [NSString stringWithFormat:@"Sound level: %.2fdb", [audioRecorder peakPowerForChannel:0]];
+}
+
 - (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
 {
     NSLog(@"Saving file: %@", soundFilePath);
@@ -234,23 +240,6 @@ float currentTime;
     }
     return randomString;
 }
-
-/*
-- (void)convertVideoToLowQuailtyWithInputURL:(NSURL*)inputURL
-                                   outputURL:(NSURL*)audioOutputURL
-                                     handler:(void (^)(TPAACAudioConverter *))handler  //Used to compress the video
-{
-    //Using TPAACAudioConverter to convert file to AAC format
-    audioConverter = [[TPAACAudioConverter alloc] initWithDelegate:self
-                                                            source:[inputURL path]
-                                                       destination:[audioOutputURL path]];
-    [audioConverter start];
-    
-    [exportSession exportAsynchronouslyWithCompletionHandler:^(void)
-     {
-         handler(exportSession);
-     }];
-}*/
 
 - (NSURL *)getLocalFilePathToSave   //Calls when recorded video saved to document library
 {

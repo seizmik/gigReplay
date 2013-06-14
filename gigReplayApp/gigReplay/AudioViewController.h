@@ -13,6 +13,7 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "TPAACAudioConverter.h"
 #import <AudioToolbox/AudioToolbox.h>
+#import <CoreAudio/CoreAudioTypes.h>
 
 @interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate, TPAACAudioConverterDelegate>
 {
@@ -20,6 +21,7 @@
     AVAudioPlayer *audioPlayer;
     AVAudioRecorder *audioRecorder;
     NSTimer *audioTimer;
+    NSTimer *levelTimer;
     NSURL *lowResURL;
     NSURL *soundFileURL;
 }
@@ -28,6 +30,7 @@
 @property (strong, nonatomic) IBOutlet UIButton *recordButton;
 @property (strong, nonatomic) IBOutlet UIButton *playButton;
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
+@property (strong, nonatomic) IBOutlet UILabel *volumeLabel;
 
 - (IBAction)recordPressed:(UIButton *)sender;
 - (IBAction)playPressed:(UIButton *)sender;
