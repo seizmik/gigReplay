@@ -48,11 +48,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [self refreshDatabaseObjects];
-    ConnectToDatabase *sql=[[ConnectToDatabase alloc]initDB];
-    NSString *query=@"SELECT * from upload_tracker where upload_status=0";
-    uploadVideoFilePath = [sql readFromDatabaseVideos:query];
-    NSLog(@"%@ YOLO",uploadVideoFilePath);
-
     [uploadTable reloadData];
 
 }

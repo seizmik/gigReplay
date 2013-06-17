@@ -45,6 +45,7 @@ bool isRecording;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     
     //Grab the expiration time
+    
 }
 
 -(void)viewDidAppear:(BOOL)animated
@@ -245,13 +246,22 @@ bool isRecording;
                                               otherButtonTitles:nil];
         [alert show];
     } //Don't need to do anything if the video was successfully saved
+    
 }
 
 
 - (void)convertVideoToLowQuailtyFromURL:(NSURL*)capturedVideoURL
 {
+    NSLog(@"Enabling camera again");
+    //End off by having the buttons being enabled again
+    [backButton setHidden:NO];
+    [cameraRecButton setEnabled:YES];
+    [cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
+    [self dismissViewControllerAnimated:NO completion:nil];
+    [self startCameraController:self usingDelegate:self];
+    
     NSLog(@"Converting video");
-   NSURL *videoOutputURL = [self getLocalFilePathToSave];
+    NSURL *videoOutputURL = [self getLocalFilePathToSave];
     [[NSFileManager defaultManager] removeItemAtURL:videoOutputURL error:nil];
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
@@ -336,7 +346,6 @@ bool isRecording;
     backButton.backgroundColor=[UIColor clearColor];
     backButton.highlighted=YES;
     [backButton setImage:[UIImage imageNamed:@"recording_overlay_back_icon"] forState:UIControlStateNormal];
-//    [backButton setTitle:@"Back" forState:UIControlStateNormal];
     [backButton setFrame:CGRectMake(5.0, 0.0, 60.0, 50.0)];
     [backButton addTarget:self action:@selector(imagePickerControllerDidCancel:) forControlEvents:UIControlEventTouchUpInside];
     backButton.enabled = YES;
@@ -415,8 +424,8 @@ bool isRecording;
         //Stop recording
         [cameraUI stopVideoCapture];
         isRecording = NO;
-        [backButton setHidden:NO];
-        [cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
+        [cameraRecButton setEnabled:NO];
+        
     }
     
 }

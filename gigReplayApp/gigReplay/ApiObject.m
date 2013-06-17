@@ -934,7 +934,7 @@ didStartElement:(NSString *)elementName
         {
             
             NSArray *details=[self.OpenSessionDetailsHolder objectAtIndex:i];
-            NSLog(@"%@ HELLO",details);
+            //NSLog(@"%@ HELLO",details);
             NSString *Session_ID=[details objectAtIndex:0];
             NSString *DateDetails=[details objectAtIndex:2];
             

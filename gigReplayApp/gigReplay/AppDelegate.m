@@ -378,7 +378,14 @@
 {
     if (buttonIndex == 0) {
         [alertView dismissWithClickedButtonIndex:-1 animated:YES];
-        [self syncWithServer];
+        dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
+        dispatch_async(syncQueue, ^{
+            //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
+            stillSynching = YES;
+            [self syncWithServer]; //This sets up the time relationship
+            //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+            stillSynching = NO;
+        });
     } else if (buttonIndex == 1) {
         //Let's try to avoid the cancel button. Instead lead them out with the settings button
         //exit(0);
