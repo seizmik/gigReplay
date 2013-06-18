@@ -10,7 +10,7 @@
 
 
 @implementation ApiObject;
-@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen,JoinSessionId,openSessionIdData;
+@synthesize User_ID,apiWrapperObject,Session_Name,SessionCode,CreatedDetailsInfo,CreatedUserName,sessionExpirationStatus,SessionExpiryDateAndTime,SessionExpiryStatus,sessionExpirationDetails,SearchSessionDetailsHolder,Scene_Name,SessionCodeFromSearch,SessionCreatedDateFromSearch,SessionCreatedDetailsFromSearch,SessionCreatedUserIDFromSearch,SessionCreatedUserNameFromSearch,SessionExpiryDetailsFromSearch,SessionExpiryStatusFromSearch,SessionNameFromSearch,hasExpiredString,OpenSessionDetailsHolder,created_useridFor_Open,Created_SessionCode_Open,Created_SessionName_Open,Created_UserName_Open,Session_Id,SessionCreatedDateForOpen,JoinSessionId,openSessionIdData,FbIdSearch;
 
 //REST method of POST facebook details to WebURL(online DB)
 -(void)postUserDetails:(NSString *)facebookId userEmail:(NSString *)email userName:(NSString *)Username facebookToken:(NSString *)fbtoken APIIdentifier:(int)Identifier
@@ -257,6 +257,10 @@ didStartElement:(NSString *)elementName
         }
         if (SessionPrefixFound)
         {
+            if ([elementName isEqualToString:@"fb_id"])
+            {
+                IsFbIdFoundInSearch=TRUE;
+            }
             if ([elementName isEqualToString:@"code"])
             {
                 IsCodeFoundInSearch=TRUE;
@@ -448,6 +452,9 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if(IsFbIdFoundInSearch){
+                self.FbIdSearch=string;
+            }
             if (IsCodeFoundInSearch)
             {
                 self.SessionCodeFromSearch=string;
@@ -617,6 +624,10 @@ didStartElement:(NSString *)elementName
     {
         if (SessionPrefixFound)
         {
+            if (([elementName isEqualToString:@"fb_id"])&&(IsFbIdFoundInSearch))
+            {
+                IsFbIdFoundInSearch=FALSE;
+            }
             if (([elementName isEqualToString:@"code"])&&(IsCodeFoundInSearch))
             {
                 IsCodeFoundInSearch=FALSE;
@@ -654,7 +665,7 @@ didStartElement:(NSString *)elementName
             if (([elementName hasPrefix:@"session_"])&& (SessionPrefixFound)&&(![elementName isEqualToString:@"session_name"]))
             {
                 
-                NSArray *Details=[[NSArray alloc]initWithObjects:self.SessionCodeFromSearch,self.SessionNameFromSearch,self.SessionCreatedDateFromSearch,self.SessionCreatedUserIDFromSearch,self.SessionCreatedUserNameFromSearch,self.SessionExpiryDetailsFromSearch,self.SessionExpiryStatusFromSearch,nil];
+                NSArray *Details=[[NSArray alloc]initWithObjects:self.SessionCodeFromSearch,self.SessionNameFromSearch,self.SessionCreatedDateFromSearch,self.SessionCreatedUserIDFromSearch,self.SessionCreatedUserNameFromSearch,self.SessionExpiryDetailsFromSearch,self.SessionExpiryStatusFromSearch,self.FbIdSearch,nil];
                 [SearchSessionDetailsHolder addObject:Details];
                 
                 SessionPrefixFound=FALSE;
@@ -891,7 +902,7 @@ didStartElement:(NSString *)elementName
             
             
             NSArray *details=[self.SearchSessionDetailsHolder objectAtIndex:i];
-            
+            NSLog(@"%@ search details",details);
             NSString *Session_Code=[details objectAtIndex:0];
             NSString *Session_name=[details objectAtIndex:1];
             NSString *DateDetails=[details objectAtIndex:2];
@@ -905,10 +916,11 @@ didStartElement:(NSString *)elementName
             NSString *ExpiryDate=[InfoSplitExpiry objectAtIndex:1];
             NSString *ExpiryTime=[InfoSplitExpiry objectAtIndex:0];
             NSString *ExpiryStatus=[details objectAtIndex:6];
+            NSString *fb_id_search=[details objectAtIndex:7];
             
             
             // NSLog(@"%@",self.created_userid);
-            NSString *query=[NSString stringWithFormat:@"insert into Searchsession_Details ('created_user_id','user_id','time','Date','username','Session_Code','Session_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status') values ('%@','%d','%@','%@','%@','%@','%@','%@','%@','%@')",session_created_USERID,appDelegateObject.CurrentUserID,CreatedTime,SessionCreatedDate,session_Created_USERNAME,Session_Code,Session_name,ExpiryDate,ExpiryTime,ExpiryStatus];
+            NSString *query=[NSString stringWithFormat:@"insert into Searchsession_Details ('created_user_id','user_id','time','Date','username','Session_Code','Session_Name','Session_Expiry_Date','Session_Expiry_Time','Session_Expiry_Status','facebook_id') values ('%@','%d','%@','%@','%@','%@','%@','%@','%@','%@','%@')",session_created_USERID,appDelegateObject.CurrentUserID,CreatedTime,SessionCreatedDate,session_Created_USERNAME,Session_Code,Session_name,ExpiryDate,ExpiryTime,ExpiryStatus,fb_id_search];
             
             
             [appDelegateObject.databaseObject insertIntoDatabase:query];

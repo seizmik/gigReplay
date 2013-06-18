@@ -186,7 +186,7 @@
     joinSession.title=@"Join";
     [joinSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_join_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_join_button_off.png"]];
     
-    OpenSessionViewController *open=[[OpenSessionViewController alloc]init];
+    OpenSessionViewController *open=[[OpenSessionViewController alloc]initWithNibName:@"OpenSessionViewController" bundle:nil];
     UINavigationController *openSession=[[UINavigationController alloc]initWithRootViewController:open];
     openSession.title =@"Open";
     [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];

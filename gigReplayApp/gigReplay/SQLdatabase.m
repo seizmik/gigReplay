@@ -243,22 +243,24 @@
 			while(sqlite3_step(compiledStatement) == SQLITE_ROW)
                 
 			{				// Read the data from the result row
-                NSString *SessionExpiryStatus =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
-                NSString *SessionExpiryDate =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
-                NSString *SessionExpiryTime =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                NSString *fbId=[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,0)];
+                NSString *SessionExpiryStatus =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,1)];
+                NSString *SessionExpiryDate =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,2)];
+                NSString *SessionExpiryTime =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
                 
-                NSString *createdID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,3)];
-                NSString *ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,4)];
-                NSString *User_ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,5)];
-                NSString *Session_Code =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,6)];
-                NSString *Session_name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,7)];
-                NSString *User_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,8)];
-                NSString *Time =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,9)];
-                NSString *Date =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,10)];
+                NSString *createdID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,4)];
+                NSString *ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,5)];
+                NSString *User_ID =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,6)];
+                NSString *Session_Code =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,7)];
+                NSString *Session_name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,8)];
+                NSString *User_Name =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,9)];
+                NSString *Time =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,10)];
+                NSString *Date =[NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement,11)];
+              
                 
                 
                 
-                NSArray *Details = [[NSArray alloc]initWithObjects:createdID,ID,User_ID,User_Name,Session_name,Session_Code,Time,Date,SessionExpiryDate,SessionExpiryTime,SessionExpiryStatus,nil];
+                NSArray *Details = [[NSArray alloc]initWithObjects:createdID,ID,User_ID,User_Name,Session_name,Session_Code,Time,Date,SessionExpiryDate,SessionExpiryTime,SessionExpiryStatus,fbId,nil];
                 
                 
                 [UserDetails addObject:Details];

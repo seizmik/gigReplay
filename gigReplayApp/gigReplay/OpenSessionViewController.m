@@ -28,6 +28,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //load values obtained from last connection to online database
+    [self LoadSessionDetailsFromDB];
+    UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
+    [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    self.refreshControl=refresh;
+    refresh.tintColor=[UIColor redColor];
+    
     self.title=@"Open";
 
     apiWrapperObject=[[ApiObject alloc]init];
@@ -40,9 +48,25 @@
     
     // Do any additional setup after loading the view from its nib.
 }
+-(void)leon{
+    NSLog(@"fetcheddatachagend");
+    // connect to online database and retrieve new data when pulled to refresh
+    [self performSelector:@selector(updatingTable) withObject:nil afterDelay:3];
+   self.refreshControl.attributedTitle=[[NSAttributedString alloc]initWithString:@"Updating.."];
+    [self performSelector:@selector(OpenSessionDetailsFromAPI) withObject:nil afterDelay:3];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+        [formatter setDateFormat:@"MMM d, h:mm a"];
+         NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",[formatter stringFromDate:[NSDate date]]];
+        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
+}
+-(void)updatingTable{
+    
+    [self.refreshControl endRefreshing];
+}
+
 
 -(void)viewDidAppear:(BOOL)animated{
-    [self OpenSessionDetailsFromAPI];
+//   [self OpenSessionDetailsFromAPI];
     
 }
 
@@ -53,9 +77,13 @@
     
     [apiWrapperObject OpenSessionDetails:appDelegateObject.CurrentUserID WithSession:appDelegateObject.CurrentSession_Code APIIdentifier:API_IDENTIFIER_OPEN_SESSION];
     
+    
+    
 }
 
 //////////////////////////////////TableViewCell OpenSessions Implementation////////////////////////////////////
+
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {

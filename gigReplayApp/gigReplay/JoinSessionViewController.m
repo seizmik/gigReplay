@@ -10,6 +10,7 @@
 #import "CustomCell.h"
 #import "MediaRecordViewController.h"
 #import "SettingsViewController.h"
+#import "UIImageView+WebCache.h"
 
 @interface JoinSessionViewController ()
 
@@ -181,25 +182,25 @@
 	}
    
     NSArray *Details=[self.sessionDetailsHolder objectAtIndex:indexPath.row];
+    NSLog(@"%@ serach details read from DB...",Details);
         
-        if (FBSession.activeSession.isOpen) {
-            [[FBRequest requestForMe] startWithCompletionHandler:
-             ^(FBRequestConnection *connection,
-               NSDictionary<FBGraphUser> *user,
-               NSError *error) {
-                 if (!error) {
-                     
-                     cell.fbProfilePictureView.profileID = user.id;
-                 }
-             }];
-        }
     
-       
+
     cell.SceneName.text=[Details objectAtIndex:4];
     cell.directorName.text=[Details objectAtIndex:3];
     cell.SceneTake.text=[Details objectAtIndex:2];
     [cell.dateLabel setTransform:CGAffineTransformMakeRotation(-M_PI/2)];
     cell.dateLabel.text=[Details objectAtIndex:7];
+    NSString  *fb_user_ID=[Details objectAtIndex:11 ];
+    
+    NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_ID];
+    
+    //    dispatch_async(kBgQueue, ^{
+    
+    //        dispatch_async(dispatch_get_main_queue(), ^{
+    //           cell.fbProfilePictureView.profileID=fb_user_ID;
+    [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL]];
+
     
     return cell;
 }

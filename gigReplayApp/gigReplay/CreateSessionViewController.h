@@ -18,6 +18,7 @@
     NSString *sessionname;
     BOOL   RespondsReached;
     MediaRecordViewController *recordObj;
+    BOOL pressed;
 }
 @property (strong, nonatomic) IBOutlet UITextField *sceneNameTextField;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
@@ -34,5 +35,8 @@
 - (void)populateUserDetails;
 - (IBAction)resignTextField:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *start_button;
+- (IBAction)helpInfoButton:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *helpButtonView;
+@property (strong, nonatomic) IBOutlet UIButton *helpButton;
 
 @end

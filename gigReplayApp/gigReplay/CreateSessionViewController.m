@@ -15,7 +15,7 @@
 @implementation CreateSessionViewController
 @synthesize sceneCodeDisplay, sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button;
 //@synthesize userProfileImage;
-@synthesize timeDisplay;
+@synthesize timeDisplay,helpButtonView,helpButton;
 
 -(void)SyncUserDetails
 {
@@ -38,7 +38,9 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
+    pressed =YES;
     self.title=@"Create";
     if (FBSession.activeSession.isOpen) {
         [self populateUserDetails];
@@ -252,4 +254,17 @@
 }
 
 
+- (IBAction)helpInfoButton:(id)sender {
+    
+    if([helpButtonView isHidden]){
+        [self.view addSubview:helpButtonView];
+        [helpButtonView setHidden:NO ];
+        
+    }
+    else {
+        
+        [helpButtonView setHidden:YES];
+        
+    }
+}
 @end

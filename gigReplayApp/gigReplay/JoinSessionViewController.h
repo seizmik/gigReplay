@@ -19,6 +19,7 @@
     NSMutableArray *sessionDetailsHolder;
       BOOL    SelectionButtonSeleted;
     MediaRecordViewController *mediaObject;
+   
     
 }
 

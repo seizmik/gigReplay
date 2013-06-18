@@ -49,7 +49,7 @@
     
     /******* SEARCH  SESSION DETAILS ************************************/
     
-   
+    BOOL                 IsFbIdFoundInSearch;
     BOOL                 IsCodeFoundInSearch;
     BOOL                 IsSessionNameFoundInSearch;
     BOOL                 IsSessionCreatedInfoInSearch;
@@ -143,6 +143,9 @@
 
 //for join session_id
 @property (nonatomic, retain)NSString            *JoinSessionId;
+
+//for search session fb_id
+@property(nonatomic,strong)NSString              *FbIdSearch;
 
 -(void)SendNotificationsAfterUserRegistration:(NSString*)Status;
 -(void)SendNotificationsAfterJoinSearchAPI:(NSString*)Status;
