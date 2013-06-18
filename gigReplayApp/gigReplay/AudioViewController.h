@@ -20,6 +20,7 @@
     TPAACAudioConverter *audioConverter;
     AVAudioPlayer *audioPlayer;
     AVAudioRecorder *audioRecorder;
+    AVAudioSession *audioSession;
     NSTimer *audioTimer;
     NSTimer *levelTimer;
     NSURL *lowResURL;
@@ -31,9 +32,12 @@
 @property (strong, nonatomic) IBOutlet UIButton *playButton;
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
 @property (strong, nonatomic) IBOutlet UILabel *volumeLabel;
+@property (strong, nonatomic) IBOutlet UIProgressView *peakPowerGraph;
 
 - (IBAction)recordPressed:(UIButton *)sender;
 - (IBAction)playPressed:(UIButton *)sender;
 - (IBAction)uploadPressed:(UIButton *)sender;
+
+-(void)levelTimerCallback:(NSTimer *)timer;
 
 @end

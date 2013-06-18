@@ -18,6 +18,7 @@
 @implementation AudioViewController
 @synthesize timeLabel;
 @synthesize recordButton, playButton, uploadButton, volumeLabel;
+@synthesize peakPowerGraph;
 
 double startTime;
 float currentTime;
@@ -40,9 +41,9 @@ float currentTime;
     [self checkRecording];
     [self checkPlaying];
     
+    
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
     //levelTimer = [NSTimer scheduledTimerWithTimeInterval: 0.03 target: self selector: @selector(levelTimerCallback:) userInfo: nil repeats: YES];
-        
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -74,10 +75,10 @@ float currentTime;
             NSLog(@"Error: %@", [error localizedDescription]);
         } else {
             [audioRecorder prepareToRecord];
-            //[self getStartTime];
             [audioRecorder record];
             [self getStartTime];
             [self checkRecording];
+            levelTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(levelTimerCallback:) userInfo: nil repeats: YES];
         }
     } else {
         //We get the stop time here to make it the same as video sync
@@ -92,7 +93,7 @@ float currentTime;
                                                            destination:[lowResURL path]];
         [audioConverter start];
         //Here, we rely on the delegates to update the recording status. As long as the conversion is not complete, or has not faulted, the record button will not trigger. Hence, you cannot reset the soundFileURL, startTime, or back out and change the session.
-        
+        [levelTimer invalidate];
     }
     [self timerStartStop];
     
@@ -161,7 +162,11 @@ float currentTime;
 - (void)levelTimerCallback:(NSTimer *)timer {
 	[audioRecorder updateMeters];
 	//NSLog(@"Average input: %f Peak input: %f", [audioRecorder averagePowerForChannel:0], [audioRecorder peakPowerForChannel:0]);
+    float peakPower, averagePower;
+    peakPower = [audioRecorder peakPowerForChannel:0]/160 + 1;
+    averagePower = [audioRecorder averagePowerForChannel:0]/60 + 1;
     volumeLabel.text = [NSString stringWithFormat:@"Sound level: %.2fdb", [audioRecorder peakPowerForChannel:0]];
+    peakPowerGraph.progress = peakPower;
 }
 
 - (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
@@ -199,6 +204,7 @@ float currentTime;
     
     audioRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:&error];
     audioRecorder.delegate = self;
+    audioRecorder.meteringEnabled = YES;
     
     return error;
 }
@@ -302,6 +308,8 @@ float currentTime;
     NSLog(@"So, by right, we should be adding it into the database at this point");
     [self insertIntoDatabasewithPath:lowResURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
     [self removeFile:soundFileURL];
+    //Must change the soundFileURL because it's going to be deleted, then the player can't play it
+    soundFileURL = lowResURL;
     //Only once the conversion is complete, then you let the user take another audio
     [self checkRecording];
     
