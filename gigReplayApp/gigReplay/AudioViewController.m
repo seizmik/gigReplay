@@ -45,6 +45,7 @@ float currentTime;
     self.audioController = [[AEAudioController alloc]
                             initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription]
                             inputEnabled:YES];
+    [audioController start:nil];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
 }
 
