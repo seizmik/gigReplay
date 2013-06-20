@@ -96,6 +96,7 @@ float currentTime;
     [self timerStartStop];
     */
     if (recorder) {
+        [self getStartTime];
         [recorder finishRecording];
         [audioController removeOutputReceiver:recorder];
         [audioController removeInputReceiver:recorder];
@@ -131,7 +132,7 @@ float currentTime;
             return;
         } else {
             //If there are no errors, get the start time of the audio
-            [self getStartTime];
+            //[self getStartTime];
         }
         
         [audioController addOutputReceiver:recorder];
