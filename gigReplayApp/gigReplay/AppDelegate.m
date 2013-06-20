@@ -32,10 +32,6 @@
     [self LoadUser];
     [self checkExistingUser];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-    //Load up the upload tracker database as well
-    dbObject = [[ConnectToDatabase alloc] initDB];
-    [dbObject checkAndCreateDatabase];
     
     //Update files that were cancelled during upload, if any
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE upload_status=9"];
@@ -57,6 +53,14 @@
 {
     databaseObject=[[SQLdatabase alloc]initDatabase];
     [databaseObject checkDatabaseExists];
+    
+    //Load up the second database as well
+    dbObject = [[ConnectToDatabase alloc] initDB];
+    [dbObject checkAndCreateDatabase];
+    //Clear out the upload tracker
+    if(![dbObject delFromDatabase:@"DELETE FROM upload_tracker WHERE upload_status=1 OR upload_status=-1"]){
+        NSLog(@"Error occurred clearing out upload_tracker");
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -96,7 +100,6 @@
     //At this point of time, we should retrieve the last sync and when it was taken to determine if another sync is needed. KIV
     dbObject = [[ConnectToDatabase alloc] initDB];
     syncObject = [dbObject syncCheck];
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
     NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid");
@@ -128,7 +131,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 

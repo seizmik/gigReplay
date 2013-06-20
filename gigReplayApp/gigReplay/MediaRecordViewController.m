@@ -43,7 +43,7 @@ int currentTime;
     isRecording = NO;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     
-    //Grab the expiration time
+    //Grab the expiration time and start counting down
     
 }
 
@@ -66,6 +66,7 @@ int currentTime;
 
 - (IBAction)videoRecordPressed:(UIButton *)sender {
     [self startCameraController:self usingDelegate:self];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
 }
 
 - (IBAction)audioRecordPressed:(UIButton *)sender {
@@ -206,7 +207,6 @@ int currentTime;
     //4 -overlay added to cameraui
     cameraUI.cameraOverlayView = overlay;
     
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     return YES;
 }
 
@@ -350,22 +350,12 @@ int currentTime;
     backButton.enabled = YES;
     [overlay addSubview:backButton];
     
-    //Help button
-//    helpButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    helpButton.backgroundColor=[UIColor clearColor];
-//    helpButton.highlighted=YES;
-//    [helpButton setImage:[UIImage imageNamed:@"recording_overlay_help_icon"] forState:UIControlStateNormal];
-//    [helpButton setTitle:@"Help" forState:UIControlStateNormal];
-    //flash toggle
+    //Flash toggle
     flashtoggle=[[UISwitch alloc]initWithFrame:CGRectMake((screenWidth - 80.0), 10.0, 40.0, 40.0)];
     flashtoggle.backgroundColor=[UIColor clearColor];
     flashtoggle.highlighted=YES;
     [flashtoggle addTarget:self action:@selector(flashtoggle) forControlEvents:UIControlEventValueChanged];
     [overlay  addSubview:flashtoggle];
-//    [helpButton setFrame:CGRectMake((screenWidth - 45.0), 0.0, 40.0, 40.0)];
-//    [helpButton addTarget:self action:@selector(helpButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-//    helpButton.enabled = YES;
-//    [overlay addSubview:helpButton];
     
     //Recording button
     cameraRecButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -431,6 +421,7 @@ int currentTime;
 
 - (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
     [self dismissViewControllerAnimated:YES completion:nil];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 - (void)helpButtonPressed {

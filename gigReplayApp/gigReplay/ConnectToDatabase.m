@@ -156,4 +156,20 @@
     sqlite3_close(database);
 }
 
+- (BOOL)delFromDatabase:(NSString *)strQuery
+{
+    sqlite3 *database;
+    if (sqlite3_open([databasePath UTF8String], &database) == SQLITE_OK) {
+        static sqlite3_stmt *compiledStatement;
+        sqlite3_exec(database, [[NSString stringWithFormat:@"%@", strQuery] UTF8String], NULL, NULL, NULL);
+        sqlite3_finalize(compiledStatement);
+        NSLog(@"Entries deleted");
+        sqlite3_close(database);
+        return TRUE;
+    } else {
+        sqlite3_close(database);
+        return FALSE;
+    }
+}
+
 @end

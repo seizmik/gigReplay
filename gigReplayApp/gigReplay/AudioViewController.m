@@ -46,11 +46,16 @@ float currentTime;
                             initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription]
                             inputEnabled:YES];
     [audioController start:nil];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 - (void)didReceiveMemoryWarning
