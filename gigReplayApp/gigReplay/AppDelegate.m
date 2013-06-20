@@ -15,6 +15,8 @@
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
 #import "ReplaysViewController.h"
+#import "MediaRecordViewController.h"
+#import "AudioViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -62,7 +64,15 @@
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
-    //Need to stop the sync here
+    //Need to stop any recordings and take the time stamp
+    MediaRecordViewController *cameraObject = [[MediaRecordViewController alloc] init];
+    AudioViewController *audioObject = [[AudioViewController alloc] init];
+    if (cameraObject.isRecording) {
+        [cameraObject recordButtonPressed];
+    }
+    if (audioObject.recorder) {
+        [audioObject recordPressed:nil];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application

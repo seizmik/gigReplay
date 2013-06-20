@@ -61,40 +61,8 @@ float currentTime;
 
 #pragma mark - Button actions
 
-- (IBAction)recordPressed:(UIButton *)sender {
-    /*
-    if (!audioRecorder.recording) {
-        NSError *error = nil;
-        error = [self setupAudioRecorder];
-        
-        //Audio recorder now initialised. Time to prepare the audio recorder
-        if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:[error localizedDescription]
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Continue"
-                                                  otherButtonTitles:nil];
-            [alert show];
-            NSLog(@"Error: %@", [error localizedDescription]);
-        } else {
-            [audioRecorder prepareToRecord];
-            [audioRecorder record];
-            [self getStartTime];
-            [self checkRecording];
-            levelTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(levelTimerCallback:) userInfo: nil repeats: YES];
-        }
-    } else {
-        //We get the stop time here to make it the same as video sync
-        [audioRecorder stop];
-        [levelTimer invalidate];
-        
-        //Convert the file to aac
-        lowResURL = [self getLocalFilePathToSave];
-        
-        //Here, we rely on the delegates to update the recording status. As long as the conversion is not complete, or has not faulted, the record button will not trigger. Hence, you cannot reset the soundFileURL, startTime, or back out and change the session.
-    }
-    [self timerStartStop];
-    */
+- (IBAction)recordPressed:(UIButton *)sender
+{
     if (recorder) {
         [self getStartTime];
         [recorder finishRecording];

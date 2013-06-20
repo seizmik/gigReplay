@@ -35,13 +35,13 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
+@property (strong, nonatomic) IBOutlet UIButton *videoRecordButton;
+@property (strong, nonatomic) IBOutlet UIButton *audioRecordButton;
 
 - (IBAction)videoRecordPressed:(UIButton *)sender;
 - (IBAction)audioRecordPressed:(UIButton *)sender;
 - (IBAction)uploadButtonPressed:(UIButton *)sender;
 - (IBAction)generateVideo:(UIButton *)sender;
-@property (strong, nonatomic) IBOutlet UIButton *videoRecordButton;
-@property (strong, nonatomic) IBOutlet UIButton *audioRecordButton;
 
 //StartingVideoCameraMethods
 //Delegates send messages, and you have to say where you want the messages to go. Very typically, you want them to go to "you," so in that case you simply say x.delegate=self.
@@ -49,9 +49,11 @@
 //SO in usingDelegate:self the camera is saying i am done with something and i send the message when i m done messaging to myself and implement other methods.
 -(BOOL)startCameraController:(UIViewController*)controller usingDelegate:(id )delegate;
 -(void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void*)contextInfo;
+- (void)recordButtonPressed;
 
 @property (strong,nonatomic) UIImagePickerController *cameraUI;
 @property (strong, nonatomic) UIAlertView *saveAlert;
 @property (strong, nonatomic) NSTimer *videoTimer;
+@property BOOL isRecording;
 
 @end

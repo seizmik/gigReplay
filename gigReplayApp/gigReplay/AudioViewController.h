@@ -19,7 +19,6 @@
 @interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate>
 {
     AVAudioPlayer *audioPlayer;
-    //AVAudioRecorder *audioRecorder;
     AVAudioSession *audioSession;
     NSTimer *audioTimer;
     NSTimer *levelTimer;

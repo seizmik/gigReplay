@@ -19,12 +19,11 @@
 
 @implementation MediaRecordViewController
 @synthesize sceneTitleDisplay, sceneCodeDisplay, videoTimer;
-@synthesize cameraUI, saveAlert;
+@synthesize cameraUI, saveAlert, isRecording;
 @synthesize videoRecordButton, audioRecordButton;
 
 double startTime;
 int currentTime;
-bool isRecording;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
