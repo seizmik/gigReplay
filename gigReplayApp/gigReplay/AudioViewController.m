@@ -19,6 +19,7 @@
 @synthesize timeLabel;
 @synthesize recordButton, playButton, uploadButton, volumeLabel;
 @synthesize peakPowerGraph;
+@synthesize recorder, audioController;
 
 double startTime;
 float currentTime;
@@ -36,18 +37,26 @@ float currentTime;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
+        
     self.title = @"Audio Record";
     [self checkRecording];
     [self checkPlaying];
     
-    
+    self.audioController = [[AEAudioController alloc]
+                            initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription]
+                            inputEnabled:YES];
+    [audioController start:nil];
+    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
-    //levelTimer = [NSTimer scheduledTimerWithTimeInterval: 0.03 target: self selector: @selector(levelTimerCallback:) userInfo: nil repeats: YES];
+    [self updateAudioRoute];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,51 +67,58 @@ float currentTime;
 
 #pragma mark - Button actions
 
-- (IBAction)recordPressed:(UIButton *)sender {
-    
-    if (!audioRecorder.recording) {
-        NSError *error = nil;
-        error = [self setupAudioRecorder];
+- (IBAction)recordPressed:(UIButton *)sender
+{
+    if (recorder) {
+        [self getStartTime];
+        [recorder finishRecording];
+        [audioController removeOutputReceiver:recorder];
+        [audioController removeInputReceiver:recorder];
         
-        //Audio recorder now initialised. Time to prepare the audio recorder
-        if (error) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                            message:[error localizedDescription]
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Continue"
-                                                  otherButtonTitles:nil];
-            [alert show];
-            NSLog(@"Error: %@", [error localizedDescription]);
-        } else {
-            [audioRecorder prepareToRecord];
-            [audioRecorder record];
-            [self getStartTime];
-            [self checkRecording];
-            levelTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(levelTimerCallback:) userInfo: nil repeats: YES];
-        }
+        //Once it completes recording
+        [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+        
+        //Reset the variables
+        [peakPowerGraph setProgress:0.0];
+        self.recorder = nil;
     } else {
-        //We get the stop time here to make it the same as video sync
-        //[self getStartTime];
-        [audioRecorder stop];
+        self.recorder = [[AERecorder alloc] initWithAudioController:audioController];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *docsDir = [dirPaths objectAtIndex:0];
         
-        //Convert the file to aac
-        lowResURL = [self getLocalFilePathToSave];
-        //Using TPAACAudioConverter to convert file to AAC format
-        audioConverter = [[TPAACAudioConverter alloc] initWithDelegate:self
-                                                                source:[soundFileURL path]
-                                                           destination:[lowResURL path]];
-        [audioConverter start];
-        //Here, we rely on the delegates to update the recording status. As long as the conversion is not complete, or has not faulted, the record button will not trigger. Hence, you cannot reset the soundFileURL, startTime, or back out and change the session.
-        [levelTimer invalidate];
+        //Create a new directory, if one is not there already
+        NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
+        [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
+        
+        NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.m4a", [self generateRandomString]];
+        NSLog(@"Original audio path: %@", soundFileName);
+        NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
+        soundFileURL = [NSURL fileURLWithPath:soundFilePath];
+        NSError *error = nil;
+        if ( ![recorder beginRecordingToFileAtPath:soundFilePath fileType:kAudioFileM4AType error:&error] ) {
+            [[[UIAlertView alloc] initWithTitle:@"Error"
+                                         message:[NSString stringWithFormat:@"Couldn't start recording: %@", [error localizedDescription]]
+                                        delegate:nil
+                               cancelButtonTitle:nil
+                               otherButtonTitles:@"OK", nil] show];
+            self.recorder = nil;
+            return;
+        } else {
+            //If there are no errors, get the start time of the audio
+            //[self getStartTime];
+        }
+        
+        [audioController addOutputReceiver:recorder];
+        [audioController addInputReceiver:recorder];
     }
+    [self checkRecording];
     [self timerStartStop];
-    
 }
 
 - (IBAction)playPressed:(UIButton *)sender {
     if (!audioPlayer.playing) {
-    NSError *error;
-    
+        NSError *error;
         //Initialise the audio player. soundFileURL updates itself when the user records a new piece of audio
         audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:soundFileURL error:&error];
         audioPlayer.delegate = self;
@@ -127,7 +143,7 @@ float currentTime;
 
 - (void)checkRecording
 {
-    if (audioRecorder.recording) {
+    if (recorder) {
         //Prevents phone from sleeping
         [recordButton setTitle:@"STOP" forState:UIControlStateNormal];
         playButton.enabled = NO;
@@ -159,7 +175,16 @@ float currentTime;
     }
 }
 
+- (void)updateAudioRoute
+{
+    volumeLabel.text = [NSString stringWithFormat:@"Audio route: %@", audioController.audioRoute];
+}
+
+/*
 - (void)levelTimerCallback:(NSTimer *)timer {
+    [audioController inputAveragePowerLevel:NULL peakHoldLevel:NULL];
+    
+    
 	[audioRecorder updateMeters];
 	//NSLog(@"Average input: %f Peak input: %f", [audioRecorder averagePowerForChannel:0], [audioRecorder peakPowerForChannel:0]);
     float peakPower, averagePower;
@@ -167,7 +192,8 @@ float currentTime;
     averagePower = [audioRecorder averagePowerForChannel:0]/60 + 1;
     volumeLabel.text = [NSString stringWithFormat:@"Sound level: %.2fdb", [audioRecorder peakPowerForChannel:0]];
     peakPowerGraph.progress = peakPower;
-}
+    
+}*/
 
 - (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
 {
@@ -181,6 +207,7 @@ float currentTime;
 
 #pragma mark
 
+/*
 - (NSError *)setupAudioRecorder {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -190,7 +217,7 @@ float currentTime;
     NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
     [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
     
-    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.caf", [self generateRandomString]];
+    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.m4a", [self generateRandomString]];
     NSLog(@"Original audio path: %@", soundFileName);
     NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
     soundFileURL = [NSURL fileURLWithPath:soundFilePath];
@@ -200,14 +227,15 @@ float currentTime;
                                     [NSNumber numberWithInt:16], AVEncoderBitRateKey,
                                     [NSNumber numberWithInt: 2], AVNumberOfChannelsKey,
                                     [NSNumber numberWithFloat:44100.0], AVSampleRateKey, nil];
+    
     NSError *error = nil;
     
     audioRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:&error];
     audioRecorder.delegate = self;
-    audioRecorder.meteringEnabled = YES;
+    //audioRecorder.meteringEnabled = YES;
     
     return error;
-}
+}*/
 
 - (void)timerStartStop
 {
@@ -302,24 +330,6 @@ float currentTime;
 
 - (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError *)error {
     NSLog(@"Encode Error occurred");
-}
-
-- (void)AACAudioConverterDidFinishConversion:(TPAACAudioConverter*)converter {
-    NSLog(@"So, by right, we should be adding it into the database at this point");
-    [self insertIntoDatabasewithPath:lowResURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
-    [self removeFile:soundFileURL];
-    //Must change the soundFileURL because it's going to be deleted, then the player can't play it
-    soundFileURL = lowResURL;
-    //Only once the conversion is complete, then you let the user take another audio
-    [self checkRecording];
-    
-}
-
-- (void)AACAudioConverter:(TPAACAudioConverter*)converter didFailWithError:(NSError*)error {
-    NSLog(@"Error converting audio file");
-    //In this case, we stick to the original file
-    [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
-    [self checkRecording];
 }
 
 #pragma  mark

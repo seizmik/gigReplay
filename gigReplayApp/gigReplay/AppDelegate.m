@@ -15,6 +15,8 @@
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
 #import "ReplaysViewController.h"
+#import "MediaRecordViewController.h"
+#import "AudioViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -30,10 +32,6 @@
     [self LoadUser];
     [self checkExistingUser];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-        
-    //Load up the upload tracker database as well
-    dbObject = [[ConnectToDatabase alloc] initDB];
-    [dbObject checkAndCreateDatabase];
     
     //Update files that were cancelled during upload, if any
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE upload_status=9"];
@@ -55,6 +53,14 @@
 {
     databaseObject=[[SQLdatabase alloc]initDatabase];
     [databaseObject checkDatabaseExists];
+    
+    //Load up the second database as well
+    dbObject = [[ConnectToDatabase alloc] initDB];
+    [dbObject checkAndCreateDatabase];
+    //Clear out the upload tracker
+    if(![dbObject delFromDatabase:@"DELETE FROM upload_tracker WHERE upload_status=1 OR upload_status=-1"]){
+        NSLog(@"Error occurred clearing out upload_tracker");
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -62,7 +68,15 @@
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     
-    //Need to stop the sync here
+    //Need to stop any recordings and take the time stamp
+    MediaRecordViewController *cameraObject = [[MediaRecordViewController alloc] init];
+    AudioViewController *audioObject = [[AudioViewController alloc] init];
+    if (cameraObject.isRecording) {
+        [cameraObject recordButtonPressed];
+    }
+    if (audioObject.recorder) {
+        [audioObject recordPressed:nil];
+    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
@@ -86,7 +100,6 @@
     //At this point of time, we should retrieve the last sync and when it was taken to determine if another sync is needed. KIV
     dbObject = [[ConnectToDatabase alloc] initDB];
     syncObject = [dbObject syncCheck];
-    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
     NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
     NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid");
@@ -118,7 +131,6 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 

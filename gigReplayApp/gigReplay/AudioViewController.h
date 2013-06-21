@@ -11,19 +11,17 @@
 #import "AppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import <AssetsLibrary/AssetsLibrary.h>
-#import "TPAACAudioConverter.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import <CoreAudio/CoreAudioTypes.h>
+#import "AERecorder.h"
+#import "TheAmazingAudioEngine.h"
 
-@interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate, TPAACAudioConverterDelegate>
+@interface AudioViewController : UIViewController <AVAudioPlayerDelegate, AVAudioRecorderDelegate>
 {
-    TPAACAudioConverter *audioConverter;
     AVAudioPlayer *audioPlayer;
-    AVAudioRecorder *audioRecorder;
     AVAudioSession *audioSession;
     NSTimer *audioTimer;
     NSTimer *levelTimer;
-    NSURL *lowResURL;
     NSURL *soundFileURL;
 }
 
@@ -33,11 +31,14 @@
 @property (strong, nonatomic) IBOutlet UIButton *uploadButton;
 @property (strong, nonatomic) IBOutlet UILabel *volumeLabel;
 @property (strong, nonatomic) IBOutlet UIProgressView *peakPowerGraph;
+@property (nonatomic, retain) AERecorder *recorder;
+@property (nonatomic, retain) AEAudioController *audioController;
 
 - (IBAction)recordPressed:(UIButton *)sender;
 - (IBAction)playPressed:(UIButton *)sender;
 - (IBAction)uploadPressed:(UIButton *)sender;
 
--(void)levelTimerCallback:(NSTimer *)timer;
+- (void)levelTimerCallback:(NSTimer *)timer;
+- (void)updateAudioRoute;
 
 @end
