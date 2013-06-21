@@ -190,7 +190,6 @@
 		2AEF49E31740A60F00609768 /* start.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF49E21740A60F00609768 /* start.png */; };
 		2AEF86411742AF1F0039419B /* ReplaysViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AEF863F1742AF1F0039419B /* ReplaysViewController.m */; };
 		2AEF86421742AF1F0039419B /* ReplaysViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AEF86401742AF1F0039419B /* ReplaysViewController.xib */; };
-		CE05034C174DFD6200EEB78B /* TPAACAudioConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CE05034E174E06F900EEB78B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE05034D174E06F900EEB78B /* AudioToolbox.framework */; };
 		CE12D4A6174CA276002DA38A /* UploadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CE12D4A5174CA276002DA38A /* UploadCell.m */; };
 		CE12D4A8174CA318002DA38A /* UploadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE12D4A7174CA318002DA38A /* UploadCell.xib */; };
@@ -445,8 +444,6 @@
 		2AEF863E1742AF1F0039419B /* ReplaysViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplaysViewController.h; sourceTree = "<group>"; };
 		2AEF863F1742AF1F0039419B /* ReplaysViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplaysViewController.m; sourceTree = "<group>"; };
 		2AEF86401742AF1F0039419B /* ReplaysViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplaysViewController.xib; sourceTree = "<group>"; };
-		CE05034A174DFD6200EEB78B /* TPAACAudioConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TPAACAudioConverter.h; sourceTree = "<group>"; };
-		CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPAACAudioConverter.m; sourceTree = "<group>"; };
 		CE05034D174E06F900EEB78B /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		CE12D4A4174CA276002DA38A /* UploadCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadCell.h; sourceTree = "<group>"; };
 		CE12D4A5174CA276002DA38A /* UploadCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadCell.m; sourceTree = "<group>"; };
@@ -987,8 +984,6 @@
 				CE485719171FA89D00837B88 /* AudioViewController.h */,
 				CE48571A171FA89D00837B88 /* AudioViewController.m */,
 				CE48571B171FA89D00837B88 /* AudioViewController.xib */,
-				CE05034A174DFD6200EEB78B /* TPAACAudioConverter.h */,
-				CE05034B174DFD6200EEB78B /* TPAACAudioConverter.m */,
 			);
 			name = AudioRecorder;
 			sourceTree = "<group>";
@@ -1246,7 +1241,6 @@
 				2AEF86411742AF1F0039419B /* ReplaysViewController.m in Sources */,
 				2ADFD0251743E5D200F305D5 /* ReplaysCustomCell.m in Sources */,
 				CE12D4A6174CA276002DA38A /* UploadCell.m in Sources */,
-				CE05034C174DFD6200EEB78B /* TPAACAudioConverter.m in Sources */,
 				CE6E211B1754665900D1C1FF /* SyncObject.m in Sources */,
 				2A5BC702175DD706006E4D59 /* UploadTabDetailViewController.m in Sources */,
 				2A8C66D41761A54E001AFB54 /* MKAnnotationView+WebCache.m in Sources */,
