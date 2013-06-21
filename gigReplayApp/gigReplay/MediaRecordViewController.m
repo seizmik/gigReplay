@@ -189,7 +189,7 @@ bool isRecording;
     cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
     // Displays a control that allows the user to choose movie capture
     cameraUI.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie, nil];
-    cameraUI.videoMaximumDuration = 900;
+//    cameraUI.videoMaximumDuration = 900;
     
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.

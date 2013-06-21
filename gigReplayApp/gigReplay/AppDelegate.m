@@ -196,7 +196,7 @@
     uploadTab.title =@"Upload";
     [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
-    ReplaysViewController *gigReplay=[[ReplaysViewController alloc]init];
+    ReplaysViewController *gigReplay=[[ReplaysViewController alloc]initWithNibName:@"ReplaysViewController" bundle:nil];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
     [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];

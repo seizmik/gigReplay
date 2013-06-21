@@ -29,6 +29,14 @@
 		2A2036081754AE8C0068EB7C /* generate_video_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A2036061754AE8C0068EB7C /* generate_video_icon.png */; };
 		2A2036091754AE8C0068EB7C /* generate_video_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A2036071754AE8C0068EB7C /* generate_video_icon@2x.png */; };
 		2A4667B21741F05000CBE21B /* thesmos.rdb in Resources */ = {isa = PBXBuildFile; fileRef = 2A4667B11741F05000CBE21B /* thesmos.rdb */; };
+		2A49CA36177167FE006FBBBC /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA35177167FE006FBBBC /* gigreplay.sqlite */; };
+		2A49CA3A17730B83006FBBBC /* ReplaysDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A49CA3817730B83006FBBBC /* ReplaysDetailViewController.m */; };
+		2A49CA3B17730B83006FBBBC /* ReplaysDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA3917730B83006FBBBC /* ReplaysDetailViewController.xib */; };
+		2A49CA3F17731039006FBBBC /* share.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA3C17731039006FBBBC /* share.png */; };
+		2A49CA4017731039006FBBBC /* comment.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA3D17731039006FBBBC /* comment.png */; };
+		2A49CA451773118E006FBBBC /* like.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA441773118E006FBBBC /* like.png */; };
+		2A49CA4717743817006FBBBC /* play_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA4617743817006FBBBC /* play_button.png */; };
+		2A49CA4917743C21006FBBBC /* like_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA4817743C21006FBBBC /* like_on.png */; };
 		2A5BC702175DD706006E4D59 /* UploadTabDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5BC700175DD706006E4D59 /* UploadTabDetailViewController.m */; };
 		2A5BC703175DD706006E4D59 /* UploadTabDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A5BC701175DD706006E4D59 /* UploadTabDetailViewController.xib */; };
 		2A5BC70B176061CE006E4D59 /* splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5BC709176061CE006E4D59 /* splash@2x.png */; };
@@ -253,6 +261,15 @@
 		2A2036061754AE8C0068EB7C /* generate_video_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = generate_video_icon.png; sourceTree = "<group>"; };
 		2A2036071754AE8C0068EB7C /* generate_video_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "generate_video_icon@2x.png"; sourceTree = "<group>"; };
 		2A4667B11741F05000CBE21B /* thesmos.rdb */ = {isa = PBXFileReference; lastKnownFileType = file; path = thesmos.rdb; sourceTree = SOURCE_ROOT; };
+		2A49CA35177167FE006FBBBC /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
+		2A49CA3717730B83006FBBBC /* ReplaysDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplaysDetailViewController.h; sourceTree = "<group>"; };
+		2A49CA3817730B83006FBBBC /* ReplaysDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReplaysDetailViewController.m; sourceTree = "<group>"; };
+		2A49CA3917730B83006FBBBC /* ReplaysDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ReplaysDetailViewController.xib; sourceTree = "<group>"; };
+		2A49CA3C17731039006FBBBC /* share.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share.png; sourceTree = "<group>"; };
+		2A49CA3D17731039006FBBBC /* comment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = comment.png; sourceTree = "<group>"; };
+		2A49CA441773118E006FBBBC /* like.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like.png; sourceTree = "<group>"; };
+		2A49CA4617743817006FBBBC /* play_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_button.png; sourceTree = "<group>"; };
+		2A49CA4817743C21006FBBBC /* like_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like_on.png; sourceTree = "<group>"; };
 		2A5BC6FF175DD706006E4D59 /* UploadTabDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadTabDetailViewController.h; sourceTree = "<group>"; };
 		2A5BC700175DD706006E4D59 /* UploadTabDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadTabDetailViewController.m; sourceTree = "<group>"; };
 		2A5BC701175DD706006E4D59 /* UploadTabDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadTabDetailViewController.xib; sourceTree = "<group>"; };
@@ -358,7 +375,6 @@
 		2A8C66E51766DEF6001AFB54 /* off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = off.png; sourceTree = "<group>"; };
 		2A8C66EA1766F9C5001AFB54 /* playvideo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playvideo.png; sourceTree = "<group>"; };
 		2A8C66EC1766FA26001AFB54 /* playicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playicon.png; sourceTree = "<group>"; };
-		2A8C66EE17684FE9001AFB54 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		2ACD83581701AF4E00287DDC /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		2ACD835A1701AF5600287DDC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		2ACD83601701B18600287DDC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -570,6 +586,11 @@
 		2A6660AA173CB9990083EF1C /* images */ = {
 			isa = PBXGroup;
 			children = (
+				2A49CA4617743817006FBBBC /* play_button.png */,
+				2A49CA441773118E006FBBBC /* like.png */,
+				2A49CA4817743C21006FBBBC /* like_on.png */,
+				2A49CA3C17731039006FBBBC /* share.png */,
+				2A49CA3D17731039006FBBBC /* comment.png */,
 				2AEEABCA176F171B00E704A7 /* helpicon.png */,
 				2A8C66EA1766F9C5001AFB54 /* playvideo.png */,
 				2A8C66E41766DEF6001AFB54 /* on.png */,
@@ -786,8 +807,8 @@
 		2AE35C47170020BF000993E6 = {
 			isa = PBXGroup;
 			children = (
-				2A8C66EE17684FE9001AFB54 /* gigreplay.sqlite */,
 				2A5BC71117606213006E4D59 /* Default.png */,
+				2A49CA35177167FE006FBBBC /* gigreplay.sqlite */,
 				2A5BC70F17606208006E4D59 /* Default@2x.png */,
 				2A5BC70D176061F7006E4D59 /* Default-568h@2x.png */,
 				2A4667B11741F05000CBE21B /* thesmos.rdb */,
@@ -892,6 +913,9 @@
 				2AEF863E1742AF1F0039419B /* ReplaysViewController.h */,
 				2AEF863F1742AF1F0039419B /* ReplaysViewController.m */,
 				2AEF86401742AF1F0039419B /* ReplaysViewController.xib */,
+				2A49CA3717730B83006FBBBC /* ReplaysDetailViewController.h */,
+				2A49CA3817730B83006FBBBC /* ReplaysDetailViewController.m */,
+				2A49CA3917730B83006FBBBC /* ReplaysDetailViewController.xib */,
 				CE48570C171FA7EB00837B88 /* UploadTab.h */,
 				CE48570D171FA7EB00837B88 /* UploadTab.m */,
 				CE48570E171FA7EB00837B88 /* UploadTab.xib */,
@@ -1177,6 +1201,13 @@
 				2A8C66EB1766F9C5001AFB54 /* playvideo.png in Resources */,
 				2A8C66ED1766FA26001AFB54 /* playicon.png in Resources */,
 				2AEEABCB176F171B00E704A7 /* helpicon.png in Resources */,
+				2A49CA36177167FE006FBBBC /* gigreplay.sqlite in Resources */,
+				2A49CA3B17730B83006FBBBC /* ReplaysDetailViewController.xib in Resources */,
+				2A49CA3F17731039006FBBBC /* share.png in Resources */,
+				2A49CA4017731039006FBBBC /* comment.png in Resources */,
+				2A49CA451773118E006FBBBC /* like.png in Resources */,
+				2A49CA4717743817006FBBBC /* play_button.png in Resources */,
+				2A49CA4917743C21006FBBBC /* like_on.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1230,6 +1261,7 @@
 				2A8C66DD1761A54E001AFB54 /* UIButton+WebCache.m in Sources */,
 				2A8C66DE1761A54E001AFB54 /* UIImage+GIF.m in Sources */,
 				2A8C66DF1761A54E001AFB54 /* UIImageView+WebCache.m in Sources */,
+				2A49CA3A17730B83006FBBBC /* ReplaysDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

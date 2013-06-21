@@ -12,6 +12,7 @@
 #import "UIImageView+WebCache.h"
 #import "SDImageCache.h"
 #import "SDWebImageCompat.h"
+#import "ReplaysDetailViewController.h"
 
 
 
@@ -35,7 +36,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-     
+    [self obtainDataFromURL];
+    UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
+    [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
+    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
+    self.refreshControl=refresh;
+    refresh.tintColor=[UIColor redColor];
+
     
     self.title=@"Replays";
     [self.view addSubview:img1];
@@ -43,6 +50,22 @@
     
 
 }
+-(void)leon{
+    NSLog(@"fetcheddatachagend");
+    // connect to online database and retrieve new data when pulled to refresh
+    [self performSelector:@selector(updatingTable) withObject:nil afterDelay:3];
+    self.refreshControl.attributedTitle=[[NSAttributedString alloc]initWithString:@"Updating.."];
+    [self performSelector:@selector(obtainDataFromURL) withObject:nil afterDelay:3];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"MMM d, h:mm a"];
+    NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",[formatter stringFromDate:[NSDate date]]];
+    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
+}
+-(void)updatingTable{
+    
+    [self.refreshControl endRefreshing];
+}
+
 
 -(void) fetchedData:(NSData*) data{
     
@@ -66,15 +89,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     
-//        SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
-//    NSString *strQuery = @"SELECT * FROM Video_Details ORDER BY id DESC";
-//    videoDetails = [sql readFromDatabaseVideos:strQuery];
-//    NSLog(@"%@",videoDetails);
-//    //NSArray *firstItem=[videoDetails objectAtIndex:3];
-//    [self.view addSubview:img2];
-//    //[img2 setImage:[UIImage imageWithContentsOfFile:[firstItem objectAtIndex:0]]];
-//     NSLog(@"%d",[videoDetails count]);
-    [self obtainDataFromURL];
+
     
   
 }
@@ -148,30 +163,40 @@
     //place detailviewcontroller to show more details of file
     NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
      url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    [self playMovie];
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    [self playMovie];
+    
+    //new detailviewcontroller for social network integration
+    
+    ReplaysDetailViewController *replaysDetailVC=[[ReplaysDetailViewController alloc]init];
+    [replaysDetailVC setVideoURL:url];
+    [self.navigationController pushViewController:replaysDetailVC animated:YES];
+    
    
     }
 
 -(void)playMovie{
     
     movieplayer=  [[MPMoviePlayerController alloc]
-                    initWithContentURL:url];
+                   initWithContentURL:url];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackDidFinish:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification
                                                object:movieplayer];
     
-    movieplayer.controlStyle = MPMovieControlStyleDefault;
+   movieplayer.controlStyle = MPMovieControlStyleFullscreen;
     movieplayer.shouldAutoplay = YES;
-    [self.view addSubview:movieplayer.view];
-    [self shouldAutorotate];
-    [movieplayer setFullscreen:YES animated:YES];
+   [self.view addSubview:movieplayer.view];
+
+   [movieplayer setFullscreen:YES animated:YES];
+    
+    
 
 }
-
+-(BOOL)shouldAutorotate{
+    return  YES;
+}
 
 
 - (void) moviePlayBackDidFinish:(NSNotification*)notification {

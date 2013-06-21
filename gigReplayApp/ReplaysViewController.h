@@ -22,7 +22,7 @@
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
 
 
-@interface ReplaysViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
+@interface ReplaysViewController : UITableViewController<UITableViewDataSource,UITableViewDelegate>{
     NSMutableArray *videoDetails;
     NSURL *url;
     NSMutableArray *videoArray;
