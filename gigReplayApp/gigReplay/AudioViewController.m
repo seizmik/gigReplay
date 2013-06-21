@@ -48,6 +48,7 @@ float currentTime;
     [audioController start:nil];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
+    [self updateAudioRoute];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -174,8 +175,16 @@ float currentTime;
     }
 }
 
+- (void)updateAudioRoute
+{
+    volumeLabel.text = [NSString stringWithFormat:@"Audio route: %@", audioController.audioRoute];
+}
+
 /*
 - (void)levelTimerCallback:(NSTimer *)timer {
+    [audioController inputAveragePowerLevel:NULL peakHoldLevel:NULL];
+    
+    
 	[audioRecorder updateMeters];
 	//NSLog(@"Average input: %f Peak input: %f", [audioRecorder averagePowerForChannel:0], [audioRecorder peakPowerForChannel:0]);
     float peakPower, averagePower;
@@ -183,6 +192,7 @@ float currentTime;
     averagePower = [audioRecorder averagePowerForChannel:0]/60 + 1;
     volumeLabel.text = [NSString stringWithFormat:@"Sound level: %.2fdb", [audioRecorder peakPowerForChannel:0]];
     peakPowerGraph.progress = peakPower;
+    
 }*/
 
 - (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName

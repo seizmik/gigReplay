@@ -38,6 +38,7 @@
 - (IBAction)playPressed:(UIButton *)sender;
 - (IBAction)uploadPressed:(UIButton *)sender;
 
--(void)levelTimerCallback:(NSTimer *)timer;
+- (void)levelTimerCallback:(NSTimer *)timer;
+- (void)updateAudioRoute;
 
 @end
