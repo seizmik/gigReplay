@@ -49,6 +49,7 @@ float currentTime;
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
     [self updateAudioRoute];
+    levelTimer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(levelTimerCallback:) userInfo:nil repeats:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -57,6 +58,7 @@ float currentTime;
 
 - (void)viewDidDisappear:(BOOL)animated {
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
+    [levelTimer invalidate];
 }
 
 - (void)didReceiveMemoryWarning
@@ -70,7 +72,7 @@ float currentTime;
 - (IBAction)recordPressed:(UIButton *)sender
 {
     if (recorder) {
-        [self getStartTime];
+        //[self getStartTime]; //Somehow not consistent
         [recorder finishRecording];
         [audioController removeOutputReceiver:recorder];
         [audioController removeInputReceiver:recorder];
@@ -96,17 +98,17 @@ float currentTime;
         NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
         soundFileURL = [NSURL fileURLWithPath:soundFilePath];
         NSError *error = nil;
-        if ( ![recorder beginRecordingToFileAtPath:soundFilePath fileType:kAudioFileM4AType error:&error] ) {
-            [[[UIAlertView alloc] initWithTitle:@"Error"
-                                         message:[NSString stringWithFormat:@"Couldn't start recording: %@", [error localizedDescription]]
-                                        delegate:nil
-                               cancelButtonTitle:nil
-                               otherButtonTitles:@"OK", nil] show];
-            self.recorder = nil;
-            return;
+        if ( [recorder beginRecordingToFileAtPath:soundFilePath fileType:kAudioFileM4AType error:&error] ) {
+            [self getStartTime];
         } else {
             //If there are no errors, get the start time of the audio
-            //[self getStartTime];
+            [[[UIAlertView alloc] initWithTitle:@"Error"
+                                        message:[NSString stringWithFormat:@"Couldn't start recording: %@", [error localizedDescription]]
+                                       delegate:nil
+                              cancelButtonTitle:nil
+                              otherButtonTitles:@"OK", nil] show];
+            self.recorder = nil;
+            return;
         }
         
         [audioController addOutputReceiver:recorder];
@@ -180,20 +182,17 @@ float currentTime;
     volumeLabel.text = [NSString stringWithFormat:@"Audio route: %@", audioController.audioRoute];
 }
 
-/*
+
 - (void)levelTimerCallback:(NSTimer *)timer {
-    [audioController inputAveragePowerLevel:NULL peakHoldLevel:NULL];
+    Float32 peakPower, averagePower;
+    [audioController inputAveragePowerLevel:&averagePower peakHoldLevel:&peakPower];
+    //NSLog(@"Average: %.2fdb, Peak: %.2fdb", averagePower, peakPower);
     
+    peakPower = peakPower/160 + 1;
+    averagePower = averagePower/60 + 1;
+    peakPowerGraph.progress = averagePower;
     
-	[audioRecorder updateMeters];
-	//NSLog(@"Average input: %f Peak input: %f", [audioRecorder averagePowerForChannel:0], [audioRecorder peakPowerForChannel:0]);
-    float peakPower, averagePower;
-    peakPower = [audioRecorder peakPowerForChannel:0]/160 + 1;
-    averagePower = [audioRecorder averagePowerForChannel:0]/60 + 1;
-    volumeLabel.text = [NSString stringWithFormat:@"Sound level: %.2fdb", [audioRecorder peakPowerForChannel:0]];
-    peakPowerGraph.progress = peakPower;
-    
-}*/
+}
 
 - (void)insertIntoDatabasewithPath:(NSURL *)soundFilePath withStartTime:(double)start fromSession:(NSString *)sessionid sessionNamed:(NSString *)sessionName
 {

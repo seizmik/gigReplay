@@ -200,7 +200,7 @@ int currentTime;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeHigh;
+    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -408,10 +408,10 @@ int currentTime;
         [cameraUI startVideoCapture];
         
     } else {
-        [self timerStartStop];
         [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
+        [self timerStartStop];
         isRecording = NO;
         [cameraRecButton setEnabled:NO];
         

@@ -21,7 +21,7 @@
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
 @synthesize navController;
-@synthesize lagArray, diffArray, timeRelationship, syncObject;
+@synthesize lagArray, diffArray, timeRelationship, syncObject, stillSynching;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions{
     [FBProfilePictureView class];
@@ -266,7 +266,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count=0; count<10 && (jitter>0.015 || [diffArray count]<5); count++) {
+    for (count=0; count<10 && (jitter>0.01 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -285,7 +285,7 @@
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Will calculate jitter based on 5 pings
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<6; i++) {
             
             //Initialise the request
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];

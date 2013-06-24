@@ -13,4 +13,5 @@
 
 - (IBAction)facebookLogOut:(id)sender;
 - (IBAction)syncTrial:(UIButton *)sender;
+- (IBAction)reSync:(UIButton *)sender;
 @end

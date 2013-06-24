@@ -21,13 +21,12 @@
     BOOL                userexists;
     int                 CurrentUserID;
     ConnectToDatabase   *dbObject;
-    BOOL                stillSynching;
 }
 
 @property (strong, nonatomic) UIWindow *window;
 @property (assign, nonatomic) int CurrentUserID;
 @property (assign, nonatomic) NSString *CurrentSessionID;
-
+@property BOOL stillSynching;
 
 @property(strong,nonatomic)UITabBarController *tabBarController;
 
@@ -47,6 +46,7 @@
 -(void)closeFacebookSession;
 -(void)checkExistingUser;
 -(BOOL)checkFBSessionOpen;
+-(void)syncWithServer;
 
 //These are needed for synching method
 @property (strong, nonatomic) NSMutableArray *lagArray;

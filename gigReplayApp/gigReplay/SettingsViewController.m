@@ -53,4 +53,16 @@
     UIAlertView *syncTime = [[UIAlertView alloc] initWithTitle:@"Time Now" message:[NSString stringWithFormat:@"Phone time is %f. Server time is %f", timeNow, serverTime] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
     [syncTime show];
 }
+
+- (IBAction)reSync:(UIButton *)sender {
+    if (!appDelegateObject.stillSynching) {
+    dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
+    dispatch_async(syncQueue, ^{
+        //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
+        appDelegateObject.stillSynching = YES;
+        [appDelegateObject syncWithServer]; //This sets up the time relationship
+        //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+        appDelegateObject.stillSynching = NO;
+    });}
+}
 @end
