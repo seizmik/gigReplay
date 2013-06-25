@@ -579,13 +579,17 @@
             //$entry_id = mysqli_insert_id($con);
         } else {
             echo "We should be here now";
-            $query = "UPDATE media_master SET thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
+            $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
         
     }
     mysqli_close($con);
     
+    $thumbnail_name = pathinfo($thumb_2);
+    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
+    
+    flush_buffers();
     
     //Now, delete the temp directory
     deleteDirectory($temp_path);
@@ -596,13 +600,15 @@
     $mail->SetFrom('info@gigreplay.com', 'GigReplay');
     $address = $user_email;
     $mail->AddAddress($address);
+    $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
     
     $mail->Subject = 'Your Video Has Been Completed';
     $body = "<br><hr><br>
     Dear ".$user_name.",<br>
     <br>
-    Your video for session $session_name has been completed. You can view your video at the following address: <br>
-    <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
+    Your video for session $session_name has been completed. You can watch your video at the following address: <br>
+    <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
+    <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
     Remember, keep those videos rolling in.<br><br>
     
     GigReplay. Performances with a different angle.
