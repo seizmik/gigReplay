@@ -36,6 +36,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *text1;
 @property (strong, nonatomic) IBOutlet UIImageView *img2;
 @property (strong, nonatomic) IBOutlet UITableView *tableviewVideos;
+@property(strong,nonatomic) NSString *media_master_id;
 - (IBAction)play:(id)sender;
 
 

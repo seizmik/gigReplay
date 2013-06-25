@@ -18,7 +18,7 @@
 #import  "ASINetworkQueue.h"
 
 
-@interface ApiObject : NSObject<ASIHTTPRequestDelegate,UIAlertViewDelegate,ASIProgressDelegate,ASICacheDelegate,NSURLConnectionDelegate,NSXMLParserDelegate>{
+@interface ApiObject : NSObject<ASIHTTPRequestDelegate,UIAlertViewDelegate,NSURLConnectionDelegate,NSXMLParserDelegate>{
         int              ResponseIdentifier;
        
         BOOL  IsUserID;

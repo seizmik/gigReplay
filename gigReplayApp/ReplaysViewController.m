@@ -22,7 +22,7 @@
 @end
 
 @implementation ReplaysViewController
-@synthesize img1,text1,img2,tableviewVideos,movieplayer;
+@synthesize img1,text1,img2,tableviewVideos,movieplayer,media_master_id;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -134,6 +134,7 @@
         
             
     NSMutableDictionary *info=[videoArray objectAtIndex:indexPath.row];
+   
     cell.media_url.text=[info objectForKey:@"media_url"];
     cell.thumb_url .text=[info objectForKey:@"thumb_1_url"];
 //    dispatch_async(kBgQueue, ^{
@@ -162,6 +163,7 @@
     //place moive player here to play
     //place detailviewcontroller to show more details of file
     NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
+     media_master_id=[info objectForKey:@"master_id"];
      url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 //    [self playMovie];
@@ -170,6 +172,7 @@
     
     ReplaysDetailViewController *replaysDetailVC=[[ReplaysDetailViewController alloc]init];
     [replaysDetailVC setVideoURL:url];
+    [replaysDetailVC setMaster_media_id:media_master_id];
     [self.navigationController pushViewController:replaysDetailVC animated:YES];
     
    
