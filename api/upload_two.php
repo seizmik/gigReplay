@@ -21,8 +21,9 @@
     $file_url = $_SERVER['argv'][6];
     $low_res_path = $_SERVER['argv'][7];
     $low_res_url = $_SERVER['argv'][8];
+    $session_add_on = $_SERVER['argv'][9];
     
-    $target_path = "../uploads/original/";
+    $target_path = "../uploads/original/".$session_id."-".$session_add_on."/";
     
     //Convert the uploaded file.
     //If it's audio, convert to mp3. If it's video, convert to 640x360 mp4.

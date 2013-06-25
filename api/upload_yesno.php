@@ -17,22 +17,35 @@
     
     //Retrieve the POST-ed metadata
     $file_name = $_POST['file_name'];
+    $session_id = $_POST['session_id'];
     
-    $target_path = "../uploads/original/";
-    //Declare some variables here
-    
-    //Create the path for the filename and check it
-    $target_path .= $file_name;
-    
-    //Only if it sends up valid data then will it check if the file exists
-    if (isset($_POST['file_name']) && !empty($_POST['file_name'])) {
+    if (!empty($_POST['file_name']) && !empty($_POST['session_id'])) {
+        $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+        if (mysqli_connect_errno($con)) {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        } else {
+            //Find out if the video has already been created once before
+            $query = "SELECT * FROM session WHERE id=".$session_id;
+            $result = mysqli_query($con, $query);
+            $row = mysqli_fetch_array($result);
+        }
+        $session_name = $row['session_name'];
+        $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
+        
+        //Create the path for the filename and check it
+        $target_path = "../uploads/original/".$session_id."-".$session_add_on."/";
+        $target_path .= $file_name;
+        
         if (file_exists($target_path)) {
             echo "COMPLETED";
         } else {
             echo "UPLOAD";
         }
+        
     } else {
         echo "ERROR";
     }
+    
+    
     
 ?>

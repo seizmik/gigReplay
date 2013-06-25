@@ -303,6 +303,7 @@
     NSURL *uploadCheckURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_yesno.php"];
     ASIFormDataRequest *uploadRequest = [ASIFormDataRequest requestWithURL:uploadCheckURL];
     [uploadRequest addPostValue:uploadFileName forKey:@"file_name"];
+    [uploadRequest addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
     [uploadRequest setRequestMethod:@"POST"];
     [uploadRequest setDelegate:self];
     [uploadRequest startSynchronous];
@@ -318,8 +319,11 @@
         //Now add the metadata
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
+        [request addPostValue:[NSString stringWithFormat:@"%@", fileDetails.sessionName] forKey:@"session_name"];
         [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
+        
+        NSLog(@"%@", fileDetails.sessionName);
         
         [request setRequestMethod:@"POST"];
         [request setDelegate:self];
@@ -342,6 +346,7 @@
                 [self removeFile:fileDetails];
                 
             } else {
+                NSLog(@"%@", [request responseString]);
                 UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                 [alertUpload show];
                 

@@ -32,53 +32,69 @@
     $session_id = $_POST['session_id'];
     $start_time = round($_POST['start_time'], 2);
     $media_type = $_POST['content_type'];
+    $session_name = $_POST['session_name'];
     
-    $target_path = "../uploads/original/";
-    //Declare some variables here
-    $original_target_path = nil;
-    $low_res_path = nil;
-    $file_url = nil;
-    $low_res_url = nil;
-    
-    //If audio, rename into mp3. If video, rename into mp4.
-    if ($media_type==1) {
+    if (!empty($_FILES['uploadedfile']['name']) && !empty($_POST['session_id']) && !empty($_POST['start_time'])) {
         
-        $caf = create_name(basename($_FILES['uploadedfile']['name']));
-        $mp3 = replace_extension($caf, mp3);
+        $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
+        $target_path = "../uploads/original/".$session_id."-".$session_add_on."/";
+        $target_low_res = "../uploads/low_res/".$session_id."-".$session_add_on."/";
+        //Declare some variables here
+        $original_target_path = nil;
+        $low_res_path = nil;
+        $file_url = nil;
+        $low_res_url = nil;
         
-        //Variables to feed into ffmpeg commands
-        $original_target_path = $target_path . $caf;
-        $low_res_path = "../uploads/low_res/" . $mp3;
+        //Create the directories if they aren't created yet
+        if (!is_dir($target_path)) {
+            mkdir($target_path);
+        }
+        if (!is_dir($target_low_res)) {
+            mkdir($target_low_res);
+        }
         
-        //To feed into the database
-        $file_url = "http://www.lipsync.sg/uploads/original/".$caf;
-        $low_res_url = "http://www.lipsync.sg/uploads/low_res/".$mp3;
+        //If audio, rename into mp3. If video, rename into mp4.
+        if ($media_type==1) {
+            
+            $caf = create_name(basename($_FILES['uploadedfile']['name']));
+            $mp3 = replace_extension($caf, mp3);
+            
+            //Variables to feed into ffmpeg commands
+            $original_target_path = $target_path . $caf;
+            $low_res_path = "../uploads/low_res/".$session_id."-".$session_add_on."/".$mp3;
+            
+            //To feed into the database
+            $file_url = "http://www.lipsync.sg/uploads/original/".$session_id."-".$session_add_on."/".$caf;
+            $low_res_url = "http://www.lipsync.sg/uploads/low_res/".$session_id."-".$session_add_on."/".$mp3;
+            
+        } else if ($media_type==2) {
+            
+            $video = create_name(basename($_FILES['uploadedfile']['name']));
+            //$ext = end(explode(".", $video));
+            $mp4 = replace_extension($video, mp4);
+            
+            //Variables to feed into ffmpeg commands
+            $original_target_path = $target_path . $video;
+            $low_res_path = "../uploads/low_res/".$session_id."-".$session_add_on."/".$mp4;
+            
+            //To feed into the database
+            $file_url = "http://www.lipsync.sg/uploads/original/".$session_id."-".$session_add_on."/".$video;
+            $low_res_url = "http://www.lipsync.sg/uploads/low_res/".$session_id."-".$session_add_on."/".$mp4;
+            
+        }
         
-    } else if ($media_type==2) {
-        
-        $video = create_name(basename($_FILES['uploadedfile']['name']));
-        //$ext = end(explode(".", $video));
-        $mp4 = replace_extension($video, mp4);
-        
-        //Variables to feed into ffmpeg commands
-        $original_target_path = $target_path . $video;
-        $low_res_path = "../uploads/low_res/" . $mp4;
-        
-        //To feed into the database
-        $file_url = "http://www.lipsync.sg/uploads/original/".$video;
-        $low_res_url = "http://www.lipsync.sg/uploads/low_res/".$mp4;
-        
-    }
-    
-    if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
-        //If the file has been moved and created, update the database
-        //I believe that this is the part where we would be putting it into a queue using RabbitMQ
-        echo "SUCCESS";
-        
-        //Execute the command to run another script from command line. Fork
-        exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url > /dev/null 2>&1");
-    } else{
-        echo "FAIL";
+        if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
+            //If the file has been moved and created, update the database
+            //I believe that this is the part where we would be putting it into a queue using RabbitMQ
+            echo "SUCCESS";
+            
+            //Execute the command to run another script from command line. Fork
+            exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url $session_add_on > /dev/null 2>&1");
+        } else{
+            echo "FAIL";
+        }
+    } else {
+        echo "INITIAL FAIL";
     }
     
     ?>
