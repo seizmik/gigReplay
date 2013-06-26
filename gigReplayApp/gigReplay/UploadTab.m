@@ -9,6 +9,7 @@
 #import "UploadTab.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
+#import "ASINetworkQueue.h"
 #import "UploadCell.h"
 #import "SettingsViewController.h"
 #import "UploadTabDetailViewController.h"
@@ -18,7 +19,7 @@
 @end
 
 @implementation UploadTab
-@synthesize uploadTable, uploadArray, dbObject;
+@synthesize uploadTable, uploadArray, dbObject,uploadProgress;
 @synthesize detailsToDelete,movieplayer,uploadVideoFilePath;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -252,6 +253,7 @@
     
     [self uploadThisFile:fileDetails];
     
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
 }
@@ -322,7 +324,10 @@
         [request addPostValue:[NSString stringWithFormat:@"%@", fileDetails.sessionName] forKey:@"session_name"];
         [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
-        
+        //upload indicator progress bar
+        uploadProgress.hidden=NO;
+        [request setUploadProgressDelegate:uploadProgress];
+                
         NSLog(@"%@", fileDetails.sessionName);
         
         [request setRequestMethod:@"POST"];
@@ -332,11 +337,14 @@
         [request setShouldContinueWhenAppEntersBackground:YES];
         
         //The following block will run the background
+        
         [request setCompletionBlock:^{
             // Use when fetching text data
             //If returnString is TRUE, then update the database
+            uploadProgress.hidden=YES;
             if ([[request responseString] isEqualToString:@"SUCCESS"]) {
                 UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+                
                 [alertUpload show];
                 
                 [self updateTrackerWithFileDetails:fileDetails toStatus:1];
@@ -394,6 +402,7 @@
     }
     
 }
+
 
 
 

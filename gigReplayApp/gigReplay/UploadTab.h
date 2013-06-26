@@ -26,6 +26,8 @@
 @property(strong,nonatomic) NSMutableArray *uploadVideoFilePath;
 
 - (void)uploadThisFile:(UploadObject *)fileDetails;
+@property (strong, nonatomic) IBOutlet UIProgressView *uploadProgress;
+
 
 
 

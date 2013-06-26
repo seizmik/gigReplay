@@ -788,11 +788,43 @@ didStartElement:(NSString *)elementName
         {
             [self SetSearchSessionResultToDataBase];
         }
+        
+}else{
+    if (ResponseIdentifier==API_IDENTIFIER_SYNC)
+    {
+        [self SendNotificationsAfterSyncronisation:@"Failed"];
+    }
+    else if(ResponseIdentifier==API_IDENTIFIER_USER_REG)
+    {
+        [self SendNotificationsAfterUserRegistration:@"Failed"];
+    }
+    else if (ResponseIdentifier==API_IDENTIFIER_SESSION_CREATION)
+    {
+        [self SendNotificationsAfterSessionCreateAPI:@"Failed"];
+    }
+    else if(ResponseIdentifier==API_IDENTIFIER_SESSION_JOIN)
+    {
+        [self SendNotificationsAfterJoinAPI:@"Failed"];
+        
+    }
+        else if (ResponseIdentifier==API_IDENTIFIER_SEARCH_FOR_JOIN_SESSION)
+    {
+        [self SendNotificationsAfterJoinSearchAPI:@"Failed"];
+    }
+    else if (ResponseIdentifier==API_IDENTIFIER_OPEN_SESSION)
+    {
+        [self SendNotificationsAfterOpenAPI:@"Failed"];
     }
     
+    
+    [self ShowAlertMessage:@"Warning" Message:@"xml Parse failed"];
+    NSLog(@"Error parsing document!");
+
+}
+
     ResponseTimeData=nil;
-    
-    
+
+
 }-(void)SendNotificationsAfterSyncronisation:(NSString*)Status
 {
     NSDictionary* dict = [NSDictionary dictionaryWithObject:

@@ -132,6 +132,7 @@
 		2ABAB750177827B900980543 /* Pinterest.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAB74C177827B900980543 /* Pinterest.png */; };
 		2ABAB751177827B900980543 /* twitter.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAB74D177827B900980543 /* twitter.png */; };
 		2ABAB752177827B900980543 /* face.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAB74E177827B900980543 /* face.png */; };
+		2ABAB75417798C6F00980543 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 2ABAB75317798C6F00980543 /* gigreplay.sqlite */; };
 		2ACD83591701AF4E00287DDC /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD83581701AF4E00287DDC /* AdSupport.framework */; };
 		2ACD835B1701AF5600287DDC /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD835A1701AF5600287DDC /* Social.framework */; };
 		2ACD83611701B18600287DDC /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2ACD83601701B18600287DDC /* Accounts.framework */; };
@@ -404,6 +405,7 @@
 		2ABAB74C177827B900980543 /* Pinterest.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pinterest.png; sourceTree = "<group>"; };
 		2ABAB74D177827B900980543 /* twitter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = twitter.png; sourceTree = "<group>"; };
 		2ABAB74E177827B900980543 /* face.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = face.png; sourceTree = "<group>"; };
+		2ABAB75317798C6F00980543 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		2ACD83581701AF4E00287DDC /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		2ACD835A1701AF5600287DDC /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		2ACD83601701B18600287DDC /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -888,6 +890,7 @@
 				2A5BC71117606213006E4D59 /* Default.png */,
 				2A5BC70F17606208006E4D59 /* Default@2x.png */,
 				2A5BC70D176061F7006E4D59 /* Default-568h@2x.png */,
+				2ABAB75317798C6F00980543 /* gigreplay.sqlite */,
 				2A8F590D1778108F00D1DB2E /* gigreplay.sqlite */,
 				2A4667B11741F05000CBE21B /* thesmos.rdb */,
 				CE13B916174A058100514F3F /* icon.png */,
@@ -1342,6 +1345,7 @@
 				2ABAB750177827B900980543 /* Pinterest.png in Resources */,
 				2ABAB751177827B900980543 /* twitter.png in Resources */,
 				2ABAB752177827B900980543 /* face.png in Resources */,
+				2ABAB75417798C6F00980543 /* gigreplay.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

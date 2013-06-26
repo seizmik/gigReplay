@@ -33,6 +33,9 @@
     $start_time = round($_POST['start_time'], 2);
     $media_type = $_POST['content_type'];
     $session_name = $_POST['session_name'];
+    //set unlimited time limit for request else when timed-out response not sent.
+    set_time_limit(0);
+    
     
     if (!empty($_FILES['uploadedfile']['name']) && !empty($_POST['session_id']) && !empty($_POST['start_time'])) {
         
@@ -86,7 +89,16 @@
         if (move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $original_target_path)) {
             //If the file has been moved and created, update the database
             //I believe that this is the part where we would be putting it into a queue using RabbitMQ
-            echo "SUCCESS";
+            $code="200";
+            $message="Success";
+            $responseArray=array();
+            $responseArray['code']=$code;
+            $responseArray['message']=$message;
+            echo $responseArray['code'];
+            echo $responseArray['message'];
+            
+            return json_encode($responseArray);
+            
             
             //Execute the command to run another script from command line. Fork
             exec("php upload_two.php $user_id $session_id $start_time $media_type $original_target_path $file_url $low_res_path $low_res_url $session_add_on > /dev/null 2>&1");
