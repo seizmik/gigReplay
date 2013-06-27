@@ -4,9 +4,10 @@
     
     function generate_filepath($path)
     {
+        global $session_add_on, $session_id;
         //Since we are in the api folder, need to back out.
         $file = basename($path);
-        $filepath = "../uploads/original/".$file;
+        $filepath = "../uploads/original/".$session_id."-".$session_add_on."/".$file;
         return $filepath;
     }
     
@@ -60,7 +61,7 @@
     function generate_duration() {
         //return rand(300, 600)/100;
         //Creates the duration for a set number of frames
-        $frames = rand(150, 300);
+        $frames = rand(120, 240);
         $time = $frames * (1/30);
         return round($time, 3);
     }
@@ -588,9 +589,7 @@
     
     $thumbnail_name = pathinfo($thumb_2);
     $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
-    
-    flush_buffers();
-    
+        
     //Now, delete the temp directory
     deleteDirectory($temp_path);
     

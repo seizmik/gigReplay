@@ -36,17 +36,17 @@
         //This command strips the audio from the video
         $audio_only = pathinfo($original_target_path);
         $audio_only_path = $target_path . $audio_only['filename'] . "_audio.aac";
-        $file_audio_url = "http://www.lipsync.sg/uploads/original/".$audio_only['filename'] . "_audio.aac";
+        $file_audio_url = "http://www.lipsync.sg/uploads/original/".$session_id."-".$session_add_on."/".$audio_only['filename'] . "_audio.aac";
         exec("ffmpeg -i " . $original_target_path . " -ab 512k -ac 2 -acodec libvo_aacenc -vn " . $audio_only_path);
     }
     
     $media_length = calculate_content_length($original_target_path);
     //$start_time = $start_time - $media_length;
-    
+    /*
     if ($media_type == 2) {
         //Due to electronic lag, we took the start time of the video to be the end of the video. So need to subtract the media length from it.
         $start_time = $start_time - $media_length;
-    }
+    }*/
     
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
     if (mysqli_connect_errno($con)) {

@@ -101,8 +101,8 @@
     dbObject = [[ConnectToDatabase alloc] initDB];
     syncObject = [dbObject syncCheck];
     
-    NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
-    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid");
+    //NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
+    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid"); //Sync expires every 2 hours
     
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
     [internetReach startNotifier];
@@ -266,7 +266,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count=0; count<10 && (jitter>0.01 || [diffArray count]<5); count++) {
+    for (count=0; count<10 && (jitter>0.012 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;

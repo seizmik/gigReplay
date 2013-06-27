@@ -221,7 +221,7 @@ int currentTime;
     [self insertIntoDatabaseWithPath:capturedVideoURL withStartTime:startTime forSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
     
     //Save a copy to the camera roll
-    UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+    //UISaveVideoAtPathToSavedPhotosAlbum([capturedVideoURL relativePath], self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
     //Save the video
     
     bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
@@ -254,9 +254,9 @@ int currentTime;
 {
     NSLog(@"Enabling camera again");
     //End off by having the buttons being enabled again
-    [backButton setHidden:NO];
-    [cameraRecButton setEnabled:YES];
-    [cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
+    //[backButton setHidden:NO];
+    //[cameraRecButton setEnabled:YES];
+    //[cameraRecButton setImage:[UIImage imageNamed:@"recording_overlay_off_icon"] forState:UIControlStateNormal];
     [self dismissViewControllerAnimated:NO completion:nil];
     [self startCameraController:self usingDelegate:self];
     
@@ -407,13 +407,11 @@ int currentTime;
         [cameraRecButton setImage:[UIImage imageNamed:@"Recording_overlay_on_icon"] forState:UIControlStateNormal];
         [self timerStartStop];
         [cameraUI startVideoCapture];
-        
-    } else {
-        LogTimestamp;
         [self getStartTime];
+    } else {
+        //[self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
-        LogTimestamp;
         [self timerStartStop];
         isRecording = NO;
         [cameraRecButton setEnabled:NO];
