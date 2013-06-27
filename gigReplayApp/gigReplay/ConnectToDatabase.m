@@ -92,7 +92,7 @@
                 syncObject.previousSync = lastSync;
                 double currentTime = [[NSDate date] timeIntervalSince1970];
                 double timeDiff = currentTime - lastSync;
-                if (timeDiff > 360) { //Edit this number to lengthen the period of synching
+                if (timeDiff > 7200) { //Edit this number to lengthen the period of synching
                     syncObject.expiredSync = YES;
                 } else {
                     syncObject.expiredSync = NO;

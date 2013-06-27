@@ -4,9 +4,10 @@
     
     function generate_filepath($path)
     {
+        global $session_add_on, $session_id;
         //Since we are in the api folder, need to back out.
         $file = basename($path);
-        $filepath = "../uploads/original/".$file;
+        $filepath = "../uploads/original/".$session_id."-".$session_add_on."/".$file;
         return $filepath;
     }
     
