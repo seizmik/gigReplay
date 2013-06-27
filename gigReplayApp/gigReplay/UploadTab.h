@@ -16,6 +16,7 @@
 @interface UploadTab : UIViewController <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UIAlertViewDelegate>
 {
     NSArray *videopath;
+   
 }
 
 @property (strong, nonatomic) IBOutlet UITableView *uploadTable;

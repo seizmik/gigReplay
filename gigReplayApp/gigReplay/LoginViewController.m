@@ -17,8 +17,6 @@
 
 
 
-
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -30,8 +28,10 @@
 
 -(void)getDeviceID
 {
-    UIDevice *myDevice = [UIDevice currentDevice];
-	self.deviceUDID = [myDevice uniqueIdentifier];
+//    UIDevice *myDevice = [UIDevice currentDevice];
+//	self.deviceUDID = [myDevice uniqueIdentifier];
+    UIDevice *myDevice=[UIDevice currentDevice];
+    self.deviceUDID = [[myDevice identifierForVendor] UUIDString];
 }
 
 - (void)viewDidLoad

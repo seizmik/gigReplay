@@ -14,6 +14,7 @@
 #import "SettingsViewController.h"
 #import "UploadTabDetailViewController.h"
 
+
 @interface UploadTab ()
 
 @end
@@ -34,6 +35,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+   
     // Do any additional setup after loading the view from its nib.
     self.title = @"Upload";
     
@@ -45,6 +47,7 @@
     [self loadSettingsButton];
         
 }
+
 
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -316,33 +319,34 @@
         //Commence upload of file
         NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_one.php"];
         
-        __block ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
-        [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
+        __weak ASIFormDataRequest *weakRequest = request;
+        [weakRequest setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
         //Now add the metadata
-        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
-        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
-        [request addPostValue:[NSString stringWithFormat:@"%@", fileDetails.sessionName] forKey:@"session_name"];
-        [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
-        [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
+        [weakRequest addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
+        [weakRequest addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
+        [weakRequest addPostValue:[NSString stringWithFormat:@"%@", fileDetails.sessionName] forKey:@"session_name"];
+        [weakRequest addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
+        [weakRequest addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
         //upload indicator progress bar
         uploadProgress.hidden=NO;
-        [request setUploadProgressDelegate:uploadProgress];
+        [weakRequest setUploadProgressDelegate:uploadProgress];
                 
         NSLog(@"%@", fileDetails.sessionName);
         
-        [request setRequestMethod:@"POST"];
-        [request setDelegate:self];
+        [weakRequest setRequestMethod:@"POST"];
+        [weakRequest setDelegate:self];
         
         //This will allow the request to continue even upon entering the background
-        [request setShouldContinueWhenAppEntersBackground:YES];
+        [weakRequest setShouldContinueWhenAppEntersBackground:YES];
         
         //The following block will run the background
         
-        [request setCompletionBlock:^{
+        [weakRequest setCompletionBlock:^{
             // Use when fetching text data
             //If returnString is TRUE, then update the database
             uploadProgress.hidden=YES;
-            if ([[request responseString] isEqualToString:@"SUCCESS"]) {
+                if ([weakRequest.responseString isEqualToString:@"SUCCESS"])  {
                 UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                 
                 [alertUpload show];
@@ -354,7 +358,7 @@
                 [self removeFile:fileDetails];
                 
             } else {
-                NSLog(@"%@", [request responseString]);
+                NSLog(@"%@", [weakRequest responseString]);
                 UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Upload is not successful. Please try again." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
                 [alertUpload show];
                 
@@ -366,8 +370,8 @@
             }
         }];
         
-        [request setFailedBlock:^{
-            NSError *error = [request error];
+        [weakRequest setFailedBlock:^{
+            NSError *error = [weakRequest error];
             if (error) {
                 [self updateTrackerWithFileDetails:fileDetails toStatus:0];
                 [self refreshDatabaseObjects];
@@ -377,7 +381,7 @@
         
         //[request setUploadProgressDelegate:self];
         //request.showAccurateProgress = YES;
-        [request startAsynchronous];
+        [weakRequest startAsynchronous];
         
         //NSLog(@"responseStatusCode %i",[request responseStatusCode]);
         //NSLog(@"responseString %@",[request responseString]);

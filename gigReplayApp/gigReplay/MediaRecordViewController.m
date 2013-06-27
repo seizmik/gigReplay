@@ -12,6 +12,7 @@
 #import "ConnectToDatabase.h"
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
+#import "CodeTimestamps.h"
 
 @interface MediaRecordViewController ()
 
@@ -408,9 +409,11 @@ int currentTime;
         [cameraUI startVideoCapture];
         
     } else {
+        LogTimestamp;
         [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
+        LogTimestamp;
         [self timerStartStop];
         isRecording = NO;
         [cameraRecButton setEnabled:NO];
@@ -443,7 +446,7 @@ int currentTime;
 
 - (void)getStartTime {
     startTime = [[NSDate date] timeIntervalSince1970] + appDelegateObject.timeRelationship;
-    //NSLog(@"Start video! %f", startTime);
+    NSLog(@"Start video! %f", startTime);
 }
 
 - (void)timerStartStop {
