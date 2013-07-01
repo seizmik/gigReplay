@@ -329,6 +329,7 @@
         [weakRequest addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
         [weakRequest addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
         //upload indicator progress bar
+        [uploadProgress setProgress:0.0];
         uploadProgress.hidden=NO;
         [weakRequest setUploadProgressDelegate:uploadProgress];
                 

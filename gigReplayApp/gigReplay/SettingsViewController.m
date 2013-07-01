@@ -50,7 +50,7 @@
     double timeNow = [[NSDate date] timeIntervalSince1970];
     //timeNow += appDelegateObject.timeRelationship;
     double serverTime = timeNow + appDelegateObject.timeRelationship;
-    UIAlertView *syncTime = [[UIAlertView alloc] initWithTitle:@"Time Now" message:[NSString stringWithFormat:@"Phone time is %f. Server time is %f", timeNow, serverTime] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
+    UIAlertView *syncTime = [[UIAlertView alloc] initWithTitle:@"Time Now" message:[NSString stringWithFormat:@"Time now is %f", serverTime] delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
     [syncTime show];
 }
 

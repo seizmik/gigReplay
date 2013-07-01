@@ -1859,16 +1859,11 @@
 					<string key="className">CreateSessionViewController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="createScene:">id</string>
 						<string key="helpInfoButton:">id</string>
 						<string key="prepareMediaRecord:">id</string>
 						<string key="resignTextField:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="createScene:">
-							<string key="name">createScene:</string>
-							<string key="candidateClassName">id</string>
-						</object>
 						<object class="IBActionInfo" key="helpInfoButton:">
 							<string key="name">helpInfoButton:</string>
 							<string key="candidateClassName">id</string>

@@ -79,6 +79,9 @@
 #pragma mark Button actions
 
 - (IBAction)createScene:(id)sender {
+    
+    //Reset the RespondsReached, disable the sync and go buttons
+    
     if ([sceneNameTextField.text isEqualToString:@""])
     {
         [self ShowAlertMessage:@"Oopsy" Message:@"Please enter a scene name"];
