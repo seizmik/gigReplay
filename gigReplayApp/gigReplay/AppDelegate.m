@@ -41,6 +41,7 @@
 
     return YES;
 }
+
 - (BOOL)application:(UIApplication *)application
             openURL:(NSURL *)url
   sourceApplication:(NSString *)sourceApplication
@@ -87,7 +88,7 @@
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-   
+    
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -108,20 +109,18 @@
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
     
-    if(!syncObject.expiredSync) {
+    /*if(!syncObject.expiredSync) {
         timeRelationship = syncObject.previousTimeRelationship;
         NSLog(@"Using previous time relationship of %f", timeRelationship);
-    } else if (netStatus == NotReachable) {
+    } else */if (netStatus == NotReachable) {
         [self showSyncAlert];
     }else if (!stillSynching) {
         //Only when still synching is NO, another queue will be dispatched
         dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
         dispatch_async(syncQueue, ^{
             //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
-            stillSynching = YES;
             [self syncWithServer]; //This sets up the time relationship
             //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-            stillSynching = NO;
         });
     }
     
@@ -257,6 +256,9 @@
 
 - (void)syncWithServer
 {
+    
+    stillSynching = YES;
+    
     //Reset the arrays
     [lagArray removeAllObjects];
     [diffArray removeAllObjects];
@@ -266,7 +268,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count=0; count<10 && (jitter>0.012 || [diffArray count]<5); count++) {
+    for (count=0; count<10 && (jitter>0.015 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -285,7 +287,7 @@
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Will calculate jitter based on 5 pings
-        for (int i=0; i<6; i++) {
+        for (int i=0; i<5; i++) {
             
             //Initialise the request
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
@@ -376,6 +378,8 @@
             [dbObject insertToDatabase:[NSString stringWithFormat:@"INSERT INTO last_sync (time_relationship,last_sync) VALUES (%f,%f)", timeRelationship, [[NSDate date] timeIntervalSince1970]]];
         }
     }
+    
+    stillSynching = NO;
 }
 
 #pragma mark - Sync error functions
@@ -393,10 +397,8 @@
         dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
         dispatch_async(syncQueue, ^{
             //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
-            stillSynching = YES;
             [self syncWithServer]; //This sets up the time relationship
             //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-            stillSynching = NO;
         });
     } else if (buttonIndex == 1) {
         //Let's try to avoid the cancel button. Instead lead them out with the settings button

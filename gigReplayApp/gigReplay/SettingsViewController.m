@@ -59,10 +59,8 @@
     dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
     dispatch_async(syncQueue, ^{
         //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
-        appDelegateObject.stillSynching = YES;
         [appDelegateObject syncWithServer]; //This sets up the time relationship
         //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-        appDelegateObject.stillSynching = NO;
     });}
 }
 @end

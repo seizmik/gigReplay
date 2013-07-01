@@ -13,6 +13,7 @@
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
 #import "CodeTimestamps.h"
+#import "SettingsViewController.h"
 
 @interface MediaRecordViewController ()
 
@@ -43,7 +44,7 @@ int currentTime;
     [self.navigationController setNavigationBarHidden:NO];
     isRecording = NO;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
-    
+    [self loadSettingsButton];
     //Grab the expiration time and start counting down
     
 }
@@ -147,6 +148,25 @@ int currentTime;
         NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
         [request startAsynchronous];
     }
+}
+
+- (void)loadSettingsButton
+{
+    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
+    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
+    [settingsButton setImage:image forState:UIControlStateNormal];
+    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+    self.navigationItem.rightBarButtonItem = rightButton;
+    
+}
+
+- (void)goToSettings
+{
+    SettingsViewController *set=[[SettingsViewController alloc] init];
+    set.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:set animated:YES];
 }
 
 #pragma mark - Generating a thumbnail
@@ -266,7 +286,7 @@ int currentTime;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
-                                                                      presetName:AVAssetExportPresetMediumQuality];
+                                                                      presetName:AVAssetExportPreset960x540];
     exporter.outputURL=videoOutputURL;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;
