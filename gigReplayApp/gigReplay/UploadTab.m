@@ -13,6 +13,7 @@
 #import "UploadCell.h"
 #import "SettingsViewController.h"
 #import "UploadTabDetailViewController.h"
+#import "UIImageView+WebCache.h"
 
 
 @interface UploadTab ()
@@ -95,10 +96,11 @@
     cell.textLabel.text = [NSString stringWithFormat:@"Session Entry: %d_%d", fileDetails.sessionid, fileDetails.entryNumber];
     */
     
-    static NSString *UploadTableIdentifier = @"UploadTableCell";
-    UploadCell *cell = (UploadCell *)[tableView dequeueReusableCellWithIdentifier:UploadTableIdentifier];
-    
-    if (cell == nil)
+    static NSString* CellIdentifier = @"UploadCell";
+	
+	
+	UploadCell *cell = (UploadCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier ];
+	if (cell == nil)
 	{
 		
 		NSArray *topLevelObjects;
@@ -112,39 +114,46 @@
 			}
 		}
 	}
+
     
     UploadObject *fileDetails = [[UploadObject alloc] init];
   
     fileDetails = [uploadArray objectAtIndex:indexPath.row];
+    //change to nsdictionary for performance issue. NSDICT caches info in app. Similar to NSCACHE
+    NSMutableDictionary *myValues =[[NSMutableDictionary alloc] init];
+    [myValues setObject:fileDetails.sessionName forKey:@"sessionName"];
+    [myValues setObject:fileDetails.thumbnailPath forKey:@"image"];
     
-    cell.customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cell.customButton setImage:[UIImage imageNamed:@"playicon.png"] forState:UIControlStateNormal];
-    [cell.customButton setFrame:CGRectMake(260, 5, 50, 50)];
-    [cell.contentView addSubview:cell.customButton];
+     //placed a custom button action for playing videos
+//    cell.customButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [cell.customButton setImage:[UIImage imageNamed:@"playicon.png"] forState:UIControlStateNormal];
+//    [cell.customButton setFrame:CGRectMake(260, 5, 50, 50)];
+//    cell.customButton.opaque=YES;
+//    [cell.contentView addSubview:cell.customButton];
     [cell.customButton setTag:indexPath.row];
     [cell.customButton addTarget:self action:@selector(callAction:) forControlEvents:UIControlEventTouchUpInside];
     
     NSDate *fileDate = [NSDate dateWithTimeIntervalSince1970:(fileDetails.startTime + 28800)]; //This should be time difference between current locale and GMT
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    
-    //placed a custom button action for playing videos
-        
    
     
     [dateFormatter setTimeStyle:NSDateFormatterMediumStyle];
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
     [dateFormatter setLocale:[NSLocale currentLocale]];
+    [myValues setValue:[dateFormatter stringFromDate:fileDate] forKey:@"date"];
     
     
-    cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
+    //cell.sessionName.text = [NSString stringWithFormat:@"From %@", fileDetails.sessionName];
+    cell.sessionName.text=[myValues objectForKey:@"sessionName"]    ;
     if (fileDetails.contentType == 2) {
-        cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+       // cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
+        [cell.thumbnail setImageWithURL:[NSURL fileURLWithPath:fileDetails.thumbnailPath] placeholderImage:[UIImage imageNamed:@"placeholder" ]];
     } else {
         cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
     }
-    cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
-    
-    
+  // cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
+    cell.dateTaken.text=[myValues objectForKey:@"date"] ;
+        
     return cell;
 }
 

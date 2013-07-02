@@ -177,7 +177,8 @@ int currentTime;
     //NSLog(@"%@", videoURL);
     UIImage *thumbnail = [[UIImage alloc] init];
     thumbnail = [player thumbnailImageAtTime:3.0 timeOption:MPMovieTimeOptionNearestKeyFrame];
-    NSData *imageData = UIImagePNGRepresentation(thumbnail);
+    CGFloat compression = 0.9f;
+    NSData *imageData = UIImageJPEGRepresentation(thumbnail, compression);
     
     //Generate a unique name for the image and folder
     NSString *imageName = [self generateRandomString];
