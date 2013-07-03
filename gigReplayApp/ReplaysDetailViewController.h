@@ -14,6 +14,7 @@
 #import "ASIProgressDelegate.h"
 #import  "ASINetworkQueue.h"
 #import "AppDelegate.h"
+#import <Social/Social.h>
 
 
 @interface ReplaysDetailViewController : UIViewController<UITextFieldDelegate,UITextViewDelegate,ASIHTTPRequestDelegate>
@@ -39,6 +40,7 @@
 
 - (IBAction)commentSendButton:(id)sender;
 @property (strong, nonatomic) IBOutlet UITextView *commentTextField;
+- (IBAction)postFacebook:(id)sender;
 
 
 @end

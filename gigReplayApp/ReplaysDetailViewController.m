@@ -7,6 +7,7 @@
 //
 
 #import "ReplaysDetailViewController.h"
+#import "AppDelegate.h"
 
 
 @interface ReplaysDetailViewController ()
@@ -88,7 +89,7 @@
 }
 
 - (IBAction)commentPressed:(id)sender {
-    [self.view addSubview:commentView];
+    //[self.view addSubview:commentView];
     
 }
 - (IBAction)SocialBackButton:(id)sender {
@@ -116,4 +117,30 @@
     
   
 }
+- (IBAction)postFacebook:(id)sender {
+    
+    SLComposeViewController *facebookPost=[[SLComposeViewController alloc]init];
+    facebookPost = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+    [facebookPost setInitialText:@""];
+    [facebookPost addURL:[NSURL URLWithString:@"http://lipsync.sg/uploads/master/190-Busco/16-Mikail_Lo/output.mp4"]];
+    
+    [facebookPost addImage:[UIImage imageNamed:@"replay.png"]];
+    [self presentViewController:facebookPost animated:YES completion:nil];
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @end
