@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+    <?php
+        
+        $getthing = $_GET['vid'];
+                
+        $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+        if (mysqli_connect_errno($con)) {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        } else {
+            //Find out if the video has already been created once before
+            $query = "SELECT * FROM media_master WHERE master_id=".$getthing;
+            $result = mysqli_query($con, $query);
+            $row = mysqli_fetch_array($result);
+        }
+        mysqli_close($con);
+        
+        $media_id = $row['master_id'];
+        $user_id = $row['user_id'];
+        $session_id = $row['session_id'];
+        $title = $row['title'];
+        $media_url = $row['media_url'];
+        $thumb_1 = $row['thumb_1_url'];
+        $thumb_2 = $row['thumb_2_url'];
+        $thumb_3 = $row['thumb_3_url'];
+        $default_thumb = $row['default_thumb'];
+        $last_modified = $row['date_modified'];
+        
+        //Setting the session name
+        if ($user_id == 0) {
+            //Query the thesmos database for the session name
+            $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+            if (mysqli_connect_errno($con)) {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            } else {
+                //Find out if the video has already been created once before
+                $query = "SELECT * FROM session WHERE id=".$session_id;
+                $result = mysqli_query($con, $query);
+                $row = mysqli_fetch_array($result);
+            }
+            mysqli_close($con);
+            
+            $session_name = $row['session_name'];
+            $user_name = "GigReplay";
+            
+        } else {
+            $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+            if (mysqli_connect_errno($con)) {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            } else {
+                //Find out if the video has already been created once before
+                $query = "SELECT U.user_name, S.session_name FROM user_session US INNER JOIN user U on U.id = US.user_id INNER JOIN session S on S.id = US.session_id WHERE US.session_id = ".$session_id." AND US.user_id = ".$user_id;
+                $result = mysqli_query($con, $query);
+                $row = mysqli_fetch_array($result);
+            }
+            mysqli_close($con);
+            
+            $user_name = $row['user_name'];
+            $session_name = $row['session_name'];
+        }
+        
+        //Setting the title
+        if (!$title) {
+            $title = $session_name;
+        }
+        
+        //Setting the default thumbnail
+        if ($default_thumb==1) {
+            $thumbnail_url = $thumb_1;
+        } else if ($default_thumb==2) {
+            $thumbnail_url = $thumb_2;
+        } else if ($default_thumb==3) {
+            $thumbnail_url = $thumb_3;
+        }
+        
+	?>
+
+	<head>
+		<title><?=$session_name?></title>
+	</head>
+	
+	<body>
+	<h1><?=$session_name?></h1><br>
+	<video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay>
+       	<source src="<?=$media_url?>" type="video/mp4" /> 
+      	Your browser does not support the video tag
+    	</video>
+    	<div>
+            <p>Created by <?=$user_name?><br>
+    		Last modified <?=$last_modified?></p>
+    	</div>
+    <!-- some actions from Javascript -->
+    <!--
+    <button id="play">Play</button>
+    <button id="pause">Pause</button>
+    <button id="duration">Show duration</button>
+    <div id="duration-log"></div>
+    <script>
+      var movie = document.getElementById('video_with_controls');
+      document.getElementById('play').addEventListener('click', function() { movie.play(); }, false);
+      document.getElementById('pause').addEventListener('click', function() { movie.pause(); }, false);
+      document.getElementById('duration').addEventListener('click', function() { document.querySelector('#duration-log').textContent = movie.duration; }, false);
+    </script>
+    -->
+	</body>
+</html>

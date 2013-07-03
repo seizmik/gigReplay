@@ -448,13 +448,7 @@
         mkdir($master_path);
     }
     $master_path .= $user_id."-".$user_add_on."/";
-    if (!is_dir($master_path)) {
-        //If master_path is already present, delete everything that is there
-        mkdir($master_path);
-    } else {
-        deleteDirectory($master_path);
-        mkdir($master_path);
-    }
+    //We will delete the master path right before creating the new video
     
     //OK, now we know when the first video is, and when the last video is.
     //Global variable $current_time will track where we are in the time continuum.
@@ -550,7 +544,13 @@
     
     //Audio edit complete-----------------------------------------------------
     
-    
+    if (!is_dir($master_path)) {
+        //If master_path is already present, delete everything that is there
+        mkdir($master_path);
+    } else {
+        deleteDirectory($master_path);
+        mkdir($master_path);
+    }
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
@@ -577,22 +577,23 @@
         if (mysqli_num_rows($result_master) == 0) {
             $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
             mysqli_query($con, $query);
-            //$entry_id = mysqli_insert_id($con);
+            $entry_id = mysqli_insert_id($con);
         } else {
-            echo "We should be here now";
+            $row_master = mysqli_fetch_array($result_master);
+            $entry_id = $row_master['media_id'];
             $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
-        
     }
     mysqli_close($con);
     
-    $thumbnail_name = pathinfo($thumb_2);
-    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
-        
     //Now, delete the temp directory
     deleteDirectory($temp_path);
     
+    //Prepare some things for the email
+    $thumbnail_name = pathinfo($thumb_2);
+    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
+    $final_video_url = "http://www.gigreplay.com/watch.php?vid=".$entry_id;
     
     //Finally, email the user the final video
     $mail = new PHPMailer;
