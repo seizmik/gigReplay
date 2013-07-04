@@ -77,11 +77,14 @@
 	?>
 
 	<head>
-		<title><?=$session_name?></title>
+		<title><?=$title?></title>
+        <meta property="og:image" content="<?=$thumbnail_url?>"/>
+        <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+        <meta name="description" content="GigReplay">
 	</head>
 	
 	<body>
-	<h1><?=$session_name?></h1><br>
+	<h1><?=$title?></h1><br>
 	<video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay>
        	<source src="<?=$media_url?>" type="video/mp4" /> 
       	Your browser does not support the video tag

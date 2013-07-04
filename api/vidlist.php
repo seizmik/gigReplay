@@ -16,7 +16,7 @@
     if (mysqli_connect_errno($con)) {
         echo "Failed to onnect to MySQL: " . mysqli_connect_error();
     } else {
-        $query = "SELECT * FROM media_master ORDER BY date_modified DESC LIMIT 0,50";
+        $query = "SELECT * FROM media_master ORDER BY master_id DESC LIMIT 0,50";
         $result = mysqli_query($con, $query);
         $num = mysqli_num_rows($result);
         //echo $num;
@@ -30,6 +30,7 @@
         $media_id = $row['master_id'];
         $user_id = $row['user_id'];
         $session_id = $row['session_id'];
+        $title = $row['title'];
         $media_url = $row['media_url'];
         $thumb_1 = $row['thumb_1_url'];
         $thumb_2 = $row['thumb_2_url'];
@@ -38,6 +39,7 @@
         $last_modified = $row['date_modified'];
         $append_url = "http://www.gigreplay.com/watch.php?vid=".$media_id;
         
+        //Set user name
         if ($user_id == 0) {
             //Query the thesmos database for the session name
             $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
@@ -68,23 +70,30 @@
             
             $user_name = $row['user_name'];
             $session_name = $row['session_name'];
-            if ($default_thumb==1) {
-                $thumbnail_url = $thumb_1;
-            } else if ($default_thumb==2) {
-                $thumbnail_url = $thumb_2;
-            } else if ($default_thumb==3) {
-                $thumbnail_url = $thumb_3;
-            }
+        }
+        
+        //Set video title
+        if (!$title) {
+            $title = $session_name;
+        }
+        
+        //Set default thumbnail
+        if ($default_thumb==1) {
+            $thumbnail_url = $thumb_1;
+        } else if ($default_thumb==2) {
+            $thumbnail_url = $thumb_2;
+        } else if ($default_thumb==3) {
+            $thumbnail_url = $thumb_3;
         }
         
 ?>
 
      <tr>
-      <td class="table_thumbnail"><a href="<?php echo $append_url ?>">
-       <img class="thumbnail" src="<?php echo $thumbnail_url ?>" /></a></td>
+      <td class="table_thumbnail"><a href="<?=$append_url?>">
+       <img class="thumbnail" src="<?=$thumbnail_url?>" /></a></td>
       <td class="description">
-       <span><h3><a href="<?php echo $append_url ?>"><?php echo $session_name ?></a></h3></span><br>
-       <span id="created_by">Created by <?php echo $user_name ?></span><br>
+       <span><h3><a href="<?=$append_url ?>"><?=$title?></a></h3></span><br>
+       <span id="created_by">Created by <?=$user_name?></span><br>
        <p>Created at <?php echo $last_modified ?></p>
       </td>
      </tr>
