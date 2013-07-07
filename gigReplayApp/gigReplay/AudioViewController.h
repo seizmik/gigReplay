@@ -23,6 +23,7 @@
     NSTimer *audioTimer;
     NSTimer *levelTimer;
     NSURL *soundFileURL;
+    UIBackgroundTaskIdentifier bgTask;
 }
 
 @property (strong, nonatomic) IBOutlet UILabel *timeLabel;

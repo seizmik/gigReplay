@@ -71,13 +71,14 @@
     
     //Need to stop any recordings and take the time stamp
     MediaRecordViewController *cameraObject = [[MediaRecordViewController alloc] init];
-    AudioViewController *audioObject = [[AudioViewController alloc] init];
+    //AudioViewController *audioObject = [[AudioViewController alloc] init];
     if (cameraObject.isRecording) {
         [cameraObject recordButtonPressed];
     }
+    /*
     if (audioObject.recorder) {
         [audioObject recordPressed:nil];
-    }
+    }*/
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application

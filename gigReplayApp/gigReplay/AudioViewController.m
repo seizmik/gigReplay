@@ -80,6 +80,9 @@ float currentTime;
         //Once it completes recording
         [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
         
+        //End the background task
+        [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+        
         //Reset the variables
         [peakPowerGraph setProgress:0.0];
         self.recorder = nil;
@@ -98,6 +101,20 @@ float currentTime;
         NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
         soundFileURL = [NSURL fileURLWithPath:soundFilePath];
         NSError *error = nil;
+        
+        //Start the recording here. If it is successful, then place a start time.
+        bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+            //End the recording and input into the database if the background task expires
+            [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+            [recorder finishRecording];
+            [audioController removeOutputReceiver:recorder];
+            [audioController removeInputReceiver:recorder];
+            
+            //Once it completes recording
+            [self insertIntoDatabasewithPath:soundFileURL withStartTime:startTime fromSession:appDelegateObject.CurrentSessionID sessionNamed:appDelegateObject.CurrentSession_Name];
+            
+            bgTask = UIBackgroundTaskInvalid;
+        }];
         if ( [recorder beginRecordingToFileAtPath:soundFilePath fileType:kAudioFileM4AType error:&error] ) {
             [self getStartTime];
         } else {
@@ -108,6 +125,7 @@ float currentTime;
                               cancelButtonTitle:nil
                               otherButtonTitles:@"OK", nil] show];
             self.recorder = nil;
+            [[UIApplication sharedApplication] endBackgroundTask:bgTask];
             return;
         }
         
