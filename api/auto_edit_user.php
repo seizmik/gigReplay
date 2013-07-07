@@ -405,6 +405,7 @@
         $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
         //These are the results for all the videos for this session
         $result_2 = mysqli_query($con, $query_2);
+        $num_videos = mysqli_num_rows($result_2);
         //These are the results for all the audio for this session
         $result_1 = mysqli_query($con, $query_1);
         $result_3 = mysqli_query($con, $query_3);
@@ -580,7 +581,7 @@
             $entry_id = mysqli_insert_id($con);
         } else {
             $row_master = mysqli_fetch_array($result_master);
-            $entry_id = $row_master['media_id'];
+            $entry_id = $row_master['master_id'];
             $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
@@ -595,29 +596,58 @@
     $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
     $final_video_url = "http://www.gigreplay.com/watch.php?vid=".$entry_id;
     
-    //Finally, email the user the final video
-    $mail = new PHPMailer;
-    $mail->SetFrom('info@gigreplay.com', 'GigReplay');
-    $address = $user_email;
-    $mail->AddAddress($address);
-    $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
-    
-    $mail->Subject = 'Your Video Has Been Completed';
-    $body = "<br><hr><br>
-    Dear ".$user_name.",<br>
-    <br>
-    Your video for session $session_name has been completed. You can watch your video at the following address: <br>
-    <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
-    <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
-    Remember, keep those videos rolling in.<br><br>
-    
-    GigReplay. Performances with a different angle.
-    
-    <br><hr><br>This is an automatically generated email. Please do not reply.";
-    $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
-    $mail->MsgHTML($body);
-    if(!$mail->Send()) {
-        echo "Mailer Error: " . $mail->ErrorInfo;
+    if ($num_videos == 0) {
+        //There was no video. Please warn the user
+        $mail = new PHPMailer;
+        $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+        $address = $user_email;
+        $mail->AddAddress($address);
+        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
+        
+        $mail->Subject = 'Error Creating Video';
+        $body = "<br><hr><br>
+        Dear ".$user_name.",<br>
+        <br>
+        There was an error creating your video for session $session_name. Please ensure <br>
+            <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
+            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+            Remember, keep those videos rolling in.<br><br>
+            
+            GigReplay. Performances with a different angle.
+            
+            <br><hr><br>This is an automatically generated email. Please do not reply.";
+                $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+        $mail->MsgHTML($body);
+        if(!$mail->Send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
+    } else {
+        //Finally, email the user the final video
+        $mail = new PHPMailer;
+        $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+        $address = $user_email;
+        $mail->AddAddress($address);
+        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
+        
+        $mail->Subject = 'Your Video Has Been Completed';
+        $body = "<br><hr><br>
+        Dear ".$user_name.",<br>
+        <br>
+        Your video for session $session_name has been completed. You can watch your video at the following address: <br>
+            <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
+            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+            Remember, keep those videos rolling in.<br><br>
+            
+            GigReplay. Performances with a different angle.
+            
+            <br><hr><br>This is an automatically generated email. Please do not reply.";
+                $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+        $mail->MsgHTML($body);
+        if(!$mail->Send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
     }
+    
+    
     
 ?>

@@ -122,7 +122,9 @@
     //change to nsdictionary for performance issue. NSDICT caches info in app. Similar to NSCACHE
     NSMutableDictionary *myValues =[[NSMutableDictionary alloc] init];
     [myValues setObject:fileDetails.sessionName forKey:@"sessionName"];
-    [myValues setObject:fileDetails.thumbnailPath forKey:@"image"];
+    if (fileDetails.thumbnailPath) {
+        [myValues setObject:fileDetails.thumbnailPath forKey:@"image"];
+    }
     
      //placed a custom button action for playing videos
 //    cell.customButton = [UIButton buttonWithType:UIButtonTypeCustom];
