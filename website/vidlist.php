@@ -1,12 +1,22 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
  <head>
   <title>GigReplay Video List</title>
+  <link rel="stylesheet" type="text/css" href="/gigreplay.css">
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <link rel="shortcut icon" href="/resources/favicon.ico">
+  <meta property="og:image" content="/resources/g_logo.png"/>
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="description" content="GigReplay">
  </head>
 
  <body>
-  <table>
+  <br>
+<?php include 'top_toolbar.php'; ?>
+  <br>
+
+  <table class="table table-hover">
    <thead></thead>
    <tbody>
 
@@ -89,12 +99,13 @@
 ?>
 
      <tr>
-      <td class="table_thumbnail"><a href="<?=$append_url?>">
-       <img class="thumbnail" src="<?=$thumbnail_url?>" /></a></td>
-      <td class="description">
-       <span><h3><a href="<?=$append_url ?>"><?=$title?></a></h3></span><br>
-       <span id="created_by">Created by <?=$user_name?></span><br>
-       <p>Created at <?php echo $last_modified ?></p>
+      <td>
+       <div class="span4"><a href="<?=$append_url?>">
+       <img src="<?=$thumbnail_url?>"/></a></div>
+
+       <div class="span5"><h3><a href="<?=$append_url ?>"><?=$title?></a></h3>
+       <p>Created by <?=$user_name?><br>
+       <small>Created at <?php echo $last_modified ?></small></p>
       </td>
      </tr>
 

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
-
+<html prefix="og: http://ogp.me/ns#">
+ <div class="span12">
     <?php
         
         $getthing = $_GET['vid'];
@@ -76,23 +76,28 @@
         
 	?>
 
-	<head>
-		<title><?=$title?></title>
-        <meta property="og:image" content="<?=$thumbnail_url?>"/>
-        <meta name="keywords" content="HTML,CSS,XML,JavaScript">
-        <meta name="description" content="GigReplay">
-	</head>
-	
-	<body>
-	<h1><?=$title?></h1><br>
-	<video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay>
-       	<source src="<?=$media_url?>" type="video/mp4" /> 
+ <head>
+  <title><?=$title?></title>
+  <link rel="stylesheet" type="text/css" href="/gigreplay.css">
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+  <meta property="og:image" content="<?=$thumbnail_url?>"/>
+  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+  <meta name="description" content="GigReplay | Videos With A Different Angle">
+  <link rel="shortcut icon" href='/resources/favicon.ico'>
+ </head>
+
+ <body>
+<?php include 'top_toolbar.php'; ?>
+
+  <h1><?=$title?></h1>
+  <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
       	Your browser does not support the video tag
-    	</video>
-    	<div>
-            <p>Created by <?=$user_name?><br>
-    		Last modified <?=$last_modified?></p>
-    	</div>
+  </video>
+  <div>
+   <p>Created by <?=$user_name?><br>
+   Last modified <?=$last_modified?></p>
+  </div>
+
     <!-- some actions from Javascript -->
     <!--
     <button id="play">Play</button>
@@ -106,5 +111,6 @@
       document.getElementById('duration').addEventListener('click', function() { document.querySelector('#duration-log').textContent = movie.duration; }, false);
     </script>
     -->
-	</body>
+ </div>
+ </body>
 </html>

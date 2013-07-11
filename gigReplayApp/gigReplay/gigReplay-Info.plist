@@ -52,6 +52,10 @@
 	<string>425449864216352</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -66,9 +70,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-    <key>UIBackgroundModes</key>
-    <array>
-            <string>audio</string>
-    </array>
 </dict>
 </plist>
