@@ -13,8 +13,8 @@
 @end
 
 @implementation CreateSessionViewController
-@synthesize sceneCodeDisplay, sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button;
-//@synthesize userProfileImage;
+@synthesize sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button;
+//@synthesize userProfileImage, sceneCodeDisplay
 @synthesize timeDisplay,helpButtonView,helpButton;
 
 -(void)SyncUserDetails
@@ -175,7 +175,7 @@
             {
                 NSArray *details=[UserDetails objectAtIndex:[UserDetails count]-1];
                 sceneTitleDisplay.text=[details objectAtIndex:6];
-                sceneCodeDisplay.text=[details objectAtIndex:1];
+                //sceneCodeDisplay.text=[details objectAtIndex:1];
                 usernameDisplay.text= [details objectAtIndex:0];
                 dateDisplay.text=[details objectAtIndex:9];
                 timeDisplay.text=[details objectAtIndex:8];

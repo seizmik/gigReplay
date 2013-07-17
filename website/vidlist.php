@@ -12,13 +12,16 @@
  </head>
 
  <body>
-  <br>
-<?php include 'top_toolbar.php'; ?>
-  <br>
 
-  <table class="table table-hover">
-   <thead></thead>
-   <tbody>
+<?php include 'top_toolbar.php'; ?>
+  <div class="container-fluid">
+   <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span10">
+     <table class="table table-hover">
+      <thead></thead>
+      <tbody>
 
 <?php
     
@@ -98,24 +101,34 @@
         
 ?>
 
-     <tr>
-      <td>
-       <div class="span4"><a href="<?=$append_url?>">
-       <img src="<?=$thumbnail_url?>"/></a></div>
+       <tr>
+        <td>
+        <div>
+         <div class="span4"><a href="<?=$append_url?>">
+         <img src="<?=$thumbnail_url?>"/></a>
+         </div>
 
-       <div class="span5"><h3><a href="<?=$append_url ?>"><?=$title?></a></h3>
-       <p>Created by <?=$user_name?><br>
-       <small>Created at <?php echo $last_modified ?></small></p>
-      </td>
-     </tr>
+         <div class="span6">
+          <h3><a href="<?=$append_url ?>"><?=$title?></a></h3>
+          <p>Created by <?=$user_name?><br>
+          <small>Created at <?php echo $last_modified ?></small></p>
+         </div>
+        </div>
+        </td>
+       </tr>
 
 <?php
     
     }
 ?>
 
-   </tbody>
-  </table>
+     </tbody>
+    </table>
+    </div>
+    <div class="span1">
+    </div>
+   </div>
+  </div>
  </body>
 
 </html>

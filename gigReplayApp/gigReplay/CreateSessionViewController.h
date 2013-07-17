@@ -22,7 +22,7 @@
 }
 @property (strong, nonatomic) IBOutlet UITextField *sceneNameTextField;
 @property (strong, nonatomic) IBOutlet UILabel *sceneTitleDisplay;
-@property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
+//@property (strong, nonatomic) IBOutlet UILabel *sceneCodeDisplay;
 @property (strong, nonatomic) IBOutlet UILabel *usernameDisplay;
 @property (strong, nonatomic) IBOutlet UIButton *createSceneButton;
 @property (strong,nonatomic)ApiObject *apiWrapperObject;

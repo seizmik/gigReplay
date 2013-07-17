@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#">
- <div class="span12">
     <?php
         
         $getthing = $_GET['vid'];
@@ -88,29 +87,23 @@
 
  <body>
 <?php include 'top_toolbar.php'; ?>
-
-  <h1><?=$title?></h1>
-  <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+  <div class="container-fluid">
+   <div class="row-fluid">
+    <div class="span1">
+    </div>
+    <div class="span10">
+     <h1><?=$title?></h1>
+     <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
       	Your browser does not support the video tag
-  </video>
-  <div>
-   <p>Created by <?=$user_name?><br>
-   Last modified <?=$last_modified?></p>
+     </video>
+     <div>
+      <p>Created by <?=$user_name?><br>
+      Last modified <?=$last_modified?></p>
+     </div>
+    </div>
+    <div class="span1">
+    </div>
+   </div>
   </div>
-
-    <!-- some actions from Javascript -->
-    <!--
-    <button id="play">Play</button>
-    <button id="pause">Pause</button>
-    <button id="duration">Show duration</button>
-    <div id="duration-log"></div>
-    <script>
-      var movie = document.getElementById('video_with_controls');
-      document.getElementById('play').addEventListener('click', function() { movie.play(); }, false);
-      document.getElementById('pause').addEventListener('click', function() { movie.pause(); }, false);
-      document.getElementById('duration').addEventListener('click', function() { document.querySelector('#duration-log').textContent = movie.duration; }, false);
-    </script>
-    -->
- </div>
  </body>
 </html>
