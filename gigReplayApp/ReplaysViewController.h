@@ -27,10 +27,12 @@
     NSURL *url;
     NSMutableArray *videoArray;
     NSString *fullPathImage;
-    NSString *videoImage;
+//    NSString *videoImage;
     UIImage *image1;
     
 }
+@property(strong,nonatomic)UIImage *facebookImage;
+@property(strong,nonatomic) NSString *videoImage;
 @property(strong,nonatomic)MPMoviePlayerController *movieplayer;
 @property (strong, nonatomic) IBOutlet UIImageView *img1;
 @property (strong, nonatomic) IBOutlet UILabel *text1;

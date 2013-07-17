@@ -21,6 +21,7 @@
    
 @property(strong,nonatomic)MPMoviePlayerController *movieplayer;
 @property(strong,nonatomic)NSURL *videoURL;
+@property(strong,nonatomic)UIImage *videoImage;
 @property(strong,nonatomic)NSString  *master_media_id;
 @property (strong, nonatomic) IBOutlet UIView *ReplaysDetailView;
 - (IBAction)startPlay:(id)sender;

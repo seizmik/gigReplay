@@ -8,6 +8,8 @@
 
 #import "ReplaysDetailViewController.h"
 #import "AppDelegate.h"
+#import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
 
 
 @interface ReplaysDetailViewController ()
@@ -15,7 +17,7 @@
 @end
 
 @implementation ReplaysDetailViewController
-@synthesize movieplayer,videoURL,ReplaysDetailView,likeImage,socialShareView,master_media_id;
+@synthesize movieplayer,videoURL,ReplaysDetailView,likeImage,socialShareView,master_media_id,videoImage;
 @synthesize commentView,commentTextField;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -122,9 +124,11 @@
     SLComposeViewController *facebookPost=[[SLComposeViewController alloc]init];
     facebookPost = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
     [facebookPost setInitialText:@""];
-    [facebookPost addURL:[NSURL URLWithString:@"http://lipsync.sg/uploads/master/190-Busco/16-Mikail_Lo/output.mp4"]];
     
-    [facebookPost addImage:[UIImage imageNamed:@"replay.png"]];
+    [facebookPost addURL:videoURL];
+    
+    [facebookPost addImage:videoImage];
+    NSLog(@"%@",videoImage);
     [self presentViewController:facebookPost animated:YES completion:nil];
     
 }

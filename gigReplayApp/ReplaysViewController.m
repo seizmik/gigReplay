@@ -16,13 +16,14 @@
 
 
 
+
 @interface ReplaysViewController ()
 
 
 @end
 
 @implementation ReplaysViewController
-@synthesize img1,text1,img2,tableviewVideos,movieplayer,media_master_id;
+@synthesize img1,text1,img2,tableviewVideos,movieplayer,media_master_id,videoImage,facebookImage;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -93,6 +94,9 @@
     
   
 }
+-(void)didMoveToParentViewController:(UIViewController *)parent{
+    [movieplayer stop];
+}
 
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{
@@ -153,6 +157,9 @@
 
     [cell.imageView setImageWithURL:[NSURL URLWithString:videoImage]
                    placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
+    
+   // self.facebookImage=cell.imageView.image;
+    //NSLog(@"%@----> facebookImagePost",facebookImage);
     return cell;
 }
 
@@ -163,6 +170,7 @@
     //place moive player here to play
     //place detailviewcontroller to show more details of file
     NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
+    facebookImage =[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[info objectForKey:@"thumb_1_url"]]]];
      media_master_id=[info objectForKey:@"master_id"];
      url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
 //    [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -173,6 +181,7 @@
     ReplaysDetailViewController *replaysDetailVC=[[ReplaysDetailViewController alloc]init];
     [replaysDetailVC setVideoURL:url];
     [replaysDetailVC setMaster_media_id:media_master_id];
+    [replaysDetailVC setVideoImage:facebookImage];
     [self.navigationController pushViewController:replaysDetailVC animated:YES];
     
    
