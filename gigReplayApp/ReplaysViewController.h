@@ -27,16 +27,13 @@
     NSURL *url;
     NSMutableArray *videoArray;
     NSString *fullPathImage;
-//    NSString *videoImage;
     UIImage *image1;
     
 }
+@property (nonatomic, assign) int User_ID;
 @property(strong,nonatomic)UIImage *facebookImage;
 @property(strong,nonatomic) NSString *videoImage;
 @property(strong,nonatomic)MPMoviePlayerController *movieplayer;
-@property (strong, nonatomic) IBOutlet UIImageView *img1;
-@property (strong, nonatomic) IBOutlet UILabel *text1;
-@property (strong, nonatomic) IBOutlet UIImageView *img2;
 @property (strong, nonatomic) IBOutlet UITableView *tableviewVideos;
 @property(strong,nonatomic) NSString *media_master_id;
 - (IBAction)play:(id)sender;

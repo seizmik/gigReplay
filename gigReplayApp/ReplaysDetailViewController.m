@@ -123,9 +123,9 @@
     
     SLComposeViewController *facebookPost=[[SLComposeViewController alloc]init];
     facebookPost = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
-    [facebookPost setInitialText:@""];
+    [facebookPost setInitialText:[NSString stringWithFormat:@"http://www.gigreplay.com/watch.php?vid=%@",master_media_id]];
     
-    [facebookPost addURL:videoURL];
+    //[facebookPost addURL:videoURL];
     
     [facebookPost addImage:videoImage];
     NSLog(@"%@",videoImage);

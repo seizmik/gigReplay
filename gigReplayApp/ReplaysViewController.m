@@ -23,7 +23,7 @@
 @end
 
 @implementation ReplaysViewController
-@synthesize img1,text1,img2,tableviewVideos,movieplayer,media_master_id,videoImage,facebookImage;
+@synthesize tableviewVideos,movieplayer,media_master_id,videoImage,facebookImage,User_ID;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -36,7 +36,9 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
+    //[self postUserIdObtainReplaysVideos];
     [self obtainDataFromURL];
     UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
     [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
@@ -46,8 +48,7 @@
 
     
     self.title=@"Replays";
-    [self.view addSubview:img1];
-    [img1 setImage:[UIImage imageWithContentsOfFile:@"/var/mobile/Applications/79421FB7-C6E4-4DF5-9229-E7F8583833EC/Documents/leon"]];
+ 
     
 
 }
@@ -79,8 +80,7 @@
 }
 -(void) obtainDataFromURL{
     dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL:
-                        kGetURL];
+        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://lipsync.sg/api/replaysvideos.php?uid=%d",appDelegateObject.CurrentUserID]]];
         [self performSelectorOnMainThread:@selector(fetchedData:)
                                withObject:data waitUntilDone:YES];
     });
@@ -89,7 +89,7 @@
 
 
 -(void)viewDidAppear:(BOOL)animated{
-    
+   
 
     
   
@@ -97,6 +97,8 @@
 -(void)didMoveToParentViewController:(UIViewController *)parent{
     [movieplayer stop];
 }
+
+
 
 
 -(NSInteger) numberOfSectionsInTableView:(UITableView *)tableView{

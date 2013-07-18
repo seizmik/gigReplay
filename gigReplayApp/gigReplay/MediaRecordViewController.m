@@ -80,6 +80,8 @@ int currentTime;
 - (IBAction)uploadButtonPressed:(UIButton *)sender {
     UploadTab *uploadVC = [[UploadTab alloc] init];
     [self.navigationController pushViewController:uploadVC animated:YES];
+    
+    
 }
 
 - (IBAction)generateVideo:(UIButton *)sender

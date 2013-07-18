@@ -46,6 +46,7 @@
     lpgr.delegate = self;
     [self.uploadTable addGestureRecognizer:lpgr];
     [self loadSettingsButton];
+    
         
 }
 

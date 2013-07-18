@@ -19,7 +19,6 @@
 {
 
     BOOL                userexists;
-    int                 CurrentUserID;
     ConnectToDatabase   *dbObject;
 }
 
