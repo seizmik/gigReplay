@@ -12,10 +12,12 @@
 #import "SQLdatabase.h"
 
 
-@interface LoginViewController : UIViewController<FBLoginViewDelegate>
+@interface LoginViewController : UIViewController<FBLoginViewDelegate,UINavigationControllerDelegate>
 
 - (IBAction)fbLoginButton:(id)sender;
-
+- (IBAction)emailLoginButton:(id)sender;
+- (IBAction)emailSignUp:(id)sender;
+@property (strong, nonatomic) IBOutlet UIImageView *emailLoginLogin;
 @property (strong,nonatomic) NSString *FB_UserID;
 @property (strong,nonatomic) NSString *FB_AuthorizationToken;
 @property (strong,nonatomic) NSString *Email;

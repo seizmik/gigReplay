@@ -7,6 +7,7 @@
 //
 
 #import "LoginViewController.h"
+#import "EmailLoginViewController.h"
 
 
 @interface LoginViewController ()
@@ -38,6 +39,8 @@
 {
     [super viewDidLoad];
         [self getDeviceID];
+     self.emailLoginLogin.image=[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5];
+    
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -55,6 +58,22 @@
     [self LoadLoadingViewForFacebookSignUp];
     [self openSessionWithAllowLoginUI:YES];
     NSLog(@"FB Permissions retrieved");
+    
+}
+
+- (IBAction)emailLoginButton:(id)sender {
+    //Check against database if email exists
+    //If email doesnt exist inform user email acc does not exist
+    //IKf email exists log into home screen.
+    
+    
+    
+}
+
+- (IBAction)emailSignUp:(id)sender {
+    EmailLoginViewController *signUpVC=[[EmailLoginViewController alloc]initWithNibName:@"EmailLoginViewController" bundle:nil];
+    [self presentViewController:signUpVC animated:YES completion:nil];
+    
     
 }
 /*
