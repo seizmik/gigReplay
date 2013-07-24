@@ -21,7 +21,7 @@ border: 1px black solid;
   <div class="container-fluid">
    <div class="row-fluid">
     <div class="span2">
-     <p>There should be a left panel here</p>
+     <p></p>
     </div>
     <div class="span9">
      <h2>Featured Videos</h2>
@@ -34,7 +34,7 @@ border: 1px black solid;
     if (mysqli_connect_errno($con)) {
         echo "Failed to onnect to MySQL: " . mysqli_connect_error();
     } else {
-        $query = "SELECT * FROM media_master ORDER BY master_id DESC LIMIT 0,50";
+        $query = "SELECT * FROM media_master WHERE feature=1 ORDER BY master_id DESC LIMIT 0,50";
         $result = mysqli_query($con, $query);
         $num = mysqli_num_rows($result);
         //echo $num;
@@ -138,7 +138,7 @@ border: 1px black solid;
      </div>
     </div>
     <div class="span1">
-     <p>There should be a right panel here.</p>
+     <p></p>
     </div>
    </div>
   </div>

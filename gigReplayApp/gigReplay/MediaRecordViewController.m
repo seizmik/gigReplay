@@ -431,9 +431,9 @@ int currentTime;
         [cameraRecButton setImage:[UIImage imageNamed:@"Recording_overlay_on_icon"] forState:UIControlStateNormal];
         [self timerStartStop];
         [cameraUI startVideoCapture];
-        [self getStartTime];
-    } else {
         //[self getStartTime];
+    } else {
+        [self getStartTime];
         //Stop recording
         [cameraUI stopVideoCapture];
         [self timerStartStop];
