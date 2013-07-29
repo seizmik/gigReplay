@@ -7,7 +7,7 @@
         global $session_add_on, $session_id;
         //Since we are in the api folder, need to back out.
         $file = basename($path);
-        $filepath = "../uploads/original/".$session_id."-".$session_add_on."/".$file;
+        $filepath = "../uploads/original/".$file;
         return $filepath;
     }
     
@@ -61,7 +61,7 @@
     function generate_duration() {
         //return rand(300, 600)/100;
         //Creates the duration for a set number of frames
-        $frames = rand(90, 210);
+        $frames = rand(90, 150);
         $time = $frames * (1/30);
         return round($time, 3);
     }
