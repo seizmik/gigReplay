@@ -214,7 +214,6 @@ int currentTime;
     cameraUI.sourceType = UIImagePickerControllerSourceTypeCamera;
     // Displays a control that allows the user to choose movie capture
     cameraUI.mediaTypes = [[NSArray alloc] initWithObjects:(NSString *)kUTTypeMovie, nil];
-//    cameraUI.videoMaximumDuration = 900;
     
     // Hides the controls for moving & scaling pictures, or for
     // trimming movies. To instead show the controls, use YES.
@@ -492,6 +491,9 @@ int currentTime;
 - (void)timeUpdate:(NSTimer *)theTimer {
     currentTime += 1;
     self->timerLabel.text = [NSString stringWithFormat:@"%@", [self timeFormatted:currentTime]];
+    if (currentTime==900) {
+        [self recordButtonPressed];
+    }
 }
 
 - (NSString *)timeFormatted:(int)totalSeconds

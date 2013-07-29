@@ -17,6 +17,40 @@ border: 1px black solid;
  </head>
 
  <body>
+  <div id="fb-root"></div>
+  <script>
+   // Additional JS functions here
+   window.fbAsyncInit = function() {
+       FB.init({
+               appId      : '425449864216352', // App ID
+               channelUrl : '//www.gigreplay.com/channel.html', // Channel File
+               status     : true, // check login status
+               cookie     : true, // enable cookies to allow the server to access the session
+               xfbml      : true  // parse XFBML
+               });
+    
+       // Additional init code here
+       FB.Event.subscribe('auth.authResponseChange', function(response) {
+        if (response.status === 'connected') {
+         testAPI();
+        } else if (response.status === 'not_authorized') {
+         FB.login();
+        } else {
+         FB.login();
+        }
+       });
+   };
+
+   // Load the SDK asynchronously
+   (function(d){
+    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement('script'); js.id = id; js.async = true;
+    js.src = "//connect.facebook.net/en_US/all.js";
+    ref.parentNode.insertBefore(js, ref);
+    }(document));
+  </script>
+
 <?php include 'top_toolbar.php'; ?>
   <div class="container-fluid">
    <div class="row-fluid">
