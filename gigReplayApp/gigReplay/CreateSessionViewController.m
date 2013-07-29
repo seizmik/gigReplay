@@ -10,22 +10,15 @@
 
 @interface CreateSessionViewController ()
 
+@property (nonatomic, strong) NSArray *accountItems;
+
 @end
 
 @implementation CreateSessionViewController
 @synthesize sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button;
 //@synthesize userProfileImage, sceneCodeDisplay
-@synthesize timeDisplay,helpButtonView,helpButton;
+@synthesize timeDisplay,profileViewOutlet,profileName,profileAccount,accountItems;
 
--(void)SyncUserDetails
-{
-   
-
-    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
-    NSArray *details=[UserDetails objectAtIndex:0];
-    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
-    [apiWrapperObject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -41,10 +34,8 @@
     
     [super viewDidLoad];
     pressed =YES;
+    
     self.title=@"Create";
-    if (FBSession.activeSession.isOpen) {
-        [self populateUserDetails];
-    }
     apiWrapperObject=[[ApiObject alloc] init];
     [self SyncUserDetails];
     RespondsReached=FALSE;
@@ -62,11 +53,80 @@
     
     // Do any additional setup after loading the view from its nib.
     [self loadSettingsButton];
+    [self loadProfileButton];
     
     [self.start_button setBackgroundImage:[UIImage animatedImageNamed:@"start_" duration:4.0] forState:UIControlStateNormal];
+    UISwipeGestureRecognizer * recognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(goToSettings)];
+    UISwipeGestureRecognizer *profileRecognizer=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(goToProfile)];
+    [profileRecognizer setDirection:UISwipeGestureRecognizerDirectionRight];
+    [recognizer setDirection:(UISwipeGestureRecognizerDirectionLeft)];
+    [self.view addGestureRecognizer:profileRecognizer];
+    [self.view addGestureRecognizer:recognizer];
+    
+    //implementing profile page menu items
+    accountItems=[NSArray arrayWithObjects:@"Invite",@"Messages",@"MyCrew",@"Find Crew", nil];
+    
+    [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)]];
+}
+
+-(void)handlePan:(UIPanGestureRecognizer *)gesture{
+    
+    CGPoint translate = [gesture translationInView:gesture.view];CGPoint velocity = [gesture velocityInView:gesture.view];
+    if (translate.x > 0.0 && (translate.x + velocity.x * 0.25) > (gesture.view.bounds.size.width / 2.0) && profileViewOutlet)
+    {
+        // moving right (and/or flicked right)
+        
+        [UIView animateWithDuration:0.25
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             profileViewOutlet.frame = [self frameForCurrentViewWithTranslate:CGPointZero];
+                             self.view.frame = [self frameForNextViewWithTranslate:CGPointZero];
+                         }
+                         completion:^(BOOL finished) {
+                             // do whatever you want upon completion to reflect that everything has slid to the right
+                             
+                             // this redefines "next" to be the old "current",
+                             // "current" to be the old "previous", and recycles
+                             // the old "next" to be the new "previous" (you'd presumably.
+                             // want to update the content for the new "previous" to reflect whatever should be there
+                             
+                             UIView *tempView = profileViewOutlet;
+                             profileViewOutlet=self.view;
+                             self.view =tempView;
+                             self.view.frame = [self frameForPreviousViewWithTranslate:CGPointZero];
+                         }];
+    }
     
 }
 
+- (CGRect)frameForPreviousViewWithTranslate:(CGPoint)translate
+{
+    return CGRectMake(-self.view.bounds.size.width + translate.x, translate.y, self.view.bounds.size.width, self.view.bounds.size.height);
+}
+
+- (CGRect)frameForCurrentViewWithTranslate:(CGPoint)translate
+{
+    return CGRectMake(translate.x, translate.y, self.view.bounds.size.width, self.view.bounds.size.height);
+}
+
+- (CGRect)frameForNextViewWithTranslate:(CGPoint)translate
+{
+    return CGRectMake(self.view.bounds.size.width + translate.x, translate.y, self.view.bounds.size.width, self.view.bounds.size.height);
+}
+
+
+-(void)SyncUserDetails
+{
+    
+    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
+    NSArray *details=[UserDetails objectAtIndex:0];
+    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
+    
+    //post is required when awake from background else usersync is lost and cant get open/join etc
+    [apiWrapperObject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
+    
+}
 
 
 - (void)didReceiveMemoryWarning
@@ -136,6 +196,17 @@
     self.navigationItem.rightBarButtonItem = rightButton;
     
 }
+-(void)loadProfileButton
+{
+    UIImage *image = [UIImage imageNamed:@"profile.png"];
+    UIButton *profileButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [profileButton setFrame:CGRectMake(0, 0, 23, 23)];
+    [profileButton setImage:image forState:UIControlStateNormal];
+    [profileButton addTarget:self action:@selector(goToProfile) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *leftButton = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
+    self.navigationItem.leftBarButtonItem = leftButton;
+
+}
 
 - (void)goToSettings
 {
@@ -143,24 +214,23 @@
     set.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:set animated:YES];
 }
-
-#pragma mark -
-
-- (void)populateUserDetails
-{
-    if (FBSession.activeSession.isOpen) {
-        [[FBRequest requestForMe] startWithCompletionHandler:
-         ^(FBRequestConnection *connection,
-           NSDictionary<FBGraphUser> *user,
-           NSError *error) {
-             if (!error) {
-                
-                 //self.userProfileImage.profileID = user.id;
-             }
-         }];
-    }
+-(void)goToProfile{
+    
+    profileViewOutlet.frame=CGRectMake(0, 0, 250, 480);
+    UISwipeGestureRecognizer *dismissProfileView=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(dimissProfile)];
+    [dismissProfileView setDirection:UISwipeGestureRecognizerDirectionLeft];
+    [profileViewOutlet addGestureRecognizer:dismissProfileView];
+    [self.view addSubview:profileViewOutlet];
+    
+    profileName.text=appDelegateObject.CurrentUserName;
+    
 }
-    -(void)RemoveLoadingView:(NSNotification *)notification
+
+-(void)dimissProfile{
+    [profileViewOutlet removeFromSuperview];
+}
+
+-(void)RemoveLoadingView:(NSNotification *)notification
     {
         NSDictionary *dict = [notification userInfo];
         NSString *status=[dict objectForKey:@"Status"];
@@ -257,17 +327,4 @@
 }
 
 
-- (IBAction)helpInfoButton:(id)sender {
-    
-    if([helpButtonView isHidden]){
-        [self.view addSubview:helpButtonView];
-        [helpButtonView setHidden:NO ];
-        
-    }
-    else {
-        
-        [helpButtonView setHidden:YES];
-        
-    }
-}
 @end

@@ -14,7 +14,7 @@
 #import "MediaRecordViewController.h"
 #import "SettingsViewController.h"
 
-@interface CreateSessionViewController : UIViewController{
+@interface CreateSessionViewController : UIViewController<UIGestureRecognizerDelegate>{
     NSString *sessionname;
     BOOL   RespondsReached;
     MediaRecordViewController *recordObj;
@@ -35,8 +35,8 @@
 - (void)populateUserDetails;
 - (IBAction)resignTextField:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *start_button;
-- (IBAction)helpInfoButton:(id)sender;
-@property (strong, nonatomic) IBOutlet UIView *helpButtonView;
-@property (strong, nonatomic) IBOutlet UIButton *helpButton;
+@property (strong, nonatomic) IBOutlet UIView *profileViewOutlet;
+@property (strong, nonatomic) IBOutlet UILabel *profileName;
+@property (strong, nonatomic) IBOutlet UITableView *profileAccount;
 
 @end

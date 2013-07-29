@@ -7,7 +7,7 @@
    <div class="span2"><img src='/resources/g_logo_title_invert.png' /></div>
   </a>
   <ul class="nav">
-   <li><a href="#">Home</a></li>
+   <li><a href="/front.php">Home</a></li>
    <li><a href="#">My Videos</a></li>
    <li><a href="#">Favourites</a></li>
   </ul>
