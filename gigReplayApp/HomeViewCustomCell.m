@@ -9,14 +9,21 @@
 #import "HomeViewCustomCell.h"
 
 @implementation HomeViewCustomCell
-
+@synthesize imageView,VideoView,videoImageView,imageView1,imageView2,imageView3,playButton,movieplayer;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        // Initialization code
-    }
+        movieplayer.controlStyle = MPMovieControlStyleDefault;
+        movieplayer.shouldAutoplay = NO;
+        [VideoView addSubview:movieplayer.view];
+        [movieplayer.view setFrame:VideoView.bounds];
+        
+        [movieplayer setFullscreen:YES animated:YES];
+
+        
+            }
     return self;
 }
 

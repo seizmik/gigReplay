@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface HomeViewCustomCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIView *VideoView;
@@ -15,7 +16,10 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView3;
 @property (strong, nonatomic) IBOutlet UIView *moviePlayer;
+@property (strong, nonatomic) IBOutlet UIImageView *videoImageView;
 
+@property (strong, nonatomic) IBOutlet UIButton *playButton;
+@property(strong,nonatomic)MPMoviePlayerController *movieplayer;
 
 
 
