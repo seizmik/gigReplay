@@ -3,12 +3,10 @@
 
  <head>
   <title>GigReplay Video List</title>
-  <link rel="stylesheet" type="text/css" href="/gigreplay.css">
-  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-  <link rel="shortcut icon" href="/resources/favicon.ico">
+
+<?php include 'header.php'; ?>
+
   <meta property="og:image" content="/resources/g_logo.png"/>
-  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
-  <meta name="description" content="GigReplay">
   <style type="text/css">
 /** {
 border: 1px black solid;
@@ -52,15 +50,20 @@ border: 1px black solid;
   </script>
 
 <?php include 'top_toolbar.php'; ?>
-  <div class="container-fluid">
-   <div class="row-fluid">
-    <div class="span2">
-     <p></p>
+<!-- Create the webpage here -->
+  <div class="col-12 col-lg-12">
+   <div class="row">
+    <div class="col-2 col-lg-2">
+     <ul class="nav nav-pills nav-stacked">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">Subscriptions</a></li>
+      <li><a href="#">Profile</a></li>
+      <li><a href="#">Inbox</a></li>
+     </ul>
     </div>
-    <div class="span9">
-     <h2>Featured Videos</h2>
-     <div class="row-fluid">
-      <ul class="thumbnails">
+    <div class="col-9 col-lg-9">
+    <h3>Featured Videos</h3>
+     <div class="row">
 
 <?php
     
@@ -142,25 +145,25 @@ border: 1px black solid;
     
 ?>
 
-       <li class="span4">
-
-         <a href="<?=$append_url ?>" class="thumbnail span12">
-         <img src="<?=$thumbnail_url ?>" /></a>
-         <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
-         Created by <?=$user_name ?><br>
-         <small>Created at <?=$last_modified ?></small>
-       </li>
-
+      <div class="col-12 col-lg-4">
+       <a href="<?=$append_url ?>" class="thumbnail">
+        <img data-src="holder.js/100%x100%" alt="100%x100%" src="<?=$thumbnail_url ?>" style="display:block;">
+       </a>
+       <div class="caption">
+        <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
+        <p>Created by <?=$user_name ?><br>
+        <small>Created at <?=$last_modified ?></small></p>
+       </div>
+      </div>
 <?php
         $row_count++;
         if($row_count>=3) {
         //Echo out the new row and start a new one
 ?>
 
-      </ul>
+<!-- Creating a new row -->
      </div>
-     <div class="row-fluid">
-      <ul class="thumbnails">
+     <div class="row">
 
 <?php
             $row_count=0;
@@ -168,11 +171,9 @@ border: 1px black solid;
     }
 ?>
 
-      </ul>
      </div>
     </div>
-    <div class="span1">
-     <p></p>
+    <div class="col-1 col-lg-1">
     </div>
    </div>
   </div>

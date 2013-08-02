@@ -77,33 +77,35 @@
 
  <head>
   <title><?=$title?></title>
-  <link rel="stylesheet" type="text/css" href="/gigreplay.css">
-  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+<?php include 'header.php'; ?>
+
   <meta property="og:image" content="<?=$thumbnail_url?>"/>
-  <meta name="keywords" content="HTML,CSS,XML,JavaScript">
-  <meta name="description" content="GigReplay | Videos With A Different Angle">
   <link rel="shortcut icon" href='/resources/favicon.ico'>
+  <style type="text/css">
+/** {
+border: 1px black solid;
+}*/
+  </style>
  </head>
 
  <body>
 <?php include 'top_toolbar.php'; ?>
-  <div class="container-fluid">
-   <div class="row-fluid">
-    <div class="span1">
-    </div>
-    <div class="span10">
-     <h1><?=$title?></h1>
-     <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
-      	Your browser does not support the video tag
-     </video>
-     <div>
-      <p>Created by <?=$user_name?><br>
-      Last modified <?=$last_modified?></p>
-     </div>
-    </div>
-    <div class="span1">
-    </div>
+  <div class="col-1 col-lg-1">
+  </div>
+  <div class="col-10 col-lg-10">
+   <div class="text-center" style="margin-left:auto; margin-right:auto;">
+    <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+   	Your browser does not support the video tag
+    </video>
    </div>
+   <div>
+    <h1><?=$title?></h1>
+    <p>Created by <?=$user_name?><br>
+    Last modified <?=$last_modified?></p>
+   </div>
+  </div>
+  <div class="col-1 col-lg-1">
   </div>
  </body>
 </html>

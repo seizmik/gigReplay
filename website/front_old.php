@@ -6,22 +6,62 @@
   <link rel="stylesheet" type="text/css" href="/gigreplay.css">
   <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
   <link rel="shortcut icon" href="/resources/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta property="og:image" content="/resources/g_logo.png"/>
   <meta name="keywords" content="HTML,CSS,XML,JavaScript">
   <meta name="description" content="GigReplay">
+  <style type="text/css">
+/** {
+border: 1px black solid;
+}*/
+  </style>
  </head>
 
  <body>
+  <div id="fb-root"></div>
+  <script>
+   // Additional JS functions here
+   window.fbAsyncInit = function() {
+       FB.init({
+               appId      : '425449864216352', // App ID
+               channelUrl : '//www.gigreplay.com/channel.html', // Channel File
+               status     : true, // check login status
+               cookie     : true, // enable cookies to allow the server to access the session
+               xfbml      : true  // parse XFBML
+               });
+    
+       // Additional init code here
+       FB.Event.subscribe('auth.authResponseChange', function(response) {
+        if (response.status === 'connected') {
+         testAPI();
+        } else if (response.status === 'not_authorized') {
+         FB.login();
+        } else {
+         FB.login();
+        }
+       });
+   };
+
+   // Load the SDK asynchronously
+   (function(d){
+    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement('script'); js.id = id; js.async = true;
+    js.src = "//connect.facebook.net/en_US/all.js";
+    ref.parentNode.insertBefore(js, ref);
+    }(document));
+  </script>
 
 <?php include 'top_toolbar.php'; ?>
   <div class="container-fluid">
    <div class="row-fluid">
-    <div class="span1">
+    <div class="span2">
+     <p></p>
     </div>
-    <div class="span10">
-     <table class="table table-hover">
-      <thead></thead>
-      <tbody>
+    <div class="span9">
+     <h2>Featured Videos</h2>
+     <div class="row-fluid">
+      <ul class="thumbnails">
 
 <?php
     
@@ -29,7 +69,7 @@
     if (mysqli_connect_errno($con)) {
         echo "Failed to onnect to MySQL: " . mysqli_connect_error();
     } else {
-        $query = "SELECT * FROM media_master ORDER BY master_id DESC LIMIT 0,50";
+        $query = "SELECT * FROM media_master WHERE feature=1 ORDER BY master_id DESC LIMIT 0,50";
         $result = mysqli_query($con, $query);
         $num = mysqli_num_rows($result);
         //echo $num;
@@ -39,6 +79,8 @@
         $entries[]=$entry;
     }
     
+    //Initialise the row count
+    $row_count=0;
     foreach ($entries as $row) {
         $media_id = $row['master_id'];
         $user_id = $row['user_id'];
@@ -98,34 +140,40 @@
         } else if ($default_thumb==3) {
             $thumbnail_url = $thumb_3;
         }
-        
+    
 ?>
 
-       <tr>
-        <td>
-        <div>
-         <div class="span4"><a href="<?=$append_url?>">
-         <img src="<?=$thumbnail_url?>"/></a>
-         </div>
+       <li class="span4">
 
-         <div class="span6">
-          <h3><a href="<?=$append_url ?>"><?=$title?></a></h3>
-          <p>Created by <?=$user_name?><br>
-          <small>Created at <?php echo $last_modified ?></small></p>
-         </div>
-        </div>
-        </td>
-       </tr>
+         <a href="<?=$append_url ?>" class="thumbnail span12">
+         <img src="<?=$thumbnail_url ?>" /></a>
+         <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
+         Created by <?=$user_name ?><br>
+         <small>Created at <?=$last_modified ?></small>
+       </li>
 
 <?php
-    
+        $row_count++;
+        if($row_count>=3) {
+        //Echo out the new row and start a new one
+?>
+
+      </ul>
+     </div>
+     <div class="row-fluid">
+      <ul class="thumbnails">
+
+<?php
+            $row_count=0;
+        }
     }
 ?>
 
-     </tbody>
-    </table>
+      </ul>
+     </div>
     </div>
     <div class="span1">
+     <p></p>
     </div>
    </div>
   </div>

@@ -137,30 +137,18 @@
     
     
     
-    if((request.responseStatusCode==400)||(request.responseStatusCode==405)||(request.responseStatusCode==406))
-    {
+    if((request.responseStatusCode==400)||(request.responseStatusCode==405)||(request.responseStatusCode==406)) {
         [self doParse:ResponseTimeData];
         [self ShowAlertMessage:@"Warning" Message:@"Unexpected Error Occured"];
         
-    }
-    else if ((request.responseStatusCode==404))
-    {
-        
-        if (ResponseIdentifier == API_IDENTIFIER_USER_REG)
-        {
+    } else if ((request.responseStatusCode==404)) {
+        if (ResponseIdentifier == API_IDENTIFIER_USER_REG) {
             //   [self SendNotificationsAfterUserRegistration:@"Warning"];
-        }
-        
-        else
-        {
+        } else {
             [self ShowAlertMessage:@"Warning" Message:@"No Data Found"];
             ResponseTimeData=nil;
-            
         }
-        
-    }
-        else
-    {
+    } else {
         [self doParse:ResponseTimeData];
     }
 }
