@@ -7,11 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ApiObject.h"
 #import "Common.h"
 #import "AppDelegate.h"
 #import "SQLdatabase.h"
-#import "LoginViewController.h"
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
 #import "ASIProgressDelegate.h"

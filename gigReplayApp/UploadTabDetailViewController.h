@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ApiObject.h"
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface UploadTabDetailViewController : UIViewController{
@@ -18,7 +19,5 @@
 @property(strong,nonatomic)NSString *videoURL;
 @property (strong, nonatomic) IBOutlet UIImageView *imageview;
 @property (strong, nonatomic) IBOutlet UIView *videoPlayer;
-
- 
 
 @end

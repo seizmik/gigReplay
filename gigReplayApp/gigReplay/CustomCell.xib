@@ -43,21 +43,22 @@
 							<object class="IBUIImageView" id="107732050">
 								<reference key="NSNextResponder" ref="63279238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrameSize">{320, 106}</string>
+								<string key="NSFrame">{{-16, -9}, {356, 127}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
 								<reference key="NSNextKeyView" ref="920517112"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
+								<float key="IBUIAlpha">0.60000002384185791</float>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
 									<string key="NSClassName">NSImage</string>
-									<string key="NSResourceName">view_ticket@2x.png</string>
+									<string key="NSResourceName">ticket.png</string>
 								</object>
 							</object>
 							<object class="IBUILabel" id="662358059">
 								<reference key="NSNextResponder" ref="63279238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{105, 65}, {129, 21}}</string>
+								<string key="NSFrame">{{95, 55}, {169, 21}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
 								<reference key="NSNextKeyView" ref="907413903"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -77,14 +78,14 @@
 								</object>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<int key="IBUITextAlignment">1</int>
-								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<string key="name">Helvetica</string>
-									<string key="family">Helvetica</string>
+								<object class="IBUIFontDescription" key="IBUIFontDescription" id="895275888">
+									<string key="name">ChalkboardSE-Regular</string>
+									<string key="family">Chalkboard SE</string>
 									<int key="traits">0</int>
 									<double key="pointSize">17</double>
 								</object>
-								<object class="NSFont" key="IBUIFont" id="945846551">
-									<string key="NSName">Helvetica</string>
+								<object class="NSFont" key="IBUIFont" id="1040458692">
+									<string key="NSName">ChalkboardSE-Regular</string>
 									<double key="NSSize">17</double>
 									<int key="NSfFlags">16</int>
 								</object>
@@ -93,7 +94,7 @@
 							<object class="IBUILabel" id="853412632">
 								<reference key="NSNextResponder" ref="63279238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{105, 20}, {129, 21}}</string>
+								<string key="NSFrame">{{99, 20}, {165, 21}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
 								<reference key="NSNextKeyView" ref="662358059"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -110,17 +111,8 @@
 								<reference key="IBUIHighlightedColor" ref="689263438"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<int key="IBUITextAlignment">1</int>
-								<object class="IBUIFontDescription" key="IBUIFontDescription">
-									<string key="name">HelveticaNeue-Light</string>
-									<string key="family">Helvetica Neue</string>
-									<int key="traits">0</int>
-									<double key="pointSize">17</double>
-								</object>
-								<object class="NSFont" key="IBUIFont">
-									<string key="NSName">HelveticaNeue-Medium</string>
-									<double key="NSSize">17</double>
-									<int key="NSfFlags">16</int>
-								</object>
+								<reference key="IBUIFontDescription" ref="895275888"/>
+								<reference key="IBUIFont" ref="1040458692"/>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 							<object class="IBUILabel" id="737637296">
@@ -146,13 +138,17 @@
 									<int key="type">1</int>
 									<double key="pointSize">17</double>
 								</object>
-								<reference key="IBUIFont" ref="945846551"/>
+								<object class="NSFont" key="IBUIFont">
+									<string key="NSName">Helvetica</string>
+									<double key="NSSize">17</double>
+									<int key="NSfFlags">16</int>
+								</object>
 								<bool key="IBUIAdjustsFontSizeToFit">NO</bool>
 							</object>
 							<object class="IBUIImageView" id="920517112">
 								<reference key="NSNextResponder" ref="63279238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{25, 20}, {77, 66}}</string>
+								<string key="NSFrame">{{25, 20}, {66, 56}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
 								<reference key="NSNextKeyView" ref="853412632"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -162,7 +158,7 @@
 							<object class="IBUILabel" id="907413903">
 								<reference key="NSNextResponder" ref="63279238"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{254, 20}, {64, 66}}</string>
+								<string key="NSFrame">{{251, 20}, {64, 66}}</string>
 								<reference key="NSSuperview" ref="63279238"/>
 								<reference key="NSNextKeyView" ref="737637296"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
@@ -276,10 +272,10 @@
 						<array class="NSMutableArray" key="children">
 							<reference ref="737637296"/>
 							<reference ref="107732050"/>
-							<reference ref="853412632"/>
-							<reference ref="662358059"/>
 							<reference ref="920517112"/>
 							<reference ref="907413903"/>
+							<reference ref="662358059"/>
+							<reference ref="853412632"/>
 						</array>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -345,8 +341,8 @@
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 		<object class="NSMutableDictionary" key="IBDocument.LastKnownImageSizes">
-			<string key="NS.key.0">view_ticket@2x.png</string>
-			<string key="NS.object.0">{614, 201}</string>
+			<string key="NS.key.0">ticket.png</string>
+			<string key="NS.object.0">{310, 135}</string>
 		</object>
 		<string key="IBCocoaTouchPluginVersion">2083</string>
 	</data>

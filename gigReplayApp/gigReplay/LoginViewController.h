@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AppDelegate.h"
+#import <Foundation/Foundation.h>
 #import<FacebookSDK/FacebookSDK.h>
 #import "SQLdatabase.h"
+#import "ApiObject.h"
+
 
 
 @interface LoginViewController : UIViewController<FBLoginViewDelegate,UINavigationControllerDelegate>
+
 
 - (IBAction)fbLoginButton:(id)sender;
 - (IBAction)emailLoginButton:(id)sender;
@@ -29,7 +32,10 @@
 @property (strong,nonatomic) NSString *Email_Signup;
 @property (strong,nonatomic) NSString *UserName;
 
--(void)getDeviceID;
 
+@property (strong,nonatomic) ApiObject *apiwrapperobject;
+-(void)getDeviceID;
+-(void)SyncUserDetails;
 
 @end
+ 
