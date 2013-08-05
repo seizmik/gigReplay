@@ -10,13 +10,11 @@
 #import "EmailLoginViewController.h"
 
 
-
 @interface LoginViewController ()
 
 @end
 
 @implementation LoginViewController
-@synthesize apiwrapperobject;
 
 
 
@@ -40,7 +38,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    apiwrapperobject=[[ApiObject alloc]init];
         [self getDeviceID];
      self.emailLoginLogin.image=[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5];
     
@@ -56,14 +53,11 @@
 
 - (IBAction)fbLoginButton:(id)sender {
     
-    // AppDelegate *appDelegateObject = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    //[appDelegateObject loadApplicationHome];
+   // AppDelegate *appDelegateObject = (AppDelegate *)[UIApplication sharedApplication].delegate;
+   // [appDelegateObject loadApplicationHome];
     [self LoadLoadingViewForFacebookSignUp];
     [self openSessionWithAllowLoginUI:YES];
     NSLog(@"FB Permissions retrieved");
-    
-  
-    
     
 }
 
@@ -71,7 +65,6 @@
     //Check against database if email exists
     //If email doesnt exist inform user email acc does not exist
     //IKf email exists log into home screen.
-    [appDelegateObject loadApplicationHome];
     
     
     
@@ -83,37 +76,6 @@
     
     
 }
--(void)SyncUserDetails
-{
-    
-    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
-    NSArray *details=[UserDetails objectAtIndex:0];
-    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
-    
-    [apiwrapperobject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
-}
-
--(NSMutableArray*)ReadFromDataBase:(NSString*)TableName
-{
-    NSString *sqlQuery=[NSString stringWithFormat:@"Select * from %@",TableName];
-    NSMutableArray *UserDetails;
-    if ([TableName isEqualToString:@"Users"])
-    {
-        UserDetails = [appDelegateObject.databaseObject readFromDatabaseUsers:sqlQuery];
-        
-        
-    }
-    else if ([TableName isEqualToString:@"Session_Details"])
-    {
-        UserDetails = [appDelegateObject.databaseObject readFromDatabaseSessionDetails:sqlQuery];
-        
-    }
-    
-    
-    return UserDetails;
-}
-
-
 /*
  <------------------FACEBOOK AUTHENTICATION METHODS DEFINED HERE-------------------->
  */
@@ -205,7 +167,6 @@
              
              
             [self InputDetailsToDatabase];
-             [self SyncUserDetails];
          }];
     }
     NSLog(@"It skipped a lot of steps");
@@ -266,7 +227,7 @@
     if (Result)
     {
         
-       [appDelegateObject loadApplicationHome];
+        [appDelegateObject loadApplicationHome];
     }
     else
     {
