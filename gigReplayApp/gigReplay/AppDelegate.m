@@ -17,6 +17,7 @@
 #import "ReplaysViewController.h"
 #import "MediaRecordViewController.h"
 #import "AudioViewController.h"
+#import "HomeViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -187,6 +188,10 @@
 
 -(void)loadApplicationHome
 {
+    HomeViewController *home=[[HomeViewController alloc]init];
+    UINavigationController *homeNav=[[UINavigationController alloc]initWithRootViewController:home];
+    homeNav.title=@"GigReplay";
+    [homeNav.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
     
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
@@ -217,7 +222,7 @@
     tabBarController=[[UITabBarController alloc]init];
     tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color.png"]];
     
-    NSArray *viewArray=[NSArray arrayWithObjects:createSession,joinSession,openSession,uploadTab,gig,nil];
+    NSArray *viewArray=[NSArray arrayWithObjects:homeNav,createSession,joinSession,openSession,uploadTab,nil];
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
