@@ -41,7 +41,7 @@
 
 -(void) obtainDataFromURL{
     
-    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://lipsync.sg/api/commentAPI.php?mediaid=165"]];
+    NSData *data=[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://lipsync.sg/api/commentAPI.php?mediaid=%@",self.media_id]]];
     
     [self fetchedData:data];
 }
