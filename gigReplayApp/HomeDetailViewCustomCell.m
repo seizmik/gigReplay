@@ -9,6 +9,7 @@
 #import "HomeDetailViewCustomCell.h"
 
 @implementation HomeDetailViewCustomCell
+@synthesize userName,userComment;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

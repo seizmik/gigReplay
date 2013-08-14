@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Leon Ng. All rights reserved.
 //
 
-#import "HomeViewCustomCell2.h"
+#import "MyVideosCustomCell.h"
 
-@implementation HomeViewCustomCell2
+@implementation MyVideosCustomCell
 @synthesize fbProfileImageView,videoImageView,userName;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

@@ -41,6 +41,7 @@
 {
     
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:NO];
     retrievingData = NO;
     self.title=@"Create";
     if (FBSession.activeSession.isOpen) {

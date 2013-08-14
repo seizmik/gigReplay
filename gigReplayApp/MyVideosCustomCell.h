@@ -1,5 +1,5 @@
 //
-//  HomeViewCustomCell2.h
+//  MyVideosCustomCell.h
 //  gigReplay
 //
 //  Created by Leon Ng on 6/8/13.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HomeViewCustomCell2 : UITableViewCell
+@interface MyVideosCustomCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UIImageView *videoImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *fbProfileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *userName;

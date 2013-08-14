@@ -10,6 +10,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 @interface HomeViewCustomCell : UITableViewCell
+
 @property (strong, nonatomic) IBOutlet UIView *VideoView;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView1;
 @property (strong, nonatomic) IBOutlet UIImageView *imageView2;

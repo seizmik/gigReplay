@@ -19,6 +19,8 @@
 #import "AudioViewController.h"
 #import "HomeViewController.h"
 #import "InfoViewController.h"
+#import "CaptureViewController.h"
+#import "MyVideosViewController.h"
 
 @implementation AppDelegate
 @synthesize  tabBarController,databaseObject,CurrentSession_Code,CurrentSession_Created_Date,CurrentSession_Expiring_Date,CurrentSession_Expiring_Time,CurrentSession_Name,CurrentSession_NameExpired,CurrentUserName,CurrentUserID, CurrentSessionID;
@@ -140,7 +142,7 @@
 {
     NSString *sqlCommand=[NSString stringWithFormat:@"Select * from Users"];
     NSMutableArray *UserDetails= [databaseObject readFromDatabaseUsers:sqlCommand];
-    NSLog(@"%@",UserDetails);
+    
     if ([UserDetails count]>0){
         userexists=TRUE;
     } else {
@@ -196,6 +198,13 @@
     InfoViewController *infoVC=[[InfoViewController alloc]initWithNibName:@"InfoViewController" bundle:nil];
     infoVC.title=@"Events";
     
+    MyVideosViewController *myVideosVC=[[MyVideosViewController alloc]initWithNibName:@"MyVideosViewController" bundle:nil];
+    myVideosVC.title=@"myVideos";
+    
+    CaptureViewController *captureVC=[[CaptureViewController alloc]init];
+    UINavigationController *captureNav=[[UINavigationController alloc]initWithRootViewController:captureVC];
+    captureNav.title=@"Capture";
+    
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
     createSession.title=@"Create";
@@ -221,16 +230,18 @@
     gig.title=@"GigReplay";
     [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
     
+    SettingsViewController *settingsVC=[[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
     
     tabBarController=[[UITabBarController alloc]init];
-    tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color.png"]];
-    
-    NSArray *viewArray=[NSArray arrayWithObjects:home,infoVC,createSession,joinSession,openSession,uploadTab,nil];
+   // tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color3.png"]];
+    tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
+   // tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
+    NSArray *viewArray=[NSArray arrayWithObjects:home,infoVC,captureNav,myVideosVC,settingsVC,nil];
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
     [self customiseAppearance];
-    
+
     //push stack onto canvas
     self.window.rootViewController = tabBarController;
     [self.window addSubview:tabBarController.view];
