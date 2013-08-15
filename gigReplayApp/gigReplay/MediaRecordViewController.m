@@ -12,7 +12,6 @@
 #import "ConnectToDatabase.h"
 #import "ASIFormDataRequest.h"
 #import "ASIHTTPRequest.h"
-#import "CodeTimestamps.h"
 #import "SettingsViewController.h"
 
 @interface MediaRecordViewController ()

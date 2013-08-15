@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import "AppDelegate.h"
+#import "ASIHTTPRequest.h"
 
 
-@interface HomeDetailViewController : UIViewController<UITableViewDelegate,UIScrollViewDelegate>{
+@interface HomeDetailViewController : UIViewController<UITableViewDelegate,UIScrollViewDelegate,ASIHTTPRequestDelegate>{
     UIScrollView *scrollView;
 
 }
@@ -22,9 +24,15 @@
 @property (strong,nonatomic) NSMutableArray *commentArray;
 - (IBAction)backToHome:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *commentUIView;
+@property (strong, nonatomic) IBOutlet UIView *commentPopOver;
 
 @property (assign,nonatomic)CGFloat newHeight;
 
 @property(strong,nonatomic)NSMutableArray *array;
+- (IBAction)commentButton:(id)sender;
+- (IBAction)commentPost:(id)sender;
+
+@property (strong, nonatomic) IBOutlet UITextView *theComments;
+- (IBAction)commentCancel:(id)sender;
 
 @end

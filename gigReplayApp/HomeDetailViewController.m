@@ -8,10 +8,14 @@
 
 #import "HomeDetailViewController.h"
 #import "HomeDetailViewCustomCell.h"
+#import "ASIHTTPRequest.h"
+#import "ASIFormDataRequest.h"
 
 #define FONT_SIZE 14.0f
 #define CELL_CONTENT_WIDTH 320.0f
 #define CELL_CONTENT_MARGIN 10.0f
+#define VIDEO_INFO_UIVIEW_HEIGHT 225.0f
+#define VIDEOPLAYER_UIVIEW_HEIGHT 225.0f
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
 
 
@@ -32,29 +36,29 @@
 
 - (void)viewDidLoad
 {
-[self obtainDataFromURL];
     [super viewDidLoad];
-    
-    
-    
-   
+    [self obtainDataFromURL];
     [self.moviePlayer prepareToPlay];
     [self playMovie];// Do any additional setup after loading the view from its nib.
+    
+    
+
     
     
 }
 -(void)viewDidAppear:(BOOL)animated{
     
-    scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 226, 320, 322)];
-    scrollView.contentSize=CGSizeMake(320,(self.commentTableVIew.contentSize.height+225+10*[self.commentArray count]));
+    CGFloat UIScreenBottom=self.view.bounds.size.height-VIDEOPLAYER_UIVIEW_HEIGHT;
+    scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 226, 320, UIScreenBottom)];
+    scrollView.contentSize=CGSizeMake(320.0,(self.commentTableVIew.contentSize.height+VIDEO_INFO_UIVIEW_HEIGHT));
     scrollView.bounces=NO;
     [self.view addSubview:scrollView];
     [scrollView addSubview:self.commentUIView];
-    
-    [self.commentTableVIew setFrame:CGRectMake(0, 226, 320, scrollView.contentSize.height)];
     [scrollView addSubview:self.commentTableVIew];
-    NSLog(@"%f",self.commentTableVIew.contentSize.height);
-    NSLog(@"%f",self.commentTableVIew.contentSize.width);
+    [self.commentTableVIew setFrame:CGRectMake(0, 225, 320, self.commentTableVIew.contentSize.height)];
+//    NSLog(@"scrollview contentsize %f",scrollView.contentSize.height);
+//    NSLog(@"%f",self.commentTableVIew.contentSize.height);
+//    NSLog(@"%f",self.commentTableVIew.contentSize.width);
 }
 -(void) fetchedData:(NSData*) data{
     
@@ -70,7 +74,7 @@
     
    // [self fetchedData:data];
     dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://www.lipsync.sg/api/commentAPI.php?mediaid=165"]];
+        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString  stringWithFormat:@"http://www.lipsync.sg/api/commentAPI.php?mediaid=%@",self.media_id]]];
         [self performSelectorOnMainThread:@selector(fetchedData:)
                                withObject:data waitUntilDone:YES];
     });
@@ -147,6 +151,8 @@
     
     CGFloat height = MAX(size.height, 44.0f);
     self.newHeight=height+(CELL_CONTENT_MARGIN * 2)+40;
+//    NSLog(@"the oringinal height without +40 is %.2f",height+(CELL_CONTENT_MARGIN * 2));
+//    NSLog(@"self.newheight is %.2f",self.newHeight);
     return self.newHeight;
 }
 
@@ -179,13 +185,58 @@
     CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:FONT_SIZE] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
     
     [cell.userComment setText:text];
-    [cell.userName setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN,  CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 40)];
+    [cell.userName setFrame:CGRectMake(CELL_CONTENT_MARGIN, CELL_CONTENT_MARGIN,  CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), 30)];
     [cell.userComment setFrame:CGRectMake(CELL_CONTENT_MARGIN, 40, CELL_CONTENT_WIDTH - (CELL_CONTENT_MARGIN * 2), MAX(size.height, 44.0f))];
     
     return cell;
     
 }
 
+- (IBAction)commentButton:(id)sender {
+        [self.view addSubview:self.commentPopOver];
+    [self.commentPopOver setFrame:CGRectMake(0, 44, 320, 180)];
+    [self.theComments becomeFirstResponder];
+}
 
+- (IBAction)commentPost:(id)sender {
+    NSURL *url = [NSURL URLWithString:@"http://www.lipsync.sg/api/SocialMediaAPI.php"];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+    [request setPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
+    [request setPostValue:self.theComments.text forKey:@"comments"];
+    [request setPostValue:self.media_id forKey:@"media_id"];
+    NSString *user_id=[NSString stringWithFormat: @"%d", appDelegateObject.CurrentUserID];
+    [request setPostValue:user_id forKey:@"user_id"];
+    
+//    NSLog(@"currentusername %@",appDelegateObject.CurrentUserName);
+//    NSLog(@"%@",self.theComments.text);
+//    NSLog(@"%d",self.appDelegateObject.CurrentUserID);
+    
+    [request setRequestMethod:@"POST"];
+    [request setDelegate:self];
+    [request startAsynchronous];
+    
+//get data from web n show in tableview
+   
+    [self performSelector:@selector(obtainDataFromURL) withObject:nil afterDelay:1];
+    NSLog(@"%@",self.commentArray);
+    
+    //Remove subview from superview after post is completed
+    [self.commentPopOver removeFromSuperview];
+
+    
+}
+-(void)requestFinished:(ASIHTTPRequest *)request{
+    return   NSLog(@"request success");
+}
+-(void)requestFailed:(ASIHTTPRequest *)request{
+    return  NSLog(@"request failed")    ;
+}
+-(void)request:(ASIHTTPRequest *)request didReceiveData:(NSData *)data{
+    
+    
+}
+- (IBAction)commentCancel:(id)sender {
+    [self.commentPopOver removeFromSuperview];
+}
 
 @end

@@ -197,13 +197,17 @@
     
     InfoViewController *infoVC=[[InfoViewController alloc]initWithNibName:@"InfoViewController" bundle:nil];
     infoVC.title=@"Events";
+    [infoVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
     
     MyVideosViewController *myVideosVC=[[MyVideosViewController alloc]initWithNibName:@"MyVideosViewController" bundle:nil];
     myVideosVC.title=@"myVideos";
+    [myVideosVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];
     
     CaptureViewController *captureVC=[[CaptureViewController alloc]init];
     UINavigationController *captureNav=[[UINavigationController alloc]initWithRootViewController:captureVC];
     captureNav.title=@"Capture";
+    [captureNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"capture.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"capture.png"]];
+
     
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
     UINavigationController *createSession=[[UINavigationController alloc]initWithRootViewController:create];
@@ -228,14 +232,17 @@
     ReplaysViewController *gigReplay=[[ReplaysViewController alloc]initWithNibName:@"ReplaysViewController" bundle:nil];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
     SettingsViewController *settingsVC=[[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
+    settingsVC.title=@"Settings";
+     [settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
     tabBarController=[[UITabBarController alloc]init];
    // tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color3.png"]];
     tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
-   // tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
+    tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
+   
     NSArray *viewArray=[NSArray arrayWithObjects:home,infoVC,captureNav,myVideosVC,settingsVC,nil];
     
     //set tab bar controller array
