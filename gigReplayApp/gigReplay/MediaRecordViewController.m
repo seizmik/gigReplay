@@ -318,6 +318,7 @@ int currentTime;
         //Since the original data was saved into the database, don't have to do anything anymore
     }
     [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+    bgTask = UIBackgroundTaskInvalid;
  
 }
 

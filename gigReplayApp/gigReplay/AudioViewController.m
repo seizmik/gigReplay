@@ -82,6 +82,7 @@ float currentTime;
         
         //End the background task
         [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+        bgTask = UIBackgroundTaskInvalid;
         
         //Reset the variables
         [peakPowerGraph setProgress:0.0];
@@ -126,6 +127,7 @@ float currentTime;
                               otherButtonTitles:@"OK", nil] show];
             self.recorder = nil;
             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+            bgTask = UIBackgroundTaskInvalid;
             return;
         }
         

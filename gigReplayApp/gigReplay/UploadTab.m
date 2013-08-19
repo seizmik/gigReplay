@@ -127,12 +127,6 @@
         [myValues setObject:fileDetails.thumbnailPath forKey:@"image"];
     }
     
-     //placed a custom button action for playing videos
-//    cell.customButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [cell.customButton setImage:[UIImage imageNamed:@"playicon.png"] forState:UIControlStateNormal];
-//    [cell.customButton setFrame:CGRectMake(260, 5, 50, 50)];
-//    cell.customButton.opaque=YES;
-//    [cell.contentView addSubview:cell.customButton];
     [cell.customButton setTag:indexPath.row];
     [cell.customButton addTarget:self action:@selector(callAction:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -402,6 +396,10 @@
         //Update the database for that object to say that it has already been uploaded
         UIAlertView *alertUpload = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Upload was successful." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
         [alertUpload show];
+        
+        //Reset the progress bar
+        uploadProgress.hidden = YES;
+        uploadProgress.progress = 0.0;
         
         [self updateTrackerWithFileDetails:fileDetails toStatus:1];
         [self refreshDatabaseObjects];
