@@ -62,5 +62,7 @@
 }
 
 - (IBAction)settingsButton:(id)sender {
+    SettingsViewController *settingsVC=[[SettingsViewController alloc]init];
+    [self.navigationController pushViewController:settingsVC animated:YES];
 }
 @end

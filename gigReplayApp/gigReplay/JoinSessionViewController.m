@@ -31,7 +31,16 @@
 
 - (void)viewDidLoad
 {
+    
     [super viewDidLoad];
+ 
+ UIImageView *divider=[[UIImageView alloc]initWithFrame:CGRectMake(0, 1, 320, 1)];
+ divider.image=[UIImage imageNamed:@"color.png"];
+ [self.view addSubview:divider];
+
+ 
+    [self.navigationController setNavigationBarHidden:NO];
+
     self.title=@"Join";
     [mediaObject.view removeFromSuperview];
     mediaObject=[[MediaRecordViewController alloc]initWithNibName:@"MediaRecordViewController" bundle:nil];

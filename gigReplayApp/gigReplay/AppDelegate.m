@@ -193,7 +193,7 @@
 {
     HomeViewController *home=[[HomeViewController alloc]initWithNibName:@"HomeViewController" bundle:nil];
     home.title=@"GigReplay";
-    [home.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_generate_button_on_1.png"]];
+    [home.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"gig_tab_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png.png"]];
     
     InfoViewController *infoVC=[[InfoViewController alloc]initWithNibName:@"InfoViewController" bundle:nil];
     infoVC.title=@"Events";
@@ -206,7 +206,7 @@
     CaptureViewController *captureVC=[[CaptureViewController alloc]init];
     UINavigationController *captureNav=[[UINavigationController alloc]initWithRootViewController:captureVC];
     captureNav.title=@"Capture";
-    [captureNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"capture.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"capture.png"]];
+    [captureNav.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"capture_off.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"capture_off.png"]];
 
     
     CreateSessionViewController *create=[[CreateSessionViewController alloc]init];
@@ -232,16 +232,18 @@
     ReplaysViewController *gigReplay=[[ReplaysViewController alloc]initWithNibName:@"ReplaysViewController" bundle:nil];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"gig_tab_on.png" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png"]];
     
     SettingsViewController *settingsVC=[[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
     settingsVC.title=@"Settings";
      [settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
     tabBarController=[[UITabBarController alloc]init];
-   // tabBarController.tabBar.tintColor=[UIColor colorWithPatternImage:[UIImage imageNamed:@"color3.png"]];
-    tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
-    tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
+    tabBarController.tabBar.tintColor=[UIColor clearColor];
+   // tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
+    tabBarController.tabBar.backgroundColor=[UIColor whiteColor];
+    tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"selectionTab.png"];
+    //tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
    
     NSArray *viewArray=[NSArray arrayWithObjects:home,infoVC,captureNav,myVideosVC,settingsVC,nil];
     
@@ -258,8 +260,14 @@
 
 - (void)customiseAppearance
 {
-    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"navigation.png"] forBarMetrics:UIBarMetricsDefault];
-}
+    [[UINavigationBar appearance] setBackgroundImage:[UIImage imageNamed:@"realwhite.png"] forBarMetrics:UIBarMetricsDefault];
+    NSDictionary *navbarTitleTextAttributes = [NSDictionary dictionaryWithObjectsAndKeys:
+                                               [UIColor darkGrayColor],UITextAttributeTextColor,
+                                                nil];
+    
+    [[UINavigationBar appearance] setTitleTextAttributes:navbarTitleTextAttributes];
+    
+    }
 
 -(void)goToLogin
 {

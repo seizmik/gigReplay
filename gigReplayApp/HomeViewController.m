@@ -41,10 +41,10 @@
     [self SyncUserDetails];
     NSLog(@"%d get from web current user id",appDelegateObject.CurrentUserID);
 
-    UIImageView *topBar=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
-    topBar.image=[UIImage imageNamed:@"scroll bar.png"];
-    [self.view addSubview:topBar];
-    [topBar addSubview:refreshButton];
+   // UIImageView *topBar=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
+   // topBar.image=[UIImage imageNamed:@"scroll bar.png"];
+    //[self.view addSubview:topBar];
+    //[topBar addSubview:refreshButton];
 //    UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
 //    [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
 //    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
@@ -110,7 +110,7 @@
         [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                             placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
          cell.username.text=@"GigReplay Presents..";
-        cell.profilePic.image=[UIImage imageNamed:@"replayvid.png"];
+        cell.profilePic.image=[UIImage imageNamed:@"new_logo.png"];
         
         return cell;
     }

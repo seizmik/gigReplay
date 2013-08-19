@@ -7,7 +7,7 @@
 //
 
 #import "CreateSessionViewController.h"
-//BRANCHING OUTowngpsngnweo[gne[owgno[ernh[reher
+
 
 @interface CreateSessionViewController ()
 
@@ -41,6 +41,12 @@
 {
     
     [super viewDidLoad];
+    
+    UIImageView *divider=[[UIImageView alloc]initWithFrame:CGRectMake(0, 1, 320, 1)];
+    divider.image=[UIImage imageNamed:@"color.png"];
+    [self.view addSubview:divider];
+
+    
     [self.navigationController setNavigationBarHidden:NO];
     retrievingData = NO;
     self.title=@"Create";

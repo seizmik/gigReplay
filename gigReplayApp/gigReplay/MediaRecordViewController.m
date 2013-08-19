@@ -39,6 +39,11 @@ int currentTime;
 {
     [super viewDidLoad];
     
+    
+    UIImageView *divider=[[UIImageView alloc]initWithFrame:CGRectMake(0, 1, 320, 1)];
+    divider.image=[UIImage imageNamed:@"color.png"];
+    [self.view addSubview:divider];
+
     // Do any additional setup after loading the view from its nib.
     [self.navigationController setNavigationBarHidden:NO];
     isRecording = NO;
@@ -223,7 +228,7 @@ int currentTime;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality = UIImagePickerControllerQualityTypeIFrame960x540;
+    cameraUI.videoQuality=UIImagePickerControllerQualityTypeIFrame1280x720 ;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -288,7 +293,7 @@ int currentTime;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
-                                                                      presetName:AVAssetExportPreset960x540];
+                                                                      presetName:AVAssetExportPreset1280x720];
     exporter.outputURL=videoOutputURL;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;

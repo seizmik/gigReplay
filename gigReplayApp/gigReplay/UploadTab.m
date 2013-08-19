@@ -36,7 +36,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   
+    
+    UIImageView *divider=[[UIImageView alloc]initWithFrame:CGRectMake(0, 1, 320, 1)];
+    divider.image=[UIImage imageNamed:@"color.png"];
+    [self.view addSubview:divider];
+
+    
+    [self.navigationController setNavigationBarHidden:NO];
     // Do any additional setup after loading the view from its nib.
     self.title = @"Upload";
     

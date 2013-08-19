@@ -28,13 +28,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.navigationController setNavigationBarHidden:NO];
+
     //load values obtained from last connection to online database
     [self LoadSessionDetailsFromDB];
     UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
     [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
     self.refreshControl=refresh;
-    refresh.tintColor=[UIColor redColor];
+    refresh.tintColor=[UIColor whiteColor];
     
     self.title=@"Open";
 

@@ -32,10 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self obtainDataFromURL];
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    [self obtainDataFromURL];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
