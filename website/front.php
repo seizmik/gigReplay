@@ -55,10 +55,10 @@ border: 1px black solid;
    <div class="row">
     <div class="col-1 col-lg-2">
      <ul class="nav nav-pills nav-stacked hidden-sm">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Subscriptions</a></li>
-      <li><a href="#">Profile</a></li>
-      <li><a href="#">Inbox</a></li>
+      <li class="active"><a href="#">Featured</a></li>
+      <li><a href="#">My Videos</a></li>
+      <li><a href="#">My Profile</a></li>
+      <!--<li><a href="#">Inbox</a></li>-->
      </ul>
     </div>
     <div class="col-10 col-lg-9">
