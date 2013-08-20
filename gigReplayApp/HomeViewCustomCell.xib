@@ -71,7 +71,10 @@
 								<reference key="NSWindow"/>
 								<reference key="NSNextKeyView" ref="575273330"/>
 								<string key="NSReuseIdentifierKey">_NS:9</string>
-								<bool key="IBUIOpaque">NO</bool>
+								<object class="NSColor" key="IBUIBackgroundColor" id="275005860">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MCAwAA</bytes>
+								</object>
 								<bool key="IBUIClipsSubviews">YES</bool>
 								<int key="IBUIContentMode">7</int>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
@@ -81,10 +84,7 @@
 									<int key="NSColorSpace">2</int>
 									<bytes key="NSRGB">MC4zODQzMTM3NjIyIDAuMzYwNzg0MzIyIDAuMzEzNzI1NTAxMwA</bytes>
 								</object>
-								<object class="NSColor" key="IBUIHighlightedColor" id="763788339">
-									<int key="NSColorSpace">3</int>
-									<bytes key="NSWhite">MQA</bytes>
-								</object>
+								<reference key="IBUIHighlightedColor" ref="275005860"/>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
 									<string key="name">HelveticaNeue-UltraLight</string>
@@ -119,7 +119,10 @@
 										<int key="NSID">2</int>
 									</object>
 								</object>
-								<reference key="IBUIHighlightedColor" ref="763788339"/>
+								<object class="NSColor" key="IBUIHighlightedColor">
+									<int key="NSColorSpace">3</int>
+									<bytes key="NSWhite">MQA</bytes>
+								</object>
 								<int key="IBUIBaselineAdjustment">0</int>
 								<int key="IBUINumberOfLines">2</int>
 								<object class="IBUIFontDescription" key="IBUIFontDescription">
@@ -140,10 +143,7 @@
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1060729309"/>
 						<string key="NSReuseIdentifierKey">_NS:11</string>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">3</int>
-							<bytes key="NSWhite">MCAwAA</bytes>
-						</object>
+						<reference key="IBUIBackgroundColor" ref="275005860"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<bool key="IBUIClipsSubviews">YES</bool>
 						<int key="IBUIContentMode">4</int>

@@ -76,9 +76,9 @@
  
 -(void)OpenSessionDetailsFromAPI
 {
-    
+    dispatch_async(kBgQueue, ^{
     [apiWrapperObject OpenSessionDetails:appDelegateObject.CurrentUserID WithSession:appDelegateObject.CurrentSession_Code APIIdentifier:API_IDENTIFIER_OPEN_SESSION];
-    
+    });
     
     
 }
@@ -205,13 +205,14 @@
 
 -(void)LoadSessionDetailsFromDB
 {
+
+    
+     
     NSString *query=@"select * from OpenSession_Details";
     self.OpenedSessionDetailsHolder=[appDelegateObject.databaseObject readFromDatabaseOpenDetails:query];
     //NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
-    
+
     [openedSessionListTable reloadData];
-    
-    
     
 }
 

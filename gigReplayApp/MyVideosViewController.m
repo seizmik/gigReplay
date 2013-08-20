@@ -54,7 +54,8 @@
 }
 -(void) obtainDataFromURL{
     dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.lipsync.sg/api/myVideos.php?uid=%d",appDelegateObject.CurrentUserID]]];
+        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.lipsync.sg/api/myVideos.php"]]];
+        //NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://www.lipsync.sg/api/myVideos.php?uid=%d",appDelegateObject.CurrentUserID]]];
         [self performSelectorOnMainThread:@selector(fetchMyVideosData:)
                                withObject:data waitUntilDone:YES];
     });
@@ -85,8 +86,11 @@
     videoImage=[info objectForKey:@"thumb_1_url"];
     [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                         placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-    cell.userName.text=@"GigReplay Presents..";
-   // cell.fbProfileImageView=[UIImage imageNamed:@"replayvid.png"];
+    cell.userName.text=[info objectForKey:@"user_name"];
+    NSString *fb_user_id=[info objectForKey:@"fb_user_id"];
+    NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_id];
+    [cell.fbProfileImageView setImageWithURL:[NSURL URLWithString:profilePicURL]];
+    
     
     return cell;
 }

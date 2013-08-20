@@ -111,8 +111,7 @@
                             placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
          cell.username.text=@"GigReplay Presents..";
         cell.profilePic.image=[UIImage imageNamed:@"new_logo.png"];
-        
-        return cell;
+    return cell;
     }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -124,7 +123,9 @@
         [homeDetailVC setVideoURL:url];
         [homeDetailVC setMedia_id:media_master_id];
         [self presentViewController:homeDetailVC animated:YES completion:nil];
+        
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    
     
     
 }

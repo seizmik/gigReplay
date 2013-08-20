@@ -31,11 +31,13 @@
     [FBProfilePictureView class];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [application setStatusBarStyle:UIStatusBarStyleBlackTranslucent];
     [self SetDataBaseForLoginPurpose];
     [self LoadUser];
     [self checkExistingUser];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     
     //Update files that were cancelled during upload, if any
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=0 WHERE upload_status=9"];
