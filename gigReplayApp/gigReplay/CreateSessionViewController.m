@@ -18,15 +18,15 @@
 //@synthesize userProfileImage, sceneCodeDisplay;
 @synthesize timeDisplay;
 
--(void)SyncUserDetails
-{
-   
-
-    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
-    NSArray *details=[UserDetails objectAtIndex:0];
-    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
-    [apiWrapperObject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
-}
+//-(void)SyncUserDetails
+//{
+//   
+//
+//    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
+//    NSArray *details=[UserDetails objectAtIndex:0];
+//    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
+//    [apiWrapperObject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
+//}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -54,7 +54,7 @@
         [self populateUserDetails];
     }
     apiWrapperObject=[[ApiObject alloc] init];
-    [self SyncUserDetails];
+//    [self SyncUserDetails];
     RespondsReached=FALSE;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSNotificationCenter defaultCenter] addObserver:self
