@@ -14,7 +14,6 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>g_logo.png</string>
 				<string>icon.png</string>
 				<string>icon@2x.png</string>
 			</array>
@@ -76,7 +75,7 @@
 			<key>TintColor</key>
 			<dict>
 				<key>Blue</key>
-				<real>0.99186800577714951</real>
+				<real>0.9918680057771495</real>
 				<key>Green</key>
 				<real>1</real>
 				<key>Red</key>

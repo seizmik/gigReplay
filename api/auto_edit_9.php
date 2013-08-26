@@ -343,7 +343,7 @@
             echo $ss_time, "<br/>";
             echo $duration, "<br/>";
             $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ar 44100 -ac 2 -acodec libvo_aacenc " . $temp_out_path);
+            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 128k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
             $outpath_array[] = $temp_out_path;
             $i++;
         }

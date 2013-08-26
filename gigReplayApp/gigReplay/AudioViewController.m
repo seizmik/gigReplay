@@ -49,6 +49,7 @@ float currentTime;
     self.audioController = [[AEAudioController alloc]
                             initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription]
                             inputEnabled:YES];
+    [audioController enableBluetoothInput];
     [audioController start:nil];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
@@ -140,6 +141,7 @@ float currentTime;
     }
     [self checkRecording];
     [self timerStartStop];
+    [self updateAudioRoute];
 }
 
 - (IBAction)playPressed:(UIButton *)sender {
@@ -158,6 +160,7 @@ float currentTime;
         [audioPlayer stop];
     }
     [self checkPlaying];
+    [self updateAudioRoute];
 }
 
 - (IBAction)uploadPressed:(UIButton *)sender {
