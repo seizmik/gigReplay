@@ -429,6 +429,7 @@
         $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
         //These are the results for all the videos for this session
         $result_2 = mysqli_query($con, $query_2);
+        $num_videos = mysqli_num_rows($result_2);
         //These are the results for all the audio for this session
         $result_1 = mysqli_query($con, $query_1);
         $result_3 = mysqli_query($con, $query_3);

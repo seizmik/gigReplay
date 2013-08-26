@@ -4,9 +4,10 @@
     
     function generate_filepath($path)
     {
+        global $session_add_on, $session_id;
         //Since we are in the api folder, need to back out.
         $file = basename($path);
-        $filepath = "../uploads/original/".$file;
+        $filepath = "../uploads/original/".$session_id."-".$session_add_on."/".$file;
         return $filepath;
     }
     
@@ -59,13 +60,10 @@
     
     function generate_duration() {
         //return rand(300, 600)/100;
-        
-        
         //Creates the duration for a set number of frames
-        $frames = rand(150, 300);
+        $frames = rand(120, 240);
         $time = $frames * (1/30);
         return round($time, 3);
-        
     }
     
     function seek_to_check($content_details, $seek_to)
@@ -156,8 +154,6 @@
             $new_array[] = $cut_details;
             //Update the current time
             $current_time += $duration_check;
-            echo "Current time is " . $current_time, "</br>";
-            
             //Remove video details that don't exist
             $array = remove_useless_details($array);
         } //This ends the while loop to generate the details for cutting
@@ -166,8 +162,8 @@
         $return_array = array();
         $count = 0;
         for ($i =0; $i < count($new_array); $i++) {
-            //echo "New array source: ", $new_array[$i]['src'], "<br/>";
-            //echo "Return array source: ", $return_array[$count]['src'], "<br/>";
+            echo "New array source: ", $new_array[$i]['src'], "<br/>";
+            echo "Return array source: ", $return_array[$count]['src'], "<br/>";
             if ($i == 0) {
                 //First case, just add it into the returning array
                 $return_array[] = $new_array[$i];
@@ -347,7 +343,7 @@
             echo $ss_time, "<br/>";
             echo $duration, "<br/>";
             $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 512k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
+            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ar 44100 -ac 2 -acodec libvo_aacenc " . $temp_out_path);
             $outpath_array[] = $temp_out_path;
             $i++;
         }
@@ -398,7 +394,7 @@
         ob_start();
     }
 
-//End function list----------------------------------------------------------------------------------
+//End function list--------------------------------------------------------
     
     //Establish the session that we want to make the video for
     $session_id = $_GET["sid"]; //This should be a POST-ed object. Otherwise, we can make this one giant function and have the input to be the session_id, and return a link to the master file
@@ -413,6 +409,7 @@
         $result = mysqli_query($con, $query);
         $row = mysqli_fetch_array($result);
     }
+    mysqli_close($con);
     
     $session_name = $row['session_name'];
     $user_id = 0;
@@ -432,6 +429,7 @@
         $query_3 = "SELECT * FROM media_original WHERE session_id='$session_id' AND media_type=3";
         //These are the results for all the videos for this session
         $result_2 = mysqli_query($con, $query_2);
+        $num_videos = mysqli_num_rows($result_2);
         //These are the results for all the audio for this session
         $result_1 = mysqli_query($con, $query_1);
         $result_3 = mysqli_query($con, $query_3);
@@ -458,8 +456,6 @@
         
     }
     
-    echo "First start is ".$first_start." and last end is ".$last_end, "<br/>";
-        
     $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
     $user_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $user_name)), 'strlen'));
     //Create a temp folder and master folder
@@ -477,13 +473,7 @@
         mkdir($master_path);
     }
     $master_path .= $user_id."-".$user_add_on."/";
-    if (!is_dir($master_path)) {
-        //If master_path is already present, delete everything that is there
-        mkdir($master_path);
-    } else {
-        deleteDirectory($master_path);
-        mkdir($master_path);
-    }
+    //We will delete the master path right before creating the new video
     
     //OK, now we know when the first video is, and when the last video is.
     //Global variable $current_time will track where we are in the time continuum.
@@ -499,9 +489,8 @@
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
         //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
-        
         $temp_trim_array[] = $temp_trim_path;
     }
     
@@ -513,7 +502,7 @@
     exec("ffmpeg -i ".$concat_files." -c copy ".$combined_video_path);
     
     //Video edit complete---------------------------------------------------
-    flush_buffers();
+    
     
     
     //Now that the video has been completed, let's head to make the audio for the video.
@@ -577,17 +566,23 @@
     }
     
     $combined_audio_path = join_all_audio($cut_audio_array);
-    
-    //Audio edit complete-----------------------------------------------------
     flush_buffers();
+    //Audio edit complete-----------------------------------------------------
     
+    if (!is_dir($master_path)) {
+        //If master_path is already present, delete everything that is there
+        mkdir($master_path);
+    } else {
+        deleteDirectory($master_path);
+        mkdir($master_path);
+    }
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 5000k -maxrate 5000k -bufsize 10000k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
-    echo $final_video_url;
+    echo $final_video_url, "<br>";
     
     //Create 3 thumbnails based on the videos length
     $video_length = $last_end - $first_start;
@@ -600,50 +595,85 @@
     if (mysqli_connect_errno($con)) {
         echo "Failed to connect to MySQL: " . mysqli_connect_error();
     } else {
-        
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
-        
+                
         if (mysqli_num_rows($result_master) == 0) {
             $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
             mysqli_query($con, $query);
-            //$entry_id = mysqli_insert_id($con);
+            $entry_id = mysqli_insert_id($con);
         } else {
-            echo "We should be here now";
-            $query = "UPDATE media_master SET thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
+            $row_master = mysqli_fetch_array($result_master);
+            $entry_id = $row_master['master_id'];
+            $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
-        
     }
     mysqli_close($con);
     
-    //Delete the temp directory
+    //Now, delete the temp directory
     deleteDirectory($temp_path);
     
-    /*
-    //Finally, email the user the final video
-    $mail = new PHPMailer;
-    $mail->SetFrom('info@gigreplay.com', 'GigReplay');
-    $address = $user_email;
-    $mail->AddAddress($address);
+    flush_buffers();
     
-    $mail->Subject = 'Your Video Has Been Completed';
-    $body = "<br><hr><br>
-    Dear ".$user_name.",<br>
-    <br>
-    Your video for session $session_name has been completed. You can view your video at the following address: <br>
-    <a href=\"".$final_video_url."\">".$final_video_url."</a><br><br>
-    Remember, keep those videos rolling in.<br><br>
+    //Prepare some things for the email
+    $thumbnail_name = pathinfo($thumb_2);
+    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
+    $final_video_url = "http://www.gigreplay.com/watch.php?vid=".$entry_id;
     
-    GigReplay. Performances with a different angle.
-    
-    <br><hr><br>This is an automatically generated email. Please do not reply.";
-    $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
-    $mail->MsgHTML($body);
-    if(!$mail->Send()) {
-        echo "Mailer Error: " . $mail->ErrorInfo;
+    if ($num_videos == 0) {
+        //There was no video. Please warn the user
+        $mail = new PHPMailer;
+        $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+        $address = $user_email;
+        $mail->AddAddress($address);
+        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
+        
+        $mail->Subject = 'Error Creating Video';
+        $body = "<br><hr><br>
+        Dear ".$user_name.",<br>
+        <br>
+        There was an error creating your video for session $session_name. Please ensure <br>
+            <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
+            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+            Remember, keep those videos rolling in.<br><br>
+            
+            GigReplay. Performances with a different angle.
+            
+            <br><hr><br>This is an automatically generated email. Please do not reply.";
+                $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+        $mail->MsgHTML($body);
+        if(!$mail->Send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
+    } else {
+        //Finally, email the user the final video
+        $mail = new PHPMailer;
+        $mail->SetFrom('info@gigreplay.com', 'GigReplay');
+        $address = $user_email;
+        $mail->AddAddress($address);
+        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
+        
+        $mail->Subject = 'Your Video Has Been Completed';
+        $body = "<br><hr><br>
+        Dear ".$user_name.",<br>
+        <br>
+        Your video for session $session_name has been completed. You can watch your video at the following address: <br>
+            <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
+            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+            Remember, keep those videos rolling in.<br><br>
+            
+            GigReplay. Performances with a different angle.
+            
+            <br><hr><br>This is an automatically generated email. Please do not reply.";
+                $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
+        $mail->MsgHTML($body);
+        if(!$mail->Send()) {
+            echo "Mailer Error: " . $mail->ErrorInfo;
+        }
     }
-    */
+    
+    
     
 ?>
