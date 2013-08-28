@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "ConnectToDatabase.h"
 #import "UploadTab.h"
+#import "AEPlaythroughChannel.h"
 
 @interface AudioViewController ()
 
@@ -79,7 +80,7 @@ float currentTime;
     if (recorder) {
         //[self getStartTime]; //Somehow not consistent
         [recorder finishRecording];
-        [audioController removeOutputReceiver:recorder];
+        //[audioController removeOutputReceiver:recorder];
         [audioController removeInputReceiver:recorder];
         
         //Once it completes recording
@@ -113,7 +114,7 @@ float currentTime;
             //End the recording and input into the database if the background task expires
             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
             [recorder finishRecording];
-            [audioController removeOutputReceiver:recorder];
+            //[audioController removeOutputReceiver:recorder];
             [audioController removeInputReceiver:recorder];
             
             //Once it completes recording
@@ -136,7 +137,7 @@ float currentTime;
             return;
         }
         
-        [audioController addOutputReceiver:recorder];
+        //[audioController addOutputReceiver:recorder];
         [audioController addInputReceiver:recorder];
     }
     [self checkRecording];
