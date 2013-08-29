@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "ConnectToDatabase.h"
 #import "UploadTab.h"
+#import "AEPlaythroughChannel.h"
 
 @interface AudioViewController ()
 
@@ -49,6 +50,7 @@ float currentTime;
     self.audioController = [[AEAudioController alloc]
                             initWithAudioDescription:[AEAudioController nonInterleaved16BitStereoAudioDescription]
                             inputEnabled:YES];
+    [audioController enableBluetoothInput];
     [audioController start:nil];
     [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     //NSLog(@"%@", appDelegateObject.CurrentSessionID);
@@ -78,7 +80,7 @@ float currentTime;
     if (recorder) {
         //[self getStartTime]; //Somehow not consistent
         [recorder finishRecording];
-        [audioController removeOutputReceiver:recorder];
+        //[audioController removeOutputReceiver:recorder];
         [audioController removeInputReceiver:recorder];
         
         //Once it completes recording
@@ -112,7 +114,7 @@ float currentTime;
             //End the recording and input into the database if the background task expires
             [[UIApplication sharedApplication] endBackgroundTask:bgTask];
             [recorder finishRecording];
-            [audioController removeOutputReceiver:recorder];
+            //[audioController removeOutputReceiver:recorder];
             [audioController removeInputReceiver:recorder];
             
             //Once it completes recording
@@ -135,11 +137,12 @@ float currentTime;
             return;
         }
         
-        [audioController addOutputReceiver:recorder];
+        //[audioController addOutputReceiver:recorder];
         [audioController addInputReceiver:recorder];
     }
     [self checkRecording];
     [self timerStartStop];
+    [self updateAudioRoute];
 }
 
 - (IBAction)playPressed:(UIButton *)sender {
@@ -158,6 +161,7 @@ float currentTime;
         [audioPlayer stop];
     }
     [self checkPlaying];
+    [self updateAudioRoute];
 }
 
 - (IBAction)uploadPressed:(UIButton *)sender {

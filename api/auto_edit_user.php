@@ -340,7 +340,7 @@
             echo $ss_time, "<br/>";
             echo $duration, "<br/>";
             $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ac 2 -ar 44100 -acodec libvo_aacenc " . $temp_out_path);
+            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
             $outpath_array[] = $temp_out_path;
             $i++;
         }
@@ -554,17 +554,21 @@
     }
     
     //Here's where we combine the video with the audio
-    $final_video_path = $master_path . "output.mp4";
+    $final_video_path = $master_path . "output_hi.mp4";
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
-    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
-    echo $final_video_url, "<br>";
+    $final_video_path_lo = $master_path . "output_lo.mp4";
+    exec("ffmpeg -i $final_video_path -s 640x360 $final_video_path_lo");
     
-    //Create 3 thumbnails based on the videos length
+    $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
+    $final_video_url_lo = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path_lo);
+    //echo $final_video_url, "<br>";
+    
+    //Create 10 thumbnails based on the videos length
+    //Because all of the thumbnails will have similar naming, ie thumb_X.png, we can then extract it later by using the final video url and tagging on the number.
     $video_length = $last_end - $first_start;
-    $thumb_1 = create_thumbnail($final_video_path, ($video_length * 0.2), $final_video_url);
-    $thumb_2 = create_thumbnail($final_video_path, ($video_length * 0.5), $final_video_url);
-    $thumb_3 = create_thumbnail($final_video_path, ($video_length * 0.8), $final_video_url);
+    $thumb_length = $video_length/10;
+    exec("ffmpeg -i $final_video_path -f image2 -s 320x180 -vf fps=fps=1/$thumb_length thumb_%d.png");
     
     //Update the database
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
@@ -576,13 +580,13 @@
         $result_master = mysqli_query($con, $query);
                 
         if (mysqli_num_rows($result_master) == 0) {
-            $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
+            $query = "INSERT INTO media_master (session_id, user_id, media_url, media_url_lo, start_time) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$final_video_url_lo."',".$first_start.")";
             mysqli_query($con, $query);
             $entry_id = mysqli_insert_id($con);
         } else {
             $row_master = mysqli_fetch_array($result_master);
             $entry_id = $row_master['master_id'];
-            $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
+            $query = "UPDATE media_master SET media_url='".$final_video_url."', media_url_lo='".$final_video_url_lo."', start_time=".$first_start." WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
     }

@@ -343,7 +343,7 @@
             echo $ss_time, "<br/>";
             echo $duration, "<br/>";
             $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ar 44100 -ac 2 -acodec libvo_aacenc " . $temp_out_path);
+            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 128k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
             $outpath_array[] = $temp_out_path;
             $i++;
         }
@@ -584,11 +584,11 @@
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
     echo $final_video_url, "<br>";
     
-    //Create 3 thumbnails based on the videos length
+    //Create 10 thumbnails based on the videos length
+    //Because all of the thumbnails will have similar naming, ie thumb_X.png, we can then extract it later by using the final video url and tagging on the number.
     $video_length = $last_end - $first_start;
-    $thumb_1 = create_thumbnail($final_video_path, ($video_length * 0.2), $final_video_url);
-    $thumb_2 = create_thumbnail($final_video_path, ($video_length * 0.5), $final_video_url);
-    $thumb_3 = create_thumbnail($final_video_path, ($video_length * 0.8), $final_video_url);
+    $thumb_length = $video_length/10;
+    exec("ffmpeg -i $final_video_path -f image2 -s 320x180 -vf fps=fps=1/$thumb_length thumb_%d.png");
     
     //Update the database
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
@@ -598,15 +598,15 @@
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
-                
+        
         if (mysqli_num_rows($result_master) == 0) {
-            $query = "INSERT INTO media_master (session_id, user_id, media_url, thumb_1_url, thumb_2_url, thumb_3_url) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$thumb_1."','".$thumb_2."','".$thumb_3."')";
+            $query = "INSERT INTO media_master (session_id, user_id, media_url, start_time, feature) VALUES (".$session_id.",".$user_id.",'".$final_video_url."',".$first_start.",1)";
             mysqli_query($con, $query);
             $entry_id = mysqli_insert_id($con);
         } else {
             $row_master = mysqli_fetch_array($result_master);
             $entry_id = $row_master['master_id'];
-            $query = "UPDATE media_master SET media_url='".$final_video_url."',thumb_1_url='".$thumb_1."',thumb_2_url='".$thumb_2."',thumb_3_url='".$thumb_3."' WHERE session_id=".$session_id." AND user_id=".$user_id;
+            $query = "UPDATE media_master SET media_url='".$final_video_url."', start_time=".$first_start." WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
     }
