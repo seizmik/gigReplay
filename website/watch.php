@@ -97,11 +97,11 @@ border: 1px black solid;
    <div class="row">
     <div class="col-lg-1 hidden-sm">
     </div>
-    <div class="col-12 col-lg-10">
+    <div class="col-12 col-lg-10" style="max-width:960px">
      <div class="row">
       <div class="col-12 col-lg-12">
        <div class="text-center" style="margin-left:auto; margin-right:auto;">
-        <video id="video_with_controls" width="960" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+        <video id="video_with_controls" width="100%" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
        </div>
@@ -109,7 +109,8 @@ border: 1px black solid;
      </div>
      <div class="row">
       <div class="col-9 col-lg-9">
-       <h1><?=$title?></h1>
+       <span class="hidden-sm"><h1><?=$title?></h1></span>
+       <span class="visible-sm"><h3><?=$title?></h3></span>
        <p>Created by <?=$user_name?><br>
        Last modified <?=$last_modified?></p>
       </div>
