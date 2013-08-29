@@ -30,7 +30,9 @@
     margin-top:-25%;
     text-align:center;
 }
-
+#fb-button{
+	float:right;
+}
 
 .video_table td {
     padding: 5px;

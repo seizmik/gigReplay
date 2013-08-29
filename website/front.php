@@ -1,13 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
  <head>
+
   <title>GigReplay Video List</title>
 
 <?php include 'header.php'; ?>
+<?php require_once("php-sdk/facebook.php"); ?>
+<?php $config = array();
+  $config['appId'] = '425449864216352';
+  $config['secret'] = 'e0a33ee97563372f964df382b350af30';
+  $config['fileUpload'] = true; // optional
 
+  $facebook = new Facebook($config);
+  $uid = $facebook->getUser();
+  
+  ?>
+ 
   <meta property="og:image" content="/resources/g_logo.png"/>
   <style type="text/css">
+  
 /** {
 border: 1px black solid;
 }*/
@@ -15,39 +26,6 @@ border: 1px black solid;
  </head>
 
  <body>
-  <div id="fb-root"></div>
-  <script>
-   // Additional JS functions here
-   window.fbAsyncInit = function() {
-       FB.init({
-               appId      : '425449864216352', // App ID
-               channelUrl : '//www.gigreplay.com/channel.html', // Channel File
-               status     : true, // check login status
-               cookie     : true, // enable cookies to allow the server to access the session
-               xfbml      : true  // parse XFBML
-               });
-    
-       // Additional init code here
-       FB.Event.subscribe('auth.authResponseChange', function(response) {
-        if (response.status === 'connected') {
-         testAPI();
-        } else if (response.status === 'not_authorized') {
-         FB.login();
-        } else {
-         FB.login();
-        }
-       });
-   };
-
-   // Load the SDK asynchronously
-   (function(d){
-    var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-    if (d.getElementById(id)) {return;}
-    js = d.createElement('script'); js.id = id; js.async = true;
-    js.src = "//connect.facebook.net/en_US/all.js";
-    ref.parentNode.insertBefore(js, ref);
-    }(document));
-  </script>
 
 <?php include 'top_toolbar.php'; ?>
 <!-- Create the webpage here -->
@@ -57,12 +35,24 @@ border: 1px black solid;
      <ul class="nav nav-pills nav-stacked hidden-sm">
       <li class="active"><a href="#">Featured</a></li>
       <li><a href="#">My Videos</a></li>
-      <li><a href="#">My Profile</a></li>
+      <li><a href="/login.php">My Profile</a></li>
       <!--<li><a href="#">Inbox</a></li>-->
      </ul>
     </div>
+    
+    
+    
     <div class="col-10 col-lg-9">
-    <h3>Featured Videos</h3>
+    <h3>Featured Video</h3>
+    <div class="main_video">
+    <video width="1000" height="540" controls>
+  <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
+  
+Your browser does not support the video tag.
+</video>
+
+    </div>
+    <h3>More Videos</h3>
      <div class="row">
 
 <?php
