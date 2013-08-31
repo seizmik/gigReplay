@@ -36,7 +36,17 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    [self obtainDataFromURL];
+    
+    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    //If no internet access, do not load.
+    if (netStatus == NotReachable) {
+        //Load the button to retry
+    } else {
+        [self obtainDataFromURL];
+    }
 }
 - (void)didReceiveMemoryWarning
 {

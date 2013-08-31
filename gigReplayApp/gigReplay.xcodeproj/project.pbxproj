@@ -352,7 +352,7 @@
 		2A50535717AFAB18000BD700 /* HomeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeDetailViewController.h; sourceTree = "<group>"; };
 		2A50535817AFAB18000BD700 /* HomeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeDetailViewController.m; sourceTree = "<group>"; };
 		2A50535917AFAB18000BD700 /* HomeDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeDetailViewController.xib; sourceTree = "<group>"; };
-		2A58156117C834F90018FF34 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; name = gigreplay.sqlite; path = "../../Dropbox/LipSync UI PSD Files/gigreplay.sqlite"; sourceTree = "<group>"; };
+		2A58156117C834F90018FF34 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		2A5BC6FF175DD706006E4D59 /* UploadTabDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadTabDetailViewController.h; sourceTree = "<group>"; };
 		2A5BC700175DD706006E4D59 /* UploadTabDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadTabDetailViewController.m; sourceTree = "<group>"; };
 		2A5BC701175DD706006E4D59 /* UploadTabDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadTabDetailViewController.xib; sourceTree = "<group>"; };
@@ -361,8 +361,8 @@
 		2A5BC70D176061F7006E4D59 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2A5BC70F17606208006E4D59 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		2A5BC71117606213006E4D59 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		2A5CFDF517CB4DA3002C2BC5 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "../../Dropbox/LipSync UI PSD Files/icon@2x.png"; sourceTree = "<group>"; };
-		2A5CFDF617CB4DA3002C2BC5 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = "../../Dropbox/LipSync UI PSD Files/icon.png"; sourceTree = "<group>"; };
+		2A5CFDF517CB4DA3002C2BC5 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "/Users/mikaillo/Desktop/gigReplay/gigReplayApp/icon@2x.png"; sourceTree = "<absolute>"; };
+		2A5CFDF617CB4DA3002C2BC5 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		2A5CFDF917CB5113002C2BC5 /* g_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_logo.png; sourceTree = "<group>"; };
 		2A6292B61740B052003E7BDB /* start_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_1.png; sourceTree = "<group>"; };
 		2A6292B71740B052003E7BDB /* start_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_6.png; sourceTree = "<group>"; };
