@@ -20,13 +20,12 @@
     $session_id = $row['session_id'];
     $title = $row['title'];
     $media_url = $row['media_url'];
-    $thumb_1 = $row['thumb_1_url'];
-    $thumb_2 = $row['thumb_2_url'];
-    $thumb_3 = $row['thumb_3_url'];
+    $media_url_lo = $row['media_url_lo'];
+    $views = $row['views'];
+    $likes = $row['likes'];
     $default_thumb = $row['default_thumb'];
     $last_modified = $row['date_modified'];
-    $likes = $row['likes'];
-    $views = $row['views'];
+    $start_time = $row['start_time'];
     
     //Setting the session name
     if ($user_id == 0) {
@@ -66,14 +65,8 @@
         $title = $session_name;
     }
     
-    //Setting the default thumbnail
-    if ($default_thumb==1) {
-        $thumbnail_url = $thumb_1;
-    } else if ($default_thumb==2) {
-        $thumbnail_url = $thumb_2;
-    } else if ($default_thumb==3) {
-        $thumbnail_url = $thumb_3;
-    }
+    //Set default thumbnail. Append the default_thumbnail number to the string.
+    $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     
 ?>
 

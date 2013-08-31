@@ -35,7 +35,7 @@ border: 1px black solid;
      <ul class="nav nav-pills nav-stacked hidden-sm">
       <li class="active"><a href="#">Featured</a></li>
       <li><a href="#">My Videos</a></li>
-      <li><a href="/login.php">My Profile</a></li>
+      <li><a href="#">My Profile</a></li>
       <!--<li><a href="#">Inbox</a></li>-->
      </ul>
     </div>
@@ -43,16 +43,16 @@ border: 1px black solid;
     
     
     <div class="col-10 col-lg-9">
-    <h3>Featured Video</h3>
-    <div class="main_video">
-    <video width="1000" height="540" controls>
-  <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
-  
-Your browser does not support the video tag.
-</video>
-
-    </div>
-    <h3>More Videos</h3>
+     <h3>Featured Video</h3>
+     <div class="row">
+      <div class="col-12 col-lg-12" style="max-width:960px;">
+       <video width="100%" controls>
+        <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
+       Your browser does not support the video tag.
+       </video>
+      </div>
+     </div>
+     <h3>More Videos</h3>
      <div class="row">
 
 <?php
@@ -79,11 +79,12 @@ Your browser does not support the video tag.
         $session_id = $row['session_id'];
         $title = $row['title'];
         $media_url = $row['media_url'];
-        $thumb_1 = $row['thumb_1_url'];
-        $thumb_2 = $row['thumb_2_url'];
-        $thumb_3 = $row['thumb_3_url'];
+        $media_url_lo = $row['media_url_lo'];
+        $views = $row['views'];
+        $likes = $row['likes'];
         $default_thumb = $row['default_thumb'];
         $last_modified = $row['date_modified'];
+        $start_time = $row['start_time'];
         $append_url = "http://www.gigreplay.com/watch.php?vid=".$media_id;
         
         //Set user name
@@ -124,24 +125,19 @@ Your browser does not support the video tag.
             $title = $session_name;
         }
         
-        //Set default thumbnail
-        if ($default_thumb==1) {
-            $thumbnail_url = $thumb_1;
-        } else if ($default_thumb==2) {
-            $thumbnail_url = $thumb_2;
-        } else if ($default_thumb==3) {
-            $thumbnail_url = $thumb_3;
-        }
+        //Set default thumbnail. Append the default_thumbnail number to the string.
+        $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     
 ?>
 
-      <div class="col-12 col-lg-4">
+      <div class="col-12 col-lg-4" style="max-width:320px;">
        <a href="<?=$append_url ?>" class="thumbnail">
         <img data-src="holder.js/100%x100%" alt="100%x100%" src="<?=$thumbnail_url ?>" style="display:block;">
        </a>
        <div class="caption">
         <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
         <p>Created by <?=$user_name ?><br>
+        <small>"<?=$views ?>" views</small><br>
         <small>Created at <?=$last_modified ?></small></p>
        </div>
       </div>
