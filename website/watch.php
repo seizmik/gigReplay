@@ -120,7 +120,7 @@ border: 1px black solid;
 </html>
 
 <?php
-
+    $views++;
     //Time to increment the number of views. This should be done 5 seconds after the video is played. Need to also find some way to prevent botting.
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
     if (mysqli_connect_errno($con)) {

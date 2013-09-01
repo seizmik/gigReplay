@@ -137,7 +137,7 @@ border: 1px black solid;
        <div class="caption">
         <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
         <p>Created by <?=$user_name ?><br>
-        <small>"<?=$views ?>" views</small><br>
+        <small><?=$views ?> views</small><br>
         <small>Created at <?=$last_modified ?></small></p>
        </div>
       </div>

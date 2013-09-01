@@ -60,8 +60,9 @@
     
     function generate_duration() {
         //return rand(300, 600)/100;
-        //Creates the duration for a set number of frames
-        $frames = rand(120, 240);
+        //Creates the duration for a set number of frames.
+        //This should be posted up as part of the options. To be done in the near future.
+        $frames = rand(90, 180);
         $time = $frames * (1/30);
         return round($time, 3);
     }
@@ -558,7 +559,7 @@
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_path_lo = $master_path . "output_lo.mp4";
-    exec("ffmpeg -i $final_video_path -s 640x360 $final_video_path_lo");
+    exec("ffmpeg -i $final_video_path -vcodec libx264 -vprofile high -preset slow -b:v 1000k -maxrate 1000k -bufsize 500k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 $final_video_path_lo");
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
     $final_video_url_lo = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path_lo);
