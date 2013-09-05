@@ -11,6 +11,7 @@
 #import "UIImageView+WebCache.h"
 #import "SDImageCache.h"
 #import "CaptureViewController.h"
+#import "Reachability.h"
 
 
 @interface HomeViewController ()
@@ -28,8 +29,17 @@
     return self;
 }
 -(void)viewDidAppear:(BOOL)animated{
-    [self obtainDataFromURL];
-    [self.tableViewRequests reloadData];
+    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
+    [internetReach startNotifier];
+    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+    
+    //If there's no internet connection, don't load up, otherwise, the app will crash.
+    if (netStatus == NotReachable) {
+        //Load up a button that will allow to relaod the page
+    } else {
+        [self obtainDataFromURL];
+        [self.tableViewRequests reloadData];
+    }
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
 }

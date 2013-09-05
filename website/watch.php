@@ -66,8 +66,13 @@
     }
     
     //Set default thumbnail. Append the default_thumbnail number to the string.
+<<<<<<< HEAD
    // $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     $thumbnail_url= $default_thumb;
+=======
+    $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
+    
+>>>>>>> a5399d19c15ef6adea232c3f155cd6b26b1cc872
 ?>
 
  <head>

@@ -60,8 +60,9 @@
     
     function generate_duration() {
         //return rand(300, 600)/100;
-        //Creates the duration for a set number of frames
-        $frames = rand(120, 240);
+        //Creates the duration for a set number of frames.
+        //This should be posted up as part of the options. To be done in the near future.
+        $frames = rand(90, 180);
         $time = $frames * (1/30);
         return round($time, 3);
     }
@@ -558,7 +559,7 @@
     exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
     
     $final_video_path_lo = $master_path . "output_lo.mp4";
-    exec("ffmpeg -i $final_video_path -s 640x360 $final_video_path_lo");
+    exec("ffmpeg -i $final_video_path -vcodec libx264 -vprofile high -preset slow -b:v 1000k -maxrate 1000k -bufsize 500k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 $final_video_path_lo");
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
     $final_video_url_lo = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path_lo);
@@ -568,7 +569,7 @@
     //Because all of the thumbnails will have similar naming, ie thumb_X.png, we can then extract it later by using the final video url and tagging on the number.
     $video_length = $last_end - $first_start;
     $thumb_length = $video_length/10;
-    exec("ffmpeg -i $final_video_path -f image2 -s 320x180 -vf fps=fps=1/$thumb_length thumb_%d.png");
+    exec("ffmpeg -i ".$final_video_path." -f image2 -s 320x180 -vf fps=fps=1/".$thumb_length." ".$master_path."thumb_%d.png");
     
     //Update the database
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
@@ -596,8 +597,7 @@
     deleteDirectory($temp_path);
     
     //Prepare some things for the email
-    $thumbnail_name = pathinfo($thumb_2);
-    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".$thumbnail_name['basename'];
+    $thumbnail_path = "../uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/thumb_4.png";
     $final_video_url = "http://www.gigreplay.com/watch.php?vid=".$entry_id;
     
     if ($num_videos == 0) {
@@ -606,18 +606,15 @@
         $mail->SetFrom('info@gigreplay.com', 'GigReplay');
         $address = $user_email;
         $mail->AddAddress($address);
-        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
         
         $mail->Subject = 'Error Creating Video';
         $body = "<br><hr><br>
         Dear ".$user_name.",<br>
         <br>
-        There was an error creating your video for session $session_name. Please ensure <br>
-            <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
-            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+        There was an error creating your video for session $session_name. Please ensure that some videos have been uploaded to the server before generating a new video.<br>
             Remember, keep those videos rolling in.<br><br>
             
-            GigReplay. Performances with a different angle.
+            GigReplay.
             
             <br><hr><br>This is an automatically generated email. Please do not reply.";
                 $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
@@ -631,7 +628,7 @@
         $mail->SetFrom('info@gigreplay.com', 'GigReplay');
         $address = $user_email;
         $mail->AddAddress($address);
-        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail_2');
+        $mail->AddEmbeddedImage($thumbnail_path, 'thumbnail');
         
         $mail->Subject = 'Your Video Has Been Completed';
         $body = "<br><hr><br>
@@ -639,10 +636,10 @@
         <br>
         Your video for session $session_name has been completed. You can watch your video at the following address: <br>
             <a href=\"".$final_video_url."\" target=\"_blank\">".$final_video_url."</a><br><br>
-            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail_2' /></a><br><br>
+            <a href=\"".$final_video_url."\" target=\"_blank\"><img src='cid:thumbnail' /></a><br><br>
             Remember, keep those videos rolling in.<br><br>
             
-            GigReplay. Performances with a different angle.
+            GigReplay.
             
             <br><hr><br>This is an automatically generated email. Please do not reply.";
                 $mail->AltBody = "To view the message, please use an HTML compatible email viewer.";
