@@ -12,5 +12,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *videoImageView;
 @property (strong, nonatomic) IBOutlet UIImageView *fbProfileImageView;
 @property (strong, nonatomic) IBOutlet UILabel *userName;
+@property (strong, nonatomic) IBOutlet UILabel *videoDesc;
 
 @end

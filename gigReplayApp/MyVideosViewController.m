@@ -83,14 +83,14 @@
     }
     
     NSDictionary *info=[myVideosArray objectAtIndex:indexPath.row];
-    videoImage=[info objectForKey:@"thumb_1_url"];
+    videoImage=[info objectForKey:@"default_thumb"];
     [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                         placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     cell.userName.text=[info objectForKey:@"user_name"];
     NSString *fb_user_id=[info objectForKey:@"fb_user_id"];
     NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_id];
     [cell.fbProfileImageView setImageWithURL:[NSURL URLWithString:profilePicURL]];
-    
+    cell.videoDesc.text=[info objectForKey:@"title"];
     
     return cell;
 }
@@ -99,7 +99,7 @@
     
     NSMutableDictionary *info = [myVideosArray objectAtIndex:indexPath.row];
     NSString *media_master_id=[info objectForKey:@"master_id"];
-    url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
+    url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
     HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
     [homeDetailVC setVideoURL:url];
     [homeDetailVC setMedia_id:media_master_id];
