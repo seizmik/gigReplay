@@ -115,6 +115,68 @@ border: 1px black solid;
       <div class="col-3 col-lg-3" style="margin-top:1.5em;">
        <p class="text-right"><strong><?=$views ?></strong> views</p>
       </div>
+
+      <!--This is where we insert the comments from the database-->
+      <div class="row">
+       <div class="row">
+        <div class="col-12 col-lg-12">Comments:</div>
+       </div>
+       <div class="row">
+        <div class="col-11 col-lg-11">
+         <!--Put a text box there and have some placement text-->
+         <div class="text-box-input">
+         </div>
+        </div>
+       </div>
+       <div class="row">
+        <div class="pull-right">
+         <div class="button">Submit</div>
+         <div class="button">Cancel</div>
+        </div>
+       </div>
+
+<?php
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to connect to MySQL: " . mysqli_connect_error();
+    } else {
+        //Find out if the video has already been created once before
+        
+        $query = "THIS PART IS STILL BLANK! Maximum 20 entries";
+        
+        $comment_results = mysqli_query($con, $query);
+    }
+    mysqli_close($con);
+    
+    while ($comment = mysqli_fetch_array($comment_results)) {
+        $comment_array[] = $comment;
+    }
+    
+    foreach ($comment_array as $row) {
+        $comment_entry = $row['comment'];
+        $comment_up = $row['thumb_up'];
+        $comment_down = $row['thumb_down'];
+        $comment_flag = $row['flag'];
+?>
+
+       <!--A comment entry-->
+       <div class="row">
+        <div class="col-12 col-lg-12"> <!--Decorate this division-->
+         <p><?=$comment_entry ?></p>
+         <div class="button">Up Vote</div>
+         <div class="button">Down Vote</div>
+         <div class="button">Flag</div>
+        </div>
+       </div>
+
+<?php
+    }
+?>
+
+      </div>
+
+      <!--Comments portion end-->
+
      </div>
     </div>
     <div class="col-lg-1 hidden-sm">
