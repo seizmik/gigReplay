@@ -39,7 +39,7 @@
 -(void)playMovie{
 //    NSString *movieFile= [[NSBundle mainBundle] pathForResource:@"linkin" ofType:@"mp4"];
 //    NSURL *videoURL=[[NSURL alloc] initFileURLWithPath:movieFile];
-    NSURL *stream=[NSURL URLWithString:@"http://lipsync.sg/api/test2/prog_index.m3u8"];
+    NSURL *stream=[NSURL URLWithString:@"http://www.lipsync.sg/api/test/prog_index.m3u8"];
     
     self.moviePlayer=  [[MPMoviePlayerController alloc]
                         initWithContentURL:stream];

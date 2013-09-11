@@ -119,7 +119,9 @@ border: 1px black solid;
 
 <?php include 'top_toolbar.php'; ?>
 <!-- Create the webpage here -->
-
+  <div class="row"><br><br>
+  <div class="col-md-8"><p>gigReplay is still under construction, some links/objects may be broken</p></div>
+</div>
   <div class="col-12 col-lg-12">
    <div class="row">
     <div class="col-1 col-lg-2">
@@ -130,6 +132,7 @@ border: 1px black solid;
         <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
       </div>
     <?php endif ?>
+    
 <div class="fb-facepile" data-href="http://facebook.com/gigreplay" data-action="Comma separated list of action of action types" data-width="200" data-max-rows="1"></div>
      <ul class="nav nav-pills nav-stacked hidden-sm">
       <li class="active"><a href="#">Featured</a></li>
@@ -233,6 +236,7 @@ border: 1px black solid;
        <a href="<?=$append_url ?>" class="thumbnail">
         <img data-src="holder.js/100%x100%" alt="100%x100%" src="<?=$default_thumb ?>" style="display:block;">
        </a>
+        <div class="fb-like" data-href="http://www.gigreplay.com/watch.php?vid=<?php echo "$media_id";?>" data-width="200" data-show-faces="false" data-send="false"></div>
        <div class="caption">
         <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
         <p>Created by <?=$user_name ?><br>

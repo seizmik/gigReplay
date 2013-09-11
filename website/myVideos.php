@@ -66,8 +66,14 @@
     }
     
     //Set default thumbnail. Append the default_thumbnail number to the string.
+
    // $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     $thumbnail_url= $default_thumb;
+
+// $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
+    $thumbnail_url= $default_thumb;
+    
+
 ?>
 
  <head>
@@ -85,6 +91,59 @@ border: 1px black solid;
  </head>
 
  <body>
+ 
+ <script>
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '425449864216352', // App ID
+    channelUrl : '//www.gigreplay.com/channel.html', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
+
+  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
+  // for any authentication related change, such as login, logout or session refresh. This means that
+  // whenever someone who was previously logged out tries to log in again, the correct case below 
+  // will be handled. 
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    // Here we specify what we do with the response anytime this event occurs. 
+    if (response.status === 'connected') {
+     
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+     
+      FB.login();
+    } else {
+      
+      FB.login();
+    }
+  });
+  };
+
+  // Load the SDK asynchronously
+  (function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
+
+  // Here we run a very simple test of the Graph API after login is successful. 
+  // This testAPI() function is only called in those cases. 
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+	var fb_id=response.id;
+      console.log('Good to see you, ' + response.name + '.');
+	console.log('fb.id is , '+response.id+'.');
+	console.log(fb_id);
+
+    });
+  }
+</script>
+ 
 <?php include 'top_toolbar.php'; ?>
   <div class="col-12 col-lg-12">
    <div class="row">
@@ -94,12 +153,13 @@ border: 1px black solid;
      <div class="row">
       <div class="col-12 col-lg-12">
        <div class="text-center" style="margin-left:auto; margin-right:auto;">
-        <video id="video_with_controls" width="100%" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+        <video id="video_with_controls" width="640px" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
        </div>
       </div>
      </div>
+     <div class="fb-like" data-href="http://www.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" data-width="200" data-show-faces="true" data-send="false"></div>
      <div class="row">
       <div class="col-9 col-lg-9">
        <span class="hidden-sm"><h1><?=$title?></h1></span>
@@ -107,71 +167,6 @@ border: 1px black solid;
        <p>Created by <?=$user_name?><br>
        Last modified <?=$last_modified?></p>
       </div>
-      <div class="col-3 col-lg-3" style="margin-top:1.5em;">
-       <p class="text-right"><strong><?=$views ?></strong> views</p>
-      </div>
-
-      <!--This is where we insert the comments from the database-->
-      <div class="row">
-       <div class="row">
-        <div class="col-12 col-lg-12">Comments:</div>
-       </div>
-       <div class="row">
-        <div class="col-11 col-lg-11">
-         <!--Put a text box there and have some placement text-->
-         <div class="text-box-input">
-         </div>
-        </div>
-       </div>
-       <div class="row">
-        <div class="pull-right">
-         <div class="button">Submit</div>
-         <div class="button">Cancel</div>
-        </div>
-       </div>
-
-<?php
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        //Find out if the video has already been created once before
-        
-        $query = "THIS PART IS STILL BLANK! Maximum 20 entries";
-        
-        $comment_results = mysqli_query($con, $query);
-    }
-    mysqli_close($con);
-    
-    while ($comment = mysqli_fetch_array($comment_results)) {
-        $comment_array[] = $comment;
-    }
-    
-    foreach ($comment_array as $row) {
-        $comment_entry = $row['comment'];
-        $comment_up = $row['thumb_up'];
-        $comment_down = $row['thumb_down'];
-        $comment_flag = $row['flag'];
-?>
-
-       <!--A comment entry-->
-       <div class="row">
-        <div class="col-12 col-lg-12"> <!--Decorate this division-->
-         <p><?=$comment_entry ?></p>
-         <div class="button">Up Vote</div>
-         <div class="button">Down Vote</div>
-         <div class="button">Flag</div>
-        </div>
-       </div>
-
-<?php
-    }
-?>
-
-      </div>
-
-      <!--Comments portion end-->
-
      </div>
     </div>
     <div class="col-lg-1 hidden-sm">
@@ -181,18 +176,3 @@ border: 1px black solid;
  </body>
 </html>
 
-<?php
-    $views++;
-    //Time to increment the number of views. This should be done 5 seconds after the video is played. Need to also find some way to prevent botting.
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        //Find out if the video has already been created once before
-        $query = "UPDATE media_master SET views=".$views." WHERE master_id=".$getthing;
-        $result = mysqli_query($con, $query);
-    }
-    mysqli_close($con);
-    
-    
-?>

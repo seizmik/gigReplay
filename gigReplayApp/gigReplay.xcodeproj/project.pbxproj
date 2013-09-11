@@ -42,14 +42,14 @@
 		2A50535617AFA750000BD700 /* HomeViewCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A50535417AFA750000BD700 /* HomeViewCustomCell.xib */; };
 		2A50535A17AFAB18000BD700 /* HomeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A50535817AFAB18000BD700 /* HomeDetailViewController.m */; };
 		2A50535B17AFAB18000BD700 /* HomeDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A50535917AFAB18000BD700 /* HomeDetailViewController.xib */; };
-		2A58156217C834F90018FF34 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 2A58156117C834F90018FF34 /* gigreplay.sqlite */; };
 		2A5BC702175DD706006E4D59 /* UploadTabDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A5BC700175DD706006E4D59 /* UploadTabDetailViewController.m */; };
 		2A5BC703175DD706006E4D59 /* UploadTabDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A5BC701175DD706006E4D59 /* UploadTabDetailViewController.xib */; };
 		2A5BC70B176061CE006E4D59 /* splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5BC709176061CE006E4D59 /* splash@2x.png */; };
 		2A5BC70C176061CE006E4D59 /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5BC70A176061CE006E4D59 /* splash.png */; };
-		2A5CFDF717CB4DA4002C2BC5 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDF517CB4DA3002C2BC5 /* icon@2x.png */; };
 		2A5CFDF817CB4DA4002C2BC5 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDF617CB4DA3002C2BC5 /* icon.png */; };
 		2A5CFDFA17CB5113002C2BC5 /* g_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDF917CB5113002C2BC5 /* g_logo.png */; };
+		2A5CFDFC17D821DF002C2BC5 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDFB17D821DF002C2BC5 /* icon@2x.png */; };
+		2A5CFDFE17D821FF002C2BC5 /* gigreplay.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDFD17D821FF002C2BC5 /* gigreplay.sqlite */; };
 		2A6292C21740B052003E7BDB /* start_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B61740B052003E7BDB /* start_1.png */; };
 		2A6292C31740B052003E7BDB /* start_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B71740B052003E7BDB /* start_6.png */; };
 		2A6292C41740B052003E7BDB /* start_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B81740B052003E7BDB /* start_5.png */; };
@@ -352,7 +352,6 @@
 		2A50535717AFAB18000BD700 /* HomeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeDetailViewController.h; sourceTree = "<group>"; };
 		2A50535817AFAB18000BD700 /* HomeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeDetailViewController.m; sourceTree = "<group>"; };
 		2A50535917AFAB18000BD700 /* HomeDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeDetailViewController.xib; sourceTree = "<group>"; };
-		2A58156117C834F90018FF34 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		2A5BC6FF175DD706006E4D59 /* UploadTabDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadTabDetailViewController.h; sourceTree = "<group>"; };
 		2A5BC700175DD706006E4D59 /* UploadTabDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadTabDetailViewController.m; sourceTree = "<group>"; };
 		2A5BC701175DD706006E4D59 /* UploadTabDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadTabDetailViewController.xib; sourceTree = "<group>"; };
@@ -361,9 +360,10 @@
 		2A5BC70D176061F7006E4D59 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		2A5BC70F17606208006E4D59 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		2A5BC71117606213006E4D59 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		2A5CFDF517CB4DA3002C2BC5 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon@2x.png"; path = "/Users/mikaillo/Desktop/gigReplay/gigReplayApp/icon@2x.png"; sourceTree = "<absolute>"; };
 		2A5CFDF617CB4DA3002C2BC5 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		2A5CFDF917CB5113002C2BC5 /* g_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_logo.png; sourceTree = "<group>"; };
+		2A5CFDFB17D821DF002C2BC5 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		2A5CFDFD17D821FF002C2BC5 /* gigreplay.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = gigreplay.sqlite; sourceTree = "<group>"; };
 		2A6292B61740B052003E7BDB /* start_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_1.png; sourceTree = "<group>"; };
 		2A6292B71740B052003E7BDB /* start_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_6.png; sourceTree = "<group>"; };
 		2A6292B81740B052003E7BDB /* start_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_5.png; sourceTree = "<group>"; };
@@ -1037,14 +1037,14 @@
 		2AE35C47170020BF000993E6 = {
 			isa = PBXGroup;
 			children = (
-				2A5CFDF517CB4DA3002C2BC5 /* icon@2x.png */,
+				2A5CFDFB17D821DF002C2BC5 /* icon@2x.png */,
+				2A5CFDFD17D821FF002C2BC5 /* gigreplay.sqlite */,
 				2A5CFDF617CB4DA3002C2BC5 /* icon.png */,
 				2AA8BB8E17B11B2100317378 /* linkin.mp4 */,
 				2A5BC71117606213006E4D59 /* Default.png */,
 				2A5BC70F17606208006E4D59 /* Default@2x.png */,
 				2A5BC70D176061F7006E4D59 /* Default-568h@2x.png */,
 				2A4667B11741F05000CBE21B /* thesmos.rdb */,
-				2A58156117C834F90018FF34 /* gigreplay.sqlite */,
 				2A13AD811712A5E50009ACAE /* MediaRecording */,
 				2AD2DBEC17088E0000E00478 /* APIs */,
 				2AE35C9817005773000993E6 /* Facebook LoginView */,
@@ -1549,10 +1549,10 @@
 				2AFCAD1717C2147B0010D5C9 /* gig_tab_off.png in Resources */,
 				2AFCAD1A17C219EC0010D5C9 /* gig_tab_on.png in Resources */,
 				2AFCAD1E17C21D8F0010D5C9 /* capture_off.png in Resources */,
-				2A58156217C834F90018FF34 /* gigreplay.sqlite in Resources */,
-				2A5CFDF717CB4DA4002C2BC5 /* icon@2x.png in Resources */,
 				2A5CFDF817CB4DA4002C2BC5 /* icon.png in Resources */,
 				2A5CFDFA17CB5113002C2BC5 /* g_logo.png in Resources */,
+				2A5CFDFC17D821DF002C2BC5 /* icon@2x.png in Resources */,
+				2A5CFDFE17D821FF002C2BC5 /* gigreplay.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
