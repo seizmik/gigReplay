@@ -94,89 +94,154 @@ if ($user) {
 	                //if (response.perms)
 	                      window.location.href = 'example.php';
 	              } else {
-	                // user is not logged in
+		              alert('Please log In with FacebookAccount');
+	               
 	              }
 	       },{scope:'email'}); // which data to access from user profile
 	   }
 	  });
 	  }
-	 
+
+  function loginAccount(){
+	  FB.getLoginStatus(function(r){
+	       if(r.status === 'connected'){
+	              window.location.href = 'myAccount_Videos.php';
+	       }else{
+	          FB.login(function(response) {
+	                  if(response.authResponse) {
+	                //if (response.perms)
+	                	  window.location.href = 'myAccount_Videos.php';
+		   } else {
+			   alert('Please log In with FacebookAccount');
+	                FB.login();
+	                
+	              }
+	       },{scope:'email'}); // which data to access from user profile
+	   }
+	  });
+	  }
 </script>
 
-  <?php include 'top_toolbar.php'; ?>
-
-    <div class="col-12 col-lg-12">
+<?php include 'top_toolbar.php'; ?>
+<!-- Create the webpage here -->
+  <div class="row"><br><br>
+  <div class="col-md-8"><p>gigReplay is still under construction, some links/objects may be broken</p></div>
+</div>
+  <div class="col-12 col-lg-12">
    <div class="row">
     <div class="col-1 col-lg-2">
-<?php if ($user): ?>
-      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
-      
-    <?php else: ?>
-      <div>
-        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
-      </div>
-    <?php endif ?>
+ 
     <a href='#' onclick='login();'>Facebook login</a>
    <a href='#' onclick='logout();'>Facebook logout</a>
-<fb:login-button show-faces="true" width="200" max-rows="1"></fb:login-button>
-    <div class="fb-facepile" data-href="http://facebook.com/gigreplay" data-action="Comma separated list of action of action types" data-width="200" data-max-rows="1"></div>
+<div class="fb-facepile" data-href="http://facebook.com/gigreplay" data-action="Comma separated list of action of action types" data-width="200" data-max-rows="1"></div>
      <ul class="nav nav-pills nav-stacked hidden-sm">
-      <li class="active"><a href="http://www.gigreplay.com/front.php">Featured</a></li>
-      <li><a href="http://www.gigreplay.com/example.php">My Videos</a></li>
+      <li class="active"><a href="http://www.gigreplay.com/example.php">Featured</a></li>
+      <li><a href="#" onclick='loginAccount();'>My Account</a></li>
       <li><a href='http://www.gigreplay.com/example.php' onclick='login();'>testing out</a></li>
+      <li><a href='http://www.gigreplay.com/myAccount_Session.php'>testing out</a></li>
       <!--<li><a href="#">Inbox</a></li>-->
      </ul>
     </div>
     
-	
     
- 
-<div class="col-10 col-lg-9">
+    
+    <div class="col-10 col-lg-9">
+     <h3>Featured Video</h3>
      <div class="row">
       <div class="col-12 col-lg-12" style="max-width:960px;">
+       <video width="100%" controls>
+        <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
+       Your browser does not support the video tag.
+       </video>
       </div>
      </div>
-     <h3>My Generated Videos</h3>
+     <h3>More Videos</h3>
      <div class="row">
-<?php 
- $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+
+<?php
+    
+    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
     if (mysqli_connect_errno($con)) {
         echo "Failed to onnect to MySQL: " . mysqli_connect_error();
     } else {
-	
-        $query =" SELECT * FROM gigreplay.media_master JOIN thesmos.user on media_master.user_id=thesmos.user.id WHERE media_master.user_id=19";
+        $query = "SELECT * FROM media_master WHERE feature=1 ORDER BY master_id DESC LIMIT 0,50";
         $result = mysqli_query($con, $query);
-        
-	
+        $num = mysqli_num_rows($result);
+        //echo $num;
     }
     
-   
-while ($entry = mysqli_fetch_array($result)) {
+    while ($entry = mysqli_fetch_array($result)) {
         $entries[]=$entry;
     }
     
     //Initialise the row count
     $row_count=0;
     foreach ($entries as $row) {
-        $session_name = $row['title'];
-        $master_id=$row['master_id'];
-        $default_thumb=$row['default_thumb'];
-        $user_name=$row['user_name'];
-        $last_modified=$row['date_modified'];
-        $append_url ="http://www.gigreplay.com/myVideos.php?vid=".$master_id;
+        $media_id = $row['master_id'];
+        $user_id = $row['user_id'];
+        $session_id = $row['session_id'];
+        $title = $row['title'];
+        $media_url = $row['media_url'];
+        $media_url_lo = $row['media_url_lo'];
+        $views = $row['views'];
+        $likes = $row['likes'];
+        $default_thumb = $row['default_thumb'];
+        $last_modified = $row['date_modified'];
+        $start_time = $row['start_time'];
+        $append_url = "http://www.gigreplay.com/watch.php?vid=".$media_id;
         
-	/*?><?php echo "<a href= $append_url > $session_name</a>";?></br> <?php*/
-
-   mysqli_close($con);
-    ?>
+        //Set user name
+        if ($user_id == 0) {
+            //Query the thesmos database for the session name
+            $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+            if (mysqli_connect_errno($con)) {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            } else {
+                //Find out if the video has already been created once before
+                $query = "SELECT * FROM session WHERE id=".$session_id;
+                $result = mysqli_query($con, $query);
+                $row = mysqli_fetch_array($result);
+            }
+            mysqli_close($con);
+            
+            $session_name = $row['session_name'];
+            $user_name = "GigReplay";
+            
+        } else {
+            $con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+            if (mysqli_connect_errno($con)) {
+                echo "Failed to connect to MySQL: " . mysqli_connect_error();
+            } else {
+                //Find out if the video has already been created once before
+                $query = "SELECT U.user_name, S.session_name FROM user_session US INNER JOIN user U on U.id = US.user_id INNER JOIN session S on S.id = US.session_id WHERE US.session_id = ".$session_id." AND US.user_id = ".$user_id;
+                $result = mysqli_query($con, $query);
+                $row = mysqli_fetch_array($result);
+            }
+            mysqli_close($con);
+            
+            $user_name = $row['user_name'];
+            $session_name = $row['session_name'];
+        }
+        
+        //Set video title
+        if (!$title) {
+            $title = $session_name;
+        }
+        
+        //Set default thumbnail. Append the default_thumbnail number to the string.
+        $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     
-    <div class="col-12 col-lg-4" style="max-width:320px;">
+?>
+
+      <div class="col-12 col-lg-4" style="max-width:320px;">
        <a href="<?=$append_url ?>" class="thumbnail">
         <img data-src="holder.js/100%x100%" alt="100%x100%" src="<?=$default_thumb ?>" style="display:block;">
        </a>
+        <div class="fb-like" data-href="http://www.gigreplay.com/watch.php?vid=<?php echo "$media_id";?>" data-width="200" data-show-faces="false" data-send="false"></div>
        <div class="caption">
-        <a href="<?=$append_url ?>"><h3><?=$session_name ?></h3></a>
+        <a href="<?=$append_url ?>"><h3><?=$title ?></h3></a>
         <p>Created by <?=$user_name ?><br>
+        <small><?=$views ?> views</small><br>
         <small>Created at <?=$last_modified ?></small></p>
        </div>
       </div>
@@ -203,4 +268,5 @@ while ($entry = mysqli_fetch_array($result)) {
    </div>
   </div>
  </body>
+
 </html>

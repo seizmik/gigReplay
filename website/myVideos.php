@@ -160,6 +160,9 @@ border: 1px black solid;
       </div>
      </div>
      <div class="fb-like" data-href="http://www.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" data-width="200" data-show-faces="true" data-send="false"></div>
+     <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" target="_blank">
+  Share on Facebook
+</a>
      <div class="row">
       <div class="col-9 col-lg-9">
        <span class="hidden-sm"><h1><?=$title?></h1></span>
