@@ -149,7 +149,7 @@ border: 1px black solid;
      <div class="row">
       <div class="col-12 col-lg-12" style="max-width:960px;">
        <video width="100%" controls>
-        <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
+        <source src="http://www.lipsync.sg/uploads/master/318-Sunday_Morning_IV/19-Leon_Ng/output_hi.mp4" type="video/mp4">
        Your browser does not support the video tag.
        </video>
       </div>

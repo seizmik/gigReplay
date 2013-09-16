@@ -1,3 +1,37 @@
+<?php
+
+
+require 'php-sdk/facebook.php';
+
+// Create our Application instance (replace this with your appId and secret).
+$facebook = new Facebook(array(
+  'appId'  => '425449864216352',
+  'secret' => 'e0a33ee97563372f964df382b350af30',
+));
+
+// Get User ID
+$user = $facebook->getUser();
+
+
+
+if ($user) {
+  try {
+    // Proceed knowing you have a logged in user who's authenticated.
+    $user_profile = $facebook->api('/me');
+  } catch (FacebookApiException $e) {
+    error_log($e);
+    $user = null;
+  }
+}
+
+//Login or logout url will be needed depending on current user state.
+if ($user) {
+  $logoutUrl = $facebook->getLogoutUrl();
+} else {
+  $loginUrl = $facebook->getLoginUrl();
+}
+
+?>
 <html>
 <head>
  <head>
@@ -6,7 +40,17 @@
 <meta http-equiv="Pragma" CONTENT="no-cache">
 <?php include 'header.php'; ?>
 </head>
+
 <body>
+
+ <?php if ($user): ?>
+      <?php $fb_user_id=$user_profile['id'];?>
+  	
+    <?php else: ?>
+    
+  <? php //place some controls here to login user?>
+    <?php endif ?>
+
 <div id="fb-root"></div>
 <script>
   // Additional JS functions here
@@ -74,17 +118,26 @@
       </div>
      </div>
      <h3>My Generated Videos</h3>
+ <?php     if (!$user){
+	echo "You have to log in to view your G-Videos!";
+	
+}?>
+<?php if ($user): ?>
+      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
+    <?php else: ?>
+      <div>
+        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
+      </div>
+    <?php endif ?>
      <div class="row">
 <?php 
  $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
     if (mysqli_connect_errno($con)) {
         echo "Failed to onnect to MySQL: " . mysqli_connect_error();
-    } else {
-	
-        $query =" SELECT * FROM gigreplay.media_master JOIN thesmos.user on media_master.user_id=thesmos.user.id WHERE media_master.user_id=19";
+    } else { 
+        $query =" SELECT * FROM gigreplay.media_master JOIN thesmos.user on media_master.user_id=thesmos.user.id WHERE thesmos.user.fb_user_id=".$fb_user_id;
         $result = mysqli_query($con, $query);
-        
-	
+
     }
     
    
@@ -108,6 +161,7 @@ while ($entry = mysqli_fetch_array($result)) {
     ?>
     
     <div class="col-12 col-lg-4" style="max-width:320px;">
+    <h1><?php echo $result2;?></h1>
        <a href="<?=$append_url ?>" onclick='login();' class="thumbnail">
         <img data-src="holder.js/100%x100%" alt="100%x100%" src="<?=$default_thumb ?>" style="display:block;">
        </a>

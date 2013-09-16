@@ -1,6 +1,9 @@
 /** {
     border: 1px white solid;
 }*/
+.body{
+	padding-bottom:100px;
+}
 
 #toolbar {
     width: 100%; height: 100px;

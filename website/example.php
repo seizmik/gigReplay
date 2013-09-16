@@ -1,15 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
 <?php
+
 
 require 'php-sdk/facebook.php';
 
 // Create our Application instance (replace this with your appId and secret).
 $facebook = new Facebook(array(
-  'appId'  => '	425449864216352',
+  'appId'  => '425449864216352',
   'secret' => 'e0a33ee97563372f964df382b350af30',
 ));
 
 // Get User ID
 $user = $facebook->getUser();
+
+
 
 if ($user) {
   try {
@@ -28,98 +33,87 @@ if ($user) {
   $loginUrl = $facebook->getLoginUrl();
 }
 
-
 ?>
 
-<!doctype html>
-<html xmlns:fb="http://www.facebook.com/2008/fbml">
-  <head>
-  <meta http-equiv="Expires" CONTENT="0">
+ <head>
+<meta http-equiv="Expires" CONTENT="0">
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
+  <title>GigReplay Video List</title>
+
+
+
+    <?php if ($user): ?>
+      <?php $fb_user_id=$user_profile['id'];?>
+  	
+    <?php else: ?>
+  <? php //place some controls here to login user?>
+    <?php endif ?>
+
+
 <?php include 'header.php'; ?>
-    <title>php-sdk</title>
-    <style>
-      body {
-        font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
-      }
-      h1 a {
-        text-decoration: none;
-        color: #3b5998;
-      }
-      h1 a:hover {
-        text-decoration: underline;
-      }
-    </style>
-  </head>
-  <body>
-  <div id="fb-root"></div>
+ 
+  <meta property="og:image" content="/resources/g_logo.png"/>
+  <style type="text/css">
+  
+/** {
+border: 1px black solid;
+}*/
+  </style>
+ </head>
+
+ <body>
+<div id="fb-root"></div>
 <script>
-  // Additional JS functions here
   window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '425449864216352', // App ID
-      channelUrl : '//WWW.gigreplay.COM/channel.html', // Channel File
-      status     : true, // check login status
-      cookie     : true, // enable cookies to allow the server to access the session
-      xfbml      : true  // parse XFBML
-    });
+  FB.init({
+    appId      : '425449864216352', // App ID
+    channelUrl : '//www.gigreplay.com/channel.html', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
 
-    // Additional init code here
-
+  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
+  // for any authentication related change, such as login, logout or session refresh. This means that
+  // whenever someone who was previously logged out tries to log in again, the correct case below 
+  // will be handled. 
+  FB.Event.subscribe('auth.authResponseChange', function(response) {
+    // Here we specify what we do with the response anytime this event occurs. 
+    if (response.status === 'connected') {
+     
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+     
+      FB.login();
+    } else {
+      
+      FB.login();
+    }
+  });
   };
 
   // Load the SDK asynchronously
   (function(d){
-     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement('script'); js.id = id; js.async = true;
-     js.src = "//connect.facebook.net/en_US/all.js";
-     ref.parentNode.insertBefore(js, ref);
-   }(document));
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
 
-  function logout(){
-	  FB.logout(function(response) {
-		  window.location.href = 'example.php';
-		});
+  // Here we run a very simple test of the Graph API after login is successful. 
+  // This testAPI() function is only called in those cases. 
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+	var fb_id=response.id;
+      console.log('Good to see you, ' + response.name + '.');
+	console.log('fb.id is , '+response.id+'.');
+	console.log(fb_id);
+
+    });
   }
-
-  function login(){
-	  FB.getLoginStatus(function(r){
-	       if(r.status === 'connected'){
-	              window.location.href = 'example.php';
-	       }else{
-	          FB.login(function(response) {
-	                  if(response.authResponse) {
-	                //if (response.perms)
-	                      window.location.href = 'example.php';
-	              } else {
-		              alert('Please log In with FacebookAccount');
-	               
-	              }
-	       },{scope:'email'}); // which data to access from user profile
-	   }
-	  });
-	  }
-
-  function loginAccount(){
-	  FB.getLoginStatus(function(r){
-	       if(r.status === 'connected'){
-	              window.location.href = 'myAccount_Videos.php';
-	       }else{
-	          FB.login(function(response) {
-	                  if(response.authResponse) {
-	                //if (response.perms)
-	                	  window.location.href = 'myAccount_Videos.php';
-		   } else {
-			   alert('Please log In with FacebookAccount');
-	                FB.login();
-	                
-	              }
-	       },{scope:'email'}); // which data to access from user profile
-	   }
-	  });
-	  }
 </script>
 
 <?php include 'top_toolbar.php'; ?>
@@ -130,15 +124,19 @@ if ($user) {
   <div class="col-12 col-lg-12">
    <div class="row">
     <div class="col-1 col-lg-2">
- 
-    <a href='#' onclick='login();'>Facebook login</a>
-   <a href='#' onclick='logout();'>Facebook logout</a>
+ <?php if ($user): ?>
+      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
+    <?php else: ?>
+      <div>
+        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
+      </div>
+    <?php endif ?>
+    
 <div class="fb-facepile" data-href="http://facebook.com/gigreplay" data-action="Comma separated list of action of action types" data-width="200" data-max-rows="1"></div>
      <ul class="nav nav-pills nav-stacked hidden-sm">
       <li class="active"><a href="http://www.gigreplay.com/example.php">Featured</a></li>
-      <li><a href="#" onclick='loginAccount();'>My Account</a></li>
-      <li><a href='http://www.gigreplay.com/example.php' onclick='login();'>testing out</a></li>
-      <li><a href='http://www.gigreplay.com/myAccount_Session.php'>testing out</a></li>
+      <li><a href="http://www.gigreplay.com/myAccount_Videos.php">myG-Videos</a></li>
+      <li><a href="http://www.gigreplay.com/myAccount_Session.php">mySessionVideos</a></li>
       <!--<li><a href="#">Inbox</a></li>-->
      </ul>
     </div>

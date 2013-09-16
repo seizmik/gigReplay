@@ -77,9 +77,13 @@
 ?>
 
  <head>
+
+  <meta http-equiv="Expires" CONTENT="0">
+<meta http-equiv="Cache-Control" CONTENT="no-cache">
+<meta http-equiv="Pragma" CONTENT="no-cache">
   <title><?=$title?></title>
 
-<?php include 'header.php'; ?>
+ <?php include 'headertest.php'; ?>
 
   <meta property="og:image" content="<?=$thumbnail_url?>"/>
   <link rel="shortcut icon" href='/resources/favicon.ico'>
@@ -153,7 +157,7 @@ border: 1px black solid;
      <div class="row">
       <div class="col-12 col-lg-12">
        <div class="text-center" style="margin-left:auto; margin-right:auto;">
-        <video id="video_with_controls" width="640px" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+        <video id="video_with_controls" width="1000px" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
        </div>
@@ -171,11 +175,23 @@ border: 1px black solid;
        Last modified <?=$last_modified?></p>
       </div>
      </div>
+     <div >
+     <form action="/forms/comments.php" method="post">
+Comments:<br />
+<textarea class="form-control" rows="3" name="comments" id="comments" method="post"></textarea><br />
+<input type="hidden" id=username name="<?php $user_name?>"/>
+<input type="submit" value="Submit" />
+</form>
+     
+     
+     </div>
     </div>
     <div class="col-lg-1 hidden-sm">
     </div>
    </div>
   </div>
+   
  </body>
+
 </html>
 
