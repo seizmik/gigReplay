@@ -47,6 +47,22 @@
         }
     }
     
+    function updateMaster($column)
+    {
+        //Either updates the views or likes
+        global $getthing;
+        $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+        if (mysqli_connect_errno($con)) {
+            //Do something that will alert the user
+        } else {
+            //Update the database with the parameters available
+            //Also need to double check if the user has liked the video before updating
+            $query = "UPDATE media_master SET $column=($column+1) WHERE master_id=".$getthing;
+            mysqli_query($con, $query);
+        }
+        mysqli_close($con);
+    }
+    
     // End of Function list ----------------------------------------
     
     
@@ -152,32 +168,33 @@ border: 1px black solid;
        </div>
       </div>
      </div>
-     <div class="row"><div class="col-12 col-lg-12">
-      <div class="row">
-       <div class="col-9 col-lg-9">
-        <span class="hidden-sm"><h1><?=$title?></h1></span>
-        <span class="visible-sm"><h3><?=$title?></h3></span>
-        <p>Created by <?=$user_name?><br>
-        Last modified <?=$last_modified?></p>
-       </div>
-       <div class="col-3 col-lg-3" style="margin-top:1.5em;">
-        <p class="text-right"><strong><?=$views ?></strong> views</p>
-       </div>
-      </div>
-
-      <!--Comments section-->
-      <div class="row">
-       <form role="form">
-        <div class="form-group">
-         <label for="insertComment">Comments:</label>
-         <input type="comment" class="form-control" id="insertComment" placeholder="Type comment here">
+     <div class="row">
+      <div class="col-12 col-lg-12">
+       <div class="row">
+        <div class="col-9 col-lg-9">
+         <span class="hidden-sm"><h1><?=$title?></h1></span>
+         <span class="visible-sm"><h3><?=$title?></h3></span>
+         <p>Created by <?=$user_name?><br>
+         Last modified <?=$last_modified?></p>
         </div>
-        <button type="button" class="btn btn-default pull-right">Submit</button>
-       </form>
-      </div>
-      <hr/>
-      <div class="row">
-       <h3>User comments</h3>
+        <div class="col-3 col-lg-3" style="margin-top:1.5em;">
+         <p class="text-right"><strong><?=$views ?></strong> views</p>
+        </div>
+       </div>
+
+       <!--Comments section-->
+       <div class="row">
+        <form role="form">
+         <div class="form-group">
+          <label for="insertComment">Comments:</label>
+          <input type="comment" class="form-control" id="insertComment" placeholder="Type comment here">
+         </div>
+         <button type="button" class="btn btn-default pull-right">Submit</button>
+        </form>
+       </div>
+       <hr/>
+       <div class="row">
+        <h3>User comments</h3>
 
 <?php
     //Retieve all the comments from media_master
@@ -214,34 +231,35 @@ border: 1px black solid;
 
 ?>
 
-       <!--A comment entry-->
-       <div class="row">
-        <div class="col-12 col-lg-12"> <!--Decorate this division-->
-         <p>
-          <b><?=$comment_user_name?></b> writes:<br>
-          <?=$comment_text?><br>
-          <small><?=$comment_date?></small>
-         </p>
-         <div class="btn-toolbar pull-right">
-          <div class="btn-group">
-           <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></button>
-           <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></button>
+        <!--A comment entry-->
+        <div class="row">
+         <div class="col-12 col-lg-12"> <!--Decorate this division-->
+          <p>
+           <b><?=$comment_user_name?></b> writes:<br>
+           <?=$comment_text?><br>
+           <small><?=$comment_date?></small>
+          </p>
+          <div class="btn-toolbar pull-right">
+           <div class="btn-group">
+            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-up"></span></button>
+            <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-thumbs-down"></span></button>
+           </div>
+           <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-warning-sign"></span></button>
           </div>
-          <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-warning-sign"></span></button>
          </div>
         </div>
-       </div>
 
 <?php
         }
     }
 ?>
 
+       </div>
+
+       <!--Comments portion end-->
+
       </div>
-
-      <!--Comments portion end-->
-
-     </div></div>
+     </div>
     </div>
     <div class="col-lg-1 hidden-sm">
     </div>
