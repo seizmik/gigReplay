@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html prefix="og: http://ogp.me/ns#">
 <?php
+
+
+require 'php-sdk/facebook.php';
+
+// Create our Application instance (replace this with your appId and secret).
+$facebook = new Facebook(array(
+  'appId'  => '425449864216352',
+  'secret' => 'e0a33ee97563372f964df382b350af30',
+));
+
+// Get User ID
+$user = $facebook->getUser();
+
+
+
+if ($user) {
+  try {
+    // Proceed knowing you have a logged in user who's authenticated.
+    $user_profile = $facebook->api('/me');
+  } catch (FacebookApiException $e) {
+    error_log($e);
+    $user = null;
+  }
+}
+
+//Login or logout url will be needed depending on current user state.
+if ($user) {
+  $logoutUrl = $facebook->getLogoutUrl();
+} else {
+  $loginUrl = $facebook->getLoginUrl();
+}
+
+?>
+<?php if ($user): ?>
+      <?php $fb_user_id=$user_profile['id'];
+       $fb_user_name=$user_profile['name'];?>
+  	
+    <?php else: ?>
+    
+  <? php //place some controls here to login user?>
+    <?php endif ?>
+    
+    
+<?php
     
     $getthing = $_GET['vid'];
     
@@ -69,6 +113,36 @@
    // $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     $thumbnail_url= $default_thumb;
 ?>
+<!-- Grab Post data from form and process -->
+<?php 
+$username=$_POST['username'];
+$mediaid=$_POST['mediaid'];
+$userid=$_POST['userid'];
+$comment=$_POST['comments'];
+$submit=$_POST['submit'];
+if($submit){
+	if($username && $comment)
+	{
+		$con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+		if (mysqli_connect_errno($con)) {
+			echo "Failed to onnect to MySQL: " . mysqli_connect_error();
+		} else {
+			$query="INSERT INTO user_comment (user_name,media_id,user_id,comment) VALUES ('$username','$mediaid','$userid','$comment')";
+			$result = mysqli_query($con, $query);
+			header("Location: success2.php?success=$mediaid");
+		}
+		
+	}
+	else
+	{
+		echo "Please fill out all the fields.";
+	}
+
+
+}
+mysqli_close($con);
+?>
+<!--Grab Post data from form and process  -->
 
  <head>
   <title><?=$title?></title>
@@ -85,98 +159,157 @@ border: 1px black solid;
  </head>
 
  <body>
+ 
 <?php include 'top_toolbar.php'; ?>
-  <div class="col-12 col-lg-12">
-   <div class="row">
-    <div class="col-lg-1 hidden-sm">
-    </div>
-    <div class="col-12 col-lg-10" style="max-width:960px">
+ <script>
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '425449864216352', // App ID
+    channelUrl : '//www.gigreplay.com/channel.html', // Channel File
+    status     : true, // check login status
+    cookie     : true, // enable cookies to allow the server to access the session
+    xfbml      : true  // parse XFBML
+  });
+
+  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
+  // for any authentication related change, such as login, logout or session refresh. This means that
+  // whenever someone who was previously logged out tries to log in again, the correct case below 
+  // will be handled. 
+   FB.Event.subscribe('auth.authResponseChange', function(response) {
+    // Here we specify what we do with the response anytime this event occurs. 
+    if (response.status === 'connected') {
+     
+      testAPI();
+    } else if (response.status === 'not_authorized') {
+     
+      FB.login();
+    } else {
+      
+      FB.login();
+    }
+  });
+  }; 
+  function login(){
+	  FB.getLoginStatus(function(r){ //check if user already authorized the app
+	       if(r.status === 'connected'){
+	             
+	       }else{
+	          FB.login(function(response) { // opens the login dialog
+	                  if(response.authResponse) { // check if user authorized the app
+	                //if (response.perms) {
+	                     FB.login();
+	              } else {
+	            	  	FB.login();
+	                // user is not logged in
+	              }
+	       },{scope:'email'}); //permission required by the app
+	   }
+	  });
+	  }
+	 
+	  
+
+  // Load the SDK asynchronously
+  (function(d){
+   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+   if (d.getElementById(id)) {return;}
+   js = d.createElement('script'); js.id = id; js.async = true;
+   js.src = "//connect.facebook.net/en_US/all.js";
+   ref.parentNode.insertBefore(js, ref);
+  }(document));
+
+</script>
+   
+
+    
      <div class="row">
       <div class="col-12 col-lg-12">
        <div class="text-center" style="margin-left:auto; margin-right:auto;">
-        <video id="video_with_controls" width="100%" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+        <video id="video_with_controls"  controls autobuffer poster="<?=$thumbnail_url?>"> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
        </div>
       </div>
-     </div>
-     <div class="row">
-      <div class="col-9 col-lg-9">
-       <span class="hidden-sm"><h1><?=$title?></h1></span>
-       <span class="visible-sm"><h3><?=$title?></h3></span>
+    
+     
+       <div class="text-center"">
+       <h1><?=$title?></h1>
+       <h3><?=$title?></h3>
        <p>Created by <?=$user_name?><br>
        Last modified <?=$last_modified?></p>
+       <div class="text-center" style="margin-top:1.5em;">
+       <p ><strong><?=$views ?></strong> views</p>
       </div>
-      <div class="col-3 col-lg-3" style="margin-top:1.5em;">
-       <p class="text-right"><strong><?=$views ?></strong> views</p>
       </div>
+   <!--  Form for comments -->
+     
+     <div class="comments-form" style="margin-left:auto; margin-right:auto; width:960px;">
+     <?php if(!$user){?>
+     <?php }else {?>
+     <form action="myVideos.php?vid=<?php echo $getthing ?>"  method="POST">   
+Comments:<br />
+<textarea class="form-control" rows="3" name="comments" placeholder="Type comment here" method="POST"></textarea><br />
+<input type="hidden" name="username" value="<?php echo "$fb_user_name"?>"/>
+<input type="hidden" name="mediaid" value="<?php echo"$media_id"?>"/>
+<input type="hidden" name="userid" value="<?php echo"$fb_user_id"?>"/>
+<input type="submit" class="btn btn-default pull-right" name="submit"  value="Comment" />
+<br><br>
+</form>
+</div>
+<?php }?>
+<?php if(!$user){?>
+	<div class="notloggedin-comments" style="margin-left:auto; margin-right:auto; width:960px;">
+	<div class="list-group">
+	<h4 class="list-group-item-heading">Please log in to view or comment</h4>
+	<?php if ($user): ?>
+      <a href="<?php echo $logoutUrl; ?>" onclick='login();'>Logout of Facebook</a>
+    <?php else: ?>
+      <div>
+        <a href="<?php echo $loginUrl; ?>" onclick='login();'>Login with Facebook</a>
+      </div>
+    <?php endif ?>
+	</div>
+	</div>
+	
+<?php }else{ ?>
+<?php 
+$con = mysqli_connect("localhost", "default", "thesmosinc", "thesmos");
+if (mysqli_connect_errno($con)) {
+	echo "Failed to onnect to MySQL: " . mysqli_connect_error();
+} else {
+	$query2="SELECT * FROM user_comment WHERE media_id=".$getthing." ORDER BY last_post DESC limit 10 ";
+	$result2 = mysqli_query($con, $query2);
+}
 
-      <!--This is where we insert the comments from the database-->
-      <div class="row">
-       <div class="row">
-        <div class="col-12 col-lg-12">Comments:</div>
-       </div>
-       <div class="row">
-        <div class="col-11 col-lg-11">
-         <!--Put a text box there and have some placement text-->
-         <div class="text-box-input">
-         </div>
-        </div>
-       </div>
-       <div class="row">
-        <div class="pull-right">
-         <div class="button">Submit</div>
-         <div class="button">Cancel</div>
-        </div>
-       </div>
 
-<?php
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        //Find out if the video has already been created once before
-        
-        $query = "THIS PART IS STILL BLANK! Maximum 20 entries";
-        
-        $comment_results = mysqli_query($con, $query);
-    }
-    mysqli_close($con);
+while($rows=mysqli_fetch_array($result2))
+{
+    $dfacebookid=$rows['user_id'];
+     $dname=$rows['user_name'];
+     $dcomment=$rows['comment'];?>
+      <div class="comments" style="margin-left:auto; margin-right:auto; width:960px;">
+    <div class="list-group">
+    <h4 class="list-group-item-heading"><img src="http://graph.facebook.com/<?php echo $dfacebookid?>/picture?type=small&width=40&height=40"><?php echo $dname?></h4>
+    <p class="list-group-item-text"><?php echo $dcomment?></p></br><hr>
+  </a>
+</div> 
+</div>
+<?php 
+}
+
+if(mysqli_num_rows($result2) == 0){?>
+	<div class="zero-comments" style="margin-left:auto; margin-right:auto; width:960px;">
+    <div class="list-group">
+    <h4 class="list-group-item-heading">No Comments for this Video</h4>
+</div> 
+</div>
+<?php 
+}
+mysqli_close($con);
+}?>
     
-    while ($comment = mysqli_fetch_array($comment_results)) {
-        $comment_array[] = $comment;
-    }
-    
-    foreach ($comment_array as $row) {
-        $comment_entry = $row['comment'];
-        $comment_up = $row['thumb_up'];
-        $comment_down = $row['thumb_down'];
-        $comment_flag = $row['flag'];
-?>
 
-       <!--A comment entry-->
-       <div class="row">
-        <div class="col-12 col-lg-12"> <!--Decorate this division-->
-         <p><?=$comment_entry ?></p>
-         <div class="button">Up Vote</div>
-         <div class="button">Down Vote</div>
-         <div class="button">Flag</div>
-        </div>
-       </div>
-
-<?php
-    }
-?>
-
-      </div>
-
-      <!--Comments portion end-->
-
-     </div>
-    </div>
-    <div class="col-lg-1 hidden-sm">
-    </div>
-   </div>
+   
   </div>
  </body>
 </html>

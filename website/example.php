@@ -62,7 +62,7 @@ border: 1px black solid;
   </style>
  </head>
 
- <body>
+ <body >
 <div id="fb-root"></div>
 <script>
   window.fbAsyncInit = function() {
@@ -74,24 +74,51 @@ border: 1px black solid;
     xfbml      : true  // parse XFBML
   });
 
-  // Here we subscribe to the auth.authResponseChange JavaScript event. This event is fired
-  // for any authentication related change, such as login, logout or session refresh. This means that
-  // whenever someone who was previously logged out tries to log in again, the correct case below 
-  // will be handled. 
   FB.Event.subscribe('auth.authResponseChange', function(response) {
-    // Here we specify what we do with the response anytime this event occurs. 
-    if (response.status === 'connected') {
-     
-      testAPI();
-    } else if (response.status === 'not_authorized') {
-     
-      FB.login();
-    } else {
-      
-      FB.login();
-    }
-  });
-  };
+	    // Here we specify what we do with the response anytime this event occurs. 
+	    if (response.status === 'connected') {
+	      // The response object is returned with a status field that lets the app know the current
+	      // login status of the person. In this case, we're handling the situation where they 
+	      // have logged in to the app.
+	      testAPI();
+	    } else if (response.status === 'not_authorized') {
+	      // In this case, the person is logged into Facebook, but not into the app, so we call
+	      // FB.login() to prompt them to do so. 
+	      // In real-life usage, you wouldn't want to immediately prompt someone to login 
+	      // like this, for two reasons:
+	      // (1) JavaScript created popup windows are blocked by most browsers unless they 
+	      // result from direct interaction from people using the app (such as a mouse click)
+	      // (2) it is a bad experience to be continually prompted to login upon page load.
+	      FB.login();
+	    } else {
+	      // In this case, the person is not logged into Facebook, so we call the login() 
+	      // function to prompt them to do so. Note that at this stage there is no indication
+	      // of whether they are logged into the app. If they aren't then they'll see the Login
+	      // dialog right after they log in to Facebook. 
+	      // The same caveats as above apply to the FB.login() call here.
+	      FB.login();
+	    }
+	  });
+	  };
+
+  function login(){
+	  FB.getLoginStatus(function(r){ //check if user already authorized the app
+	       if(r.status === 'connected'){
+	             
+	       }else{
+	          FB.login(function(response) { // opens the login dialog
+	                  if(response.authResponse) { // check if user authorized the app
+	                //if (response.perms) {
+	                     FB.login();
+	              } else {
+	            	  	FB.login();
+	                // user is not logged in
+	              }
+	       },{scope:'email'}); //permission required by the app
+	   }
+	  });
+	  }
+	 
 
   // Load the SDK asynchronously
   (function(d){
@@ -102,18 +129,8 @@ border: 1px black solid;
    ref.parentNode.insertBefore(js, ref);
   }(document));
 
-  // Here we run a very simple test of the Graph API after login is successful. 
-  // This testAPI() function is only called in those cases. 
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-	var fb_id=response.id;
-      console.log('Good to see you, ' + response.name + '.');
-	console.log('fb.id is , '+response.id+'.');
-	console.log(fb_id);
 
-    });
-  }
+  
 </script>
 
 <?php include 'top_toolbar.php'; ?>
@@ -125,10 +142,11 @@ border: 1px black solid;
    <div class="row">
     <div class="col-1 col-lg-2">
  <?php if ($user): ?>
-      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
+      <a href="<?php echo $logoutUrl;?>" onclick='login;' >Logout of Facebook</a>
+      
     <?php else: ?>
       <div>
-        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
+        <a href="<?php echo $loginUrl; ?>" onclick='login;'>Login with Facebook</a>
       </div>
     <?php endif ?>
     
@@ -144,16 +162,75 @@ border: 1px black solid;
     
     
     <div class="col-10 col-lg-9">
-     <h3>Featured Video</h3>
-     <div class="row">
-      <div class="col-12 col-lg-12" style="max-width:960px;">
-       <video width="100%" controls>
-        <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4">
-       Your browser does not support the video tag.
-       </video>
-      </div>
+    <div class="whats-hot" style=" width:400px; float:right; margin-right:0px; clear:both;">
+      <h3>Whats Hot on Youtube</h3>
+     	
+<!--      <iframe width="560" height="315" src="//www.youtube.com/embed/cbU-V0nW3Bs" frameborder="0" allowfullscreen></iframe> -->
+<!--      <p> Korean k-POP Girl Group Girls Day back to capturing millions of view on youtube with their sexy moves..</p> -->
+<!--      <br> -->
+     
+<!--      <iframe width="560" height="315" src="//www.youtube.com/embed/jXOgYxUf6Ts" frameborder="0" allowfullscreen></iframe> -->
+<!--      <p>Awesome live TECHNO</p> -->
+<!--      <br> -->
+     
      </div>
+     <h3>Featured Video</h3>
+<!--      <div class="row"> -->
+      <div class="col-12 col-lg-12" style="max-width:960px;">
+      <div id="carousel-example-generic" class="carousel slide">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+    <a href="http://www.gigreplay.com/watch.php?vid=21" > <img src="http://gigreplay.com/resources/trouble.png" width="960px" height="500px" alt="..."></a>
+     
+      <div class="carousel-caption">
+        <h3>Cover of trouble</h3>
+    <p>#Maricella,#Travis</p>
+      </div>
+    </div>
+    <div class="item">
+    <a href="http://www.gigreplay.com/watch.php?vid=4" > <img src="http://gigreplay.com/resources/froya.png" width="960px" height="500px" alt="..."></a>
+    
+      <div class="carousel-caption">
+        <h3>Froya - Fries With Cream</h3>
+    <p>@Esplanade, Singapore!</p>
+      </div>
+    </div>
+   <div class="item">
+    <a href="http://www.gigreplay.com/watch.php?vid=6" > <img src="http://gigreplay.com/resources/saveme.png" width="960px" height="500px" alt="..."></a>
+    
+      <div class="carousel-caption">
+        <h3>Save Me Hollywood - Happier This Way</h3>
+    <p>@Esplanade, Singapore!</p>
+      </div>
+    </div>
+      
+    
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+    <span class="icon-prev"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+    <span class="icon-next"></span>
+  </a>
+</div>
+<!--        <video width="100%" controls> -->
+<!--         <source src="http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/0-GigReplay_Admin/output.mp4" type="video/mp4"> -->
+<!--        Your browser does not support the video tag. -->
+<!--        </video> -->
+<!--       </div> -->
+<!--      </div> -->
      <h3>More Videos</h3>
+     
      <div class="row">
 
 <?php
@@ -261,8 +338,7 @@ border: 1px black solid;
 
      </div>
     </div>
-    <div class="col-1 col-lg-1">
-    </div>
+    
    </div>
   </div>
  </body>

@@ -37,9 +37,9 @@ if ($user) {
 <meta http-equiv="Expires" CONTENT="0">
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
-<?php include 'header.php'; ?>
+<?php include 'headertest.php'; ?>
 </head>
-<body>
+<body style="padding-bottom: 120px">
 
 <?php if ($user): ?>
       <?php $fb_user_id=$user_profile['id'];?>
@@ -131,9 +131,9 @@ while ($entry = mysqli_fetch_array($result)) {
 
      </div>
     </div>
-    <div class="col-1 col-lg-1">
-    </div>
+    
    </div>
   </div>
   </body>
+  <?php include 'bottom_toolbar.php'; ?>
   </html>

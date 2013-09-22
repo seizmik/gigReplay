@@ -58,7 +58,7 @@ while ($entry = mysqli_fetch_array($result)) {
     <div class="col-12 col-lg-4" style="max-width:320px;">
        <div class="caption">
         <a href="<?=$append_url ?>"><h3><?=$session_name ?></h3></a>
-       <video id="video_with_controls" width="320px" height="150px" controls autobuffer poster="<?=$thumbnail_url?>" autoplay> <source src="<?=$media_url?>" type="video/mp4" />
+       <video id="video_with_controls" width="320px" height="150px" controls autobuffer poster="<?=$thumbnail_url?>"> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
          <p>Taken by <?=$user_id ?><br>
@@ -83,8 +83,9 @@ while ($entry = mysqli_fetch_array($result)) {
 
      </div>
     </div>
-    <div class="col-1 col-lg-1">
-    </div>
+  
+  <img src="resources/VideoEditor.png" width=1000px; height=800px;>
+  
    </div>
   </div>
   </body>

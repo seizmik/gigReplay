@@ -38,10 +38,10 @@ if ($user) {
   <meta http-equiv="Expires" CONTENT="0">
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
-<?php include 'header.php'; ?>
+<?php include 'headertest.php'; ?>
 </head>
 
-<body>
+<body style="padding-bottom:100px;">
 
  <?php if ($user): ?>
       <?php $fb_user_id=$user_profile['id'];?>
@@ -82,27 +82,19 @@ if ($user) {
   }
 
   function login(){
-	  FB.getLoginStatus(function(r){
+	  FB.getLoginStatus(function(r){ //check if user already authorized the app
 	       if(r.status === 'connected'){
-	              
-	       }else if(r.status === 'unknown'){
-
-	    	   alert('Please log In with FacebookAccount');
-	              window.location.href = 'myAccount_Videos.php';
-             FB.login();
-	       }
-
-	       else{
-	          FB.login(function(response) {
-	                  if(response.authResponse) {
-	                	 
-	                	  window.location.href = 'myAccount_Videos.php';
+	             
+	       }else{
+	          FB.login(function(response) { // opens the login dialog
+	                  if(response.authResponse) { // check if user authorized the app
+	                //if (response.perms) {
+	                     FB.login();
 	              } else {
-		              alert('Please log In with FacebookAccount');
-		              window.location.href = 'myAccount_Videos.php';
-	                FB.login();
+	            	  	FB.login();
+	                // user is not logged in
 	              }
-	       },{scope:'email'}); // which data to access from user profile
+	       },{scope:'email'}); //permission required by the app
 	   }
 	  });
 	  }
@@ -110,23 +102,19 @@ if ($user) {
 </script>
 
 <?php include 'top_toolbar.php'; ?>
-<div class="col-12 col-lg-12">
-<div class="row">
-<div class="col-10 col-lg-9">
-     <div class="row">
-      <div class="col-12 col-lg-12" style="max-width:960px;">
-      </div>
-     </div>
+
+<div class="videos" style="margin-left:auto; margin-right:auto; width:960px;">
+
      <h3>My Generated Videos</h3>
  <?php     if (!$user){
 	echo "You have to log in to view your G-Videos!";
 	
 }?>
 <?php if ($user): ?>
-      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
+      <a href="<?php echo $logoutUrl; ?>" onclick='login();'>Logout of Facebook</a>
     <?php else: ?>
       <div>
-        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
+        <a href="<?php echo $loginUrl; ?>" onclick='login();'>Login with Facebook</a>
       </div>
     <?php endif ?>
      <div class="row">
@@ -187,11 +175,9 @@ while ($entry = mysqli_fetch_array($result)) {
     }
 ?>
 
-     </div>
-    </div>
-    <div class="col-1 col-lg-1">
-    </div>
    </div>
-  </div>
+ 
+ </div>
   </body>
+  <?php include 'bottom_toolbar.php'; ?>
   </html>

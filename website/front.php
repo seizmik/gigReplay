@@ -146,16 +146,59 @@ border: 1px black solid;
     
     <div class="col-10 col-lg-9">
      <h3>Featured Video</h3>
-     <div class="row">
+        <div class="row">
       <div class="col-12 col-lg-12" style="max-width:960px;">
-       <video width="100%" controls>
-        <source src="http://www.lipsync.sg/uploads/master/318-Sunday_Morning_IV/19-Leon_Ng/output_hi.mp4" type="video/mp4">
-       Your browser does not support the video tag.
-       </video>
+       <div id="carousel-example-generic" class="carousel slide">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+    <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    <div class="item active">
+    <a href="http://www.gigreplay.com/watch.php?vid=21" > <img src="http://gigreplay.com/resources/trouble.png" width="960px" height="500px" alt="..."></a>
+     
+      <div class="carousel-caption">
+        <h3>Cover of trouble</h3>
+    <p>#Maricella,#Travis</p>
       </div>
+    </div>
+    <div class="item">
+    <a href="http://www.gigreplay.com/watch.php?vid=4" > <img src="http://gigreplay.com/resources/froya.png" width="960px" height="500px" alt="..."></a>
+    
+      <div class="carousel-caption">
+        <h3>Froya - Fries With Cream</h3>
+    <p>@Esplanade, Singapore!</p>
+      </div>
+    </div>
+   <div class="item">
+    <a href="http://www.gigreplay.com/watch.php?vid=6" > <img src="http://gigreplay.com/resources/saveme.png" width="960px" height="500px" alt="..."></a>
+    
+      <div class="carousel-caption">
+        <h3>Save Me Hollywood - Happier This Way</h3>
+    <p>@Esplanade, Singapore!</p>
+      </div>
+    </div>
+      
+    
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+    <span class="icon-prev"></span>
+  </a>
+  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+    <span class="icon-next"></span>
+  </a>
+</div>
+    <h3>More Videos</h3>
      </div>
-     <h3>More Videos</h3>
+     </div>
      <div class="row">
+     <br>
 
 <?php
     
