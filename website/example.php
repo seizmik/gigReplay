@@ -1,41 +1,71 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <?php
 
+// require 'config.php';
+// require 'php-sdk/facebook.php';
 
-require 'php-sdk/facebook.php';
+// // Create our Application instance (replace this with your appId and secret).
+// $facebook = new Facebook(array(
+//   'appId'  => '425449864216352',
+//   'secret' => 'e0a33ee97563372f964df382b350af30',
+// ));
 
-// Create our Application instance (replace this with your appId and secret).
-$facebook = new Facebook(array(
-  'appId'  => '425449864216352',
-  'secret' => 'e0a33ee97563372f964df382b350af30',
-));
-
-// Get User ID
-$user = $facebook->getUser();
+// // Get User ID
+// $user = $facebook->getUser();
 
 
 
-if ($user) {
-  try {
-    // Proceed knowing you have a logged in user who's authenticated.
-    $user_profile = $facebook->api('/me');
-  } catch (FacebookApiException $e) {
-    error_log($e);
-    $user = null;
-  }
-}
+// if($user){
 
-// Login or logout url will be needed depending on current user state.
-if ($user) {
-  $logoutUrl = $facebook->getLogoutUrl();
-} else {
-  $loginUrl = $facebook->getLoginUrl();
-}
+// 	try{
+// 		//get the facebook user profile data
+// 		$user_profile = $facebook->api('/me');
+// 		$params = array('next' => $base_url.'logout.php');
+// 		//logout url
+// 		$logout =$facebook->getLogoutUrl($params);
+// 		$_SESSION['User']=$user_profile;
+// 		$_SESSION['logout']=$logout;
+// 	}catch(FacebookApiException $e){
+// 		error_log($e);
+// 		$user = NULL;
+// 	}		
+// }
+	
+// if(empty($user)){
+// //login url	
+// $loginurl = $facebook->getLoginUrl(array(
+// 				'scope'			=> 'email,read_stream, publish_stream, user_birthday, user_location, user_work_history, user_hometown, user_photos',
+// 				'redirect_uri'	=> $base_url.'/login.php',
+// 				'display'=>'popup'
+// 				));
 
-?>
+// header('Location: '.$loginurl);
+// }
+
+// ?>
 
  <head>
+ <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/oauthpopup.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#facebook').click(function(e){
+        $.oauthpopup({
+            path: 'login.php',
+			width:600,
+			height:300,
+            callback: function(){
+                window.location.reload();
+            }
+        });
+		e.preventDefault();
+    });
+});
+
+
+</script>
 <meta http-equiv="Expires" CONTENT="0">
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
@@ -51,7 +81,7 @@ if ($user) {
     <?php endif ?>
 
 
-<?php include 'header.php'; ?>
+<?php include 'headertest.php'; ?>
  
   <meta property="og:image" content="/resources/g_logo.png"/>
   <style type="text/css">
@@ -60,78 +90,11 @@ if ($user) {
 border: 1px black solid;
 }*/
   </style>
+  
  </head>
 
  <body >
-<div id="fb-root"></div>
-<script>
-  window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '425449864216352', // App ID
-    channelUrl : '//www.gigreplay.com/channel.html', // Channel File
-    status     : true, // check login status
-    cookie     : true, // enable cookies to allow the server to access the session
-    xfbml      : true  // parse XFBML
-  });
 
-  FB.Event.subscribe('auth.authResponseChange', function(response) {
-	    // Here we specify what we do with the response anytime this event occurs. 
-	    if (response.status === 'connected') {
-	      // The response object is returned with a status field that lets the app know the current
-	      // login status of the person. In this case, we're handling the situation where they 
-	      // have logged in to the app.
-	      testAPI();
-	    } else if (response.status === 'not_authorized') {
-	      // In this case, the person is logged into Facebook, but not into the app, so we call
-	      // FB.login() to prompt them to do so. 
-	      // In real-life usage, you wouldn't want to immediately prompt someone to login 
-	      // like this, for two reasons:
-	      // (1) JavaScript created popup windows are blocked by most browsers unless they 
-	      // result from direct interaction from people using the app (such as a mouse click)
-	      // (2) it is a bad experience to be continually prompted to login upon page load.
-	      FB.login();
-	    } else {
-	      // In this case, the person is not logged into Facebook, so we call the login() 
-	      // function to prompt them to do so. Note that at this stage there is no indication
-	      // of whether they are logged into the app. If they aren't then they'll see the Login
-	      // dialog right after they log in to Facebook. 
-	      // The same caveats as above apply to the FB.login() call here.
-	      FB.login();
-	    }
-	  });
-	  };
-
-  function login(){
-	  FB.getLoginStatus(function(r){ //check if user already authorized the app
-	       if(r.status === 'connected'){
-	             
-	       }else{
-	          FB.login(function(response) { // opens the login dialog
-	                  if(response.authResponse) { // check if user authorized the app
-	                //if (response.perms) {
-	                     FB.login();
-	              } else {
-	            	  	FB.login();
-	                // user is not logged in
-	              }
-	       },{scope:'email'}); //permission required by the app
-	   }
-	  });
-	  }
-	 
-
-  // Load the SDK asynchronously
-  (function(d){
-   var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-   if (d.getElementById(id)) {return;}
-   js = d.createElement('script'); js.id = id; js.async = true;
-   js.src = "//connect.facebook.net/en_US/all.js";
-   ref.parentNode.insertBefore(js, ref);
-  }(document));
-
-
-  
-</script>
 
 <?php include 'top_toolbar.php'; ?>
 <!-- Create the webpage here -->
@@ -141,14 +104,18 @@ border: 1px black solid;
   <div class="col-12 col-lg-12">
    <div class="row">
     <div class="col-1 col-lg-2">
- <?php if ($user): ?>
-      <a href="<?php echo $logoutUrl;?>" onclick='login;' >Logout of Facebook</a>
-      
-    <?php else: ?>
-      <div>
-        <a href="<?php echo $loginUrl; ?>" onclick='login;'>Login with Facebook</a>
-      </div>
-    <?php endif ?>
+ <?php 
+session_start();
+if(!isset($_SESSION['User']) && empty($_SESSION['User']))   { ?>
+<img src="resources/facebook.png" id="facebook"  style="cursor:pointer;" />
+<?php  }  else{
+	
+ echo '<img src="https://graph.facebook.com/'. $_SESSION['User']['id'] .'/picture" width="30" height="30"/><div>'.$_SESSION['User']['name'].'</div>';	
+	echo '<a href="'.$_SESSION['logout'].'">Logout</a>';
+
+
+}
+	?>
     
 <div class="fb-facepile" data-href="http://facebook.com/gigreplay" data-action="Comma separated list of action of action types" data-width="200" data-max-rows="1"></div>
      <ul class="nav nav-pills nav-stacked hidden-sm">
