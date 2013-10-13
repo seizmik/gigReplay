@@ -228,6 +228,15 @@ border: 1px black solid;
         <video id="video_with_controls"  controls autobuffer poster="<?=$thumbnail_url?>"> <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
+        <div class="text-center" style="margin-left:-500px;" >
+       <div class="fb-like" data-href="http://www.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" data-width="200" data-show-faces="false" data-send="false"></div>
+     <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/share.png" width=40px; height=40px;>
+ 	 <a href="https://twitter.com/share?url=http%3A%2F%2Fwww.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/Twitter.png" width=40px; height=40px;></a>
+ 	 <img src="resources/youtube.png" width=40px; height=40px;>
+ 	 <img src="resources/pinterest.png" width=40px; height=40px;>
+ 	 <img src="resources/wordpress.png" width=40px; height=40px;>
+</a>
+</div>
        </div>
       </div>
     
@@ -246,7 +255,7 @@ border: 1px black solid;
      <div class="comments-form" style="margin-left:auto; margin-right:auto; width:960px;">
      <?php if(!$user){?>
      <?php }else {?>
-     <form action="myVideos.php?vid=<?php echo $getthing ?>"  method="POST">   
+     <form action="watch.php?vid=<?php echo $getthing ?>"  method="POST">   
 Comments:<br />
 <textarea class="form-control" rows="3" name="comments" placeholder="Type comment here" method="POST"></textarea><br />
 <input type="hidden" name="username" value="<?php echo "$fb_user_name"?>"/>
