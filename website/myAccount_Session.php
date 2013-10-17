@@ -1,44 +1,23 @@
-<?php
-
-
-require 'php-sdk/facebook.php';
-
-// Create our Application instance (replace this with your appId and secret).
-$facebook = new Facebook(array(
-  'appId'  => '425449864216352',
-  'secret' => 'e0a33ee97563372f964df382b350af30',
-));
-
-// Get User ID
-$user = $facebook->getUser();
-
-
-
-if ($user) {
-  try {
-    // Proceed knowing you have a logged in user who's authenticated.
-    $user_profile = $facebook->api('/me');
-  } catch (FacebookApiException $e) {
-    error_log($e);
-    $user = null;
-  }
-}
-
-//Login or logout url will be needed depending on current user state.
-if ($user) {
-  $logoutUrl = $facebook->getLogoutUrl();
-} else {
-  $loginUrl = $facebook->getLoginUrl();
+<html>
+<head>
+<?php require 'php-sdk/facebook.php';
+session_start();
+if(isset($_SESSION['User'])) {
+	$fb_user=$_SESSION['User']['id'];
 }
 
 ?>
-<html>
-<head>
 <meta http-equiv="Expires" CONTENT="0">
 <meta http-equiv="Cache-Control" CONTENT="no-cache">
 <meta http-equiv="Pragma" CONTENT="no-cache">
-<?php include 'headertest.php'; ?>
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </head>
+<?php 
+session_start();
+if(!$_SESSION['User']){?>
+<h3> Please Log in to Continue</h3>
+<?php }else{?>
 <body style="padding-bottom: 120px">
 
 <?php if ($user): ?>
@@ -63,17 +42,6 @@ if ($user) {
       </div>
      </div>
      <h3>My Sessions Created/Joined</h3>
-     <?php     if (!$user){
-	echo "You have to log in to view your Session Videos!";
-	
-}?>
-<?php if ($user): ?>
-      <a href="<?php echo $logoutUrl; ?>">Logout of Facebook</a>
-    <?php else: ?>
-      <div>
-        <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
-      </div>
-    <?php endif ?>
      <div class="row">
 <?php 
  $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
@@ -83,7 +51,7 @@ if ($user) {
 	
         
     	//$query =" SELECT * FROM gigreplay.media_master JOIN thesmos.user on media_master.user_id=thesmos.user.id WHERE media_master.user_id=19";
-        $query="SELECT DISTINCT session_name,session_id FROM thesmos.user_session US INNER JOIN thesmos.user U on US.user_id=U.id INNER JOIN thesmos.session S on S.id = US.session_id WHERE fb_user_id=".$fb_user_id." ORDER BY session_id DESC LIMIT 50";
+        $query="SELECT DISTINCT session_name,session_id FROM thesmos.user_session US INNER JOIN thesmos.user U on US.user_id=U.id INNER JOIN thesmos.session S on S.id = US.session_id WHERE fb_user_id=".$fb_user." ORDER BY session_id DESC LIMIT 50";
     	$result = mysqli_query($con, $query);
         
 	
@@ -135,5 +103,6 @@ while ($entry = mysqli_fetch_array($result)) {
    </div>
   </div>
   </body>
+<?php }?>  
   <?php include 'bottom_toolbar.php'; ?>
   </html>

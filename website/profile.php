@@ -7,6 +7,8 @@ if(isset($_SESSION['User'])) {
 }
 
 ?>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
 <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 
@@ -44,7 +46,13 @@ body{
 }
 .profile_items_videos{
 	width:990px;
-	height:400px;
+	margin-left:auto;
+	margin-right:auto;
+	height:auto;
+	
+}
+.profile_items_friends_videos{
+	width:990px;
 	margin-left:auto;
 	margin-right:auto;
 	height:auto;
@@ -79,6 +87,19 @@ if(!$_SESSION['User']){?>
 <a class="navbar-brand" href="http://www.gigreplay.com">
 <div class="col-2 col-lg-2"><img src='/resources/g_logo_title_invert.png' /></div>
 </a>
+<?php 
+session_start();
+if(!isset($_SESSION['User']) && empty($_SESSION['User']))   { ?>
+ <button type="button" class="btn btn-primary btn-lg " id="facebook" >Facebook Login</button>
+<!-- <img src="resources/facebook.png"  id="facebook"  style="cursor:pointer;" />-->
+<?php  }  else{?>
+	<p class="navbar-text pull-right"><?php echo '<img src="https://graph.facebook.com/'. $_SESSION['User']['id'] .'/picture" width="50" height="50"/>';?> <?php  echo $_SESSION['User']['name'];?></br><a href="<?php echo $_SESSION['logout'] ?>" class="navbar-link">Logout</a></p>
+ <?php // echo '<img src="https://graph.facebook.com/'. $_SESSION['User']['id'] .'/picture" width="50" height="50"/>'.$_SESSION['User']['name'].'';	
+// 	echo '<a href="'.$_SESSION['logout'].'">Logout</a>';
+
+
+}
+	?>
 </div>
 
 
@@ -142,14 +163,19 @@ if(!$_SESSION['User']){?>
 	
 </div>
 
-<div class="profile_items_wrapper">
+<div class="profile_items_wrapper" >
 
-	<div class="profile_items_videos">
-	<div class="panel panel-primary">
+	<div class="profile_items_videos" id="accordion" >
+	<div class="panel panel-primary" >
   <div class="panel-body">
-    Videos Created
+   <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+          Videos Created
+        </a>
+    
   </div>
-  <div class="panel-footer">
+  <div id="collapseOne" class="panel-collapse collapse ">
+  <div class="panel-footer"  >
+  
   <?php 
  $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
     if (mysqli_connect_errno($con)) {
@@ -163,7 +189,17 @@ if(!$_SESSION['User']){?>
   
 while ($entry = mysqli_fetch_array($result)) {
         $entries[]=$entry;
-    }
+
+        
+}
+if(mysqli_num_rows($result) == 0){?>
+                	
+                    
+                    <p>No videos created by <?php echo $_SESSION['User']['name']?></p>
+               
+                
+                <?php 
+                }
     
     //Initialise the row count
    
@@ -176,7 +212,7 @@ while ($entry = mysqli_fetch_array($result)) {
         $last_modified=$row['date_modified'];
         $append_url ="http://www.gigreplay.com/myVideos.php?vid=".$master_id;
         
-	
+        
         
    
     ?>
@@ -203,16 +239,101 @@ while ($entry = mysqli_fetch_array($result)) {
   </div>
 </div>
 </div>
-<div class="profile_items_comments">
+</div>
+
+	<div class="profile_items_friends_videos" id="accordion" >
+	<div class="panel panel-primary" >
+  <div class="panel-body">
+   <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+          My Friends Videos
+        </a>
+    
+  </div>
+  <div id="collapseTwo" class="panel-collapse collapse ">
+  <div class="panel-footer"  >
+  
+  <?php 
+ $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+    if (mysqli_connect_errno($con)) {
+        echo "Failed to onnect to MySQL: " . mysqli_connect_error();
+    } else { 
+		$query3="SELECT * from gigreplay.media_master,thesmos.user_friends,thesmos.user where gigreplay.media_master.user_id=thesmos.user_friends.user_friend_id AND thesmos.user.id=thesmos.user_friends.user_friend_id  ORDER BY gigreplay.media_master.session_id DESC limit 25 ";
+        $result3 = mysqli_query($con, $query3);
+
+    }
+    
+  
+while ($entry3 = mysqli_fetch_array($result3)) {
+        $entries3[]=$entry3;
+
+        
+}
+if(mysqli_num_rows($result3) == 0){?>
+                	
+                    
+                    <p>No videos by friends</p>
+               
+                
+                <?php 
+                }
+    
+    //Initialise the row count
+   
+    foreach ($entries3 as $row) {
+        $session_name = $row['title'];
+        $master_id=$row['master_id'];
+        $default_thumb=$row['default_thumb'];
+        $media_url = $row['media_url'];
+        $user_name=$row['user_name'];
+        $last_modified=$row['date_modified'];
+        $append_url ="http://www.gigreplay.com/myVideos.php?vid=".$master_id;
+        
+        
+        
+   
+    ?>
+    <div class="thumbnail" style="margin-bottom:20px;">
+    <a href="<?=$append_url ?>" >
+    	<img  src="<?=$default_thumb ?>" style="display:block; width:640px;height:360px; margin:auto; padding:5px;" >
+    	</a>
+    	<?php for ($i = 4; $i < 11; $i+=3) {
+    		$thumbnail_url = dirname($media_url)."/thumb_".$i.".png";	?>
+    		
+    		<img src="<?=$thumbnail_url ?>" style="display:inline; width:300px;height:150px; padding:5px;">
+    	<?php }?>
+        
+       
+       <div class="caption" style="text-align:center;">
+        <a href="<?=$append_url ?>"> <h3><?=$session_name ?></h3></a>
+        <p>Created by <?=$user_name ?><br>
+        <small>Created at <?=$last_modified ?></small></p>
+       </div>
+     </div>
+     <?php 
+			mysqli_close($con);
+	}?>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="profile_items_comments" id="accordion">
 	<div class="profile_items_comments">
 	<div class="panel panel-primary">
   <div class="panel-body">
-    Comment
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+          Comments
+        </a>
   </div>
-  <div class="panel-footer">Panel footer</div>
+  <div id="collapseThree" class="panel-collapse collapse ">
+  <div class="panel-footer">
+  <p>No comments for <?php echo $_SESSION['User']['name']?></p>
+  </div>
 </div>
 	
 	</div>
+</div>
+
 </div>
 </div>
 
