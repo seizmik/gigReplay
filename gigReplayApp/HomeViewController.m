@@ -116,7 +116,7 @@
         }
 
         NSDictionary *info=[videoArray objectAtIndex:indexPath.row];
-        videoImage=[info objectForKey:@"thumb_1_url"];
+        videoImage=[info objectForKey:@"default_thumb"];
         [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                             placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
          cell.username.text=@"GigReplay Presents..";

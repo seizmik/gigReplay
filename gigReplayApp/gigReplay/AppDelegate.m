@@ -18,7 +18,7 @@
 #import "MediaRecordViewController.h"
 #import "AudioViewController.h"
 #import "HomeViewController.h"
-#import "InfoViewController.h"
+#import "SocialViewController.h"
 #import "CaptureViewController.h"
 #import "MyVideosViewController.h"
 
@@ -197,9 +197,9 @@
     home.title=@"GigReplay";
     [home.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"gig_tab_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png.png"]];
     
-    InfoViewController *infoVC=[[InfoViewController alloc]initWithNibName:@"InfoViewController" bundle:nil];
-    infoVC.title=@"Events";
-    [infoVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
+    SocialViewController *socialVC=[[SocialViewController alloc]initWithNibName:@"SocialViewController" bundle:nil];
+    socialVC.title=@"Events";
+    [socialVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
     
     MyVideosViewController *myVideosVC=[[MyVideosViewController alloc]initWithNibName:@"MyVideosViewController" bundle:nil];
     myVideosVC.title=@"myVideos";
@@ -247,7 +247,7 @@
     tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"selectionTab.png"];
     //tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
    
-    NSArray *viewArray=[NSArray arrayWithObjects:home,infoVC,captureNav,myVideosVC,settingsVC,nil];
+    NSArray *viewArray=[NSArray arrayWithObjects:home,socialVC,captureNav,myVideosVC,settingsVC,nil];
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
@@ -305,7 +305,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count=0; count<10 && (jitter>0.015 || [diffArray count]<5); count++) {
+    for (count=0; count<10 && (jitter>0.005 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -324,32 +324,34 @@
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Will calculate jitter based on 5 pings
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<25; i++) {
+            //Get the local time
+            startTime = [[NSDate date] timeIntervalSince1970];
+            //NSLog(@"%f", localTime);
+
             
             //Initialise the request
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
             
-            //Get the local time
-            startTime = [[NSDate date] timeIntervalSince1970];
-            //NSLog(@"%f", localTime);
             
             //Start the request
             [request startSynchronous];
-            
+            NSString *response = [request responseString];
+            NSScanner *scanner = [NSScanner scannerWithString:response];
+            double serverTime;
+            double diffWithServer;
+            [scanner scanDouble:&serverTime];
+
             //Get the local time when the signal comes back
             backTime = [[NSDate date] timeIntervalSince1970];
             //NSLog(@"%f", backTime - localTime);
             
             NSError *error = [request error];
             if (!error) {
-                NSString *response = [request responseString];
+                
                 //NSLog(@"%@", response);
                 
                 //Converting it to a double
-                NSScanner *scanner = [NSScanner scannerWithString:response];
-                double serverTime;
-                double diffWithServer;
-                [scanner scanDouble:&serverTime];
                 
                 //Calculating the traveltimes and latency
                 travelTime = backTime - startTime;

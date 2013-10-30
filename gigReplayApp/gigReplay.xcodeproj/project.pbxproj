@@ -145,8 +145,8 @@
 		2AA8BB8017B0F96F00317378 /* myvideos_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB7E17B0F96E00317378 /* myvideos_off.png */; };
 		2AA8BB8117B0F96F00317378 /* myvideos_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB7F17B0F96E00317378 /* myvideos_on.png */; };
 		2AA8BB8317B0FA8C00317378 /* backicon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8217B0FA8B00317378 /* backicon.png */; };
-		2AA8BB8717B111C900317378 /* InfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8517B111C800317378 /* InfoViewController.m */; };
-		2AA8BB8817B111C900317378 /* InfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8617B111C800317378 /* InfoViewController.xib */; };
+		2AA8BB8717B111C900317378 /* SocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8517B111C800317378 /* SocialViewController.m */; };
+		2AA8BB8817B111C900317378 /* SocialViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8617B111C800317378 /* SocialViewController.xib */; };
 		2AA8BB8A17B1134500317378 /* linkin.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8917B1134500317378 /* linkin.png */; };
 		2AA8BB8C17B114EB00317378 /* map.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8B17B114EB00317378 /* map.png */; };
 		2AA8BB8F17B11B2200317378 /* linkin.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 2AA8BB8E17B11B2100317378 /* linkin.mp4 */; };
@@ -474,9 +474,9 @@
 		2AA8BB7E17B0F96E00317378 /* myvideos_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myvideos_off.png; sourceTree = "<group>"; };
 		2AA8BB7F17B0F96E00317378 /* myvideos_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myvideos_on.png; sourceTree = "<group>"; };
 		2AA8BB8217B0FA8B00317378 /* backicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = backicon.png; sourceTree = "<group>"; };
-		2AA8BB8417B111C800317378 /* InfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoViewController.h; sourceTree = "<group>"; };
-		2AA8BB8517B111C800317378 /* InfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoViewController.m; sourceTree = "<group>"; };
-		2AA8BB8617B111C800317378 /* InfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InfoViewController.xib; sourceTree = "<group>"; };
+		2AA8BB8417B111C800317378 /* SocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocialViewController.h; sourceTree = "<group>"; };
+		2AA8BB8517B111C800317378 /* SocialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialViewController.m; sourceTree = "<group>"; };
+		2AA8BB8617B111C800317378 /* SocialViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SocialViewController.xib; sourceTree = "<group>"; };
 		2AA8BB8917B1134500317378 /* linkin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = linkin.png; sourceTree = "<group>"; };
 		2AA8BB8B17B114EB00317378 /* map.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = map.png; sourceTree = "<group>"; };
 		2AA8BB8E17B11B2100317378 /* linkin.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = linkin.mp4; sourceTree = "<group>"; };
@@ -710,6 +710,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */,
 				CE7626D51777CABC00093147 /* Accelerate.framework in Frameworks */,
 				2A8C66E31761A6B6001AFB54 /* ImageIO.framework in Frameworks */,
 				2A8C66E11761A6B0001AFB54 /* MapKit.framework in Frameworks */,
@@ -718,7 +719,6 @@
 				2AD2DC14170948D900E00478 /* MobileCoreServices.framework in Frameworks */,
 				CED49AB2171EAEBA00AF0B00 /* CoreMedia.framework in Frameworks */,
 				CED49AB0171EAEAB00AF0B00 /* QuartzCore.framework in Frameworks */,
-				CED49AAE171EAEA000AF0B00 /* AVFoundation.framework in Frameworks */,
 				2A13AD901712D3420009ACAE /* AssetsLibrary.framework in Frameworks */,
 				2A13AD8E1712D33A0009ACAE /* MediaPlayer.framework in Frameworks */,
 				2AD2DC181709490E00E00478 /* SystemConfiguration.framework in Frameworks */,
@@ -1139,9 +1139,9 @@
 				2AABDF5E17BAB70300B438A5 /* MyVideosViewController.h */,
 				2AABDF5F17BAB70400B438A5 /* MyVideosViewController.m */,
 				2AABDF6017BAB70400B438A5 /* MyVideosViewController.xib */,
-				2AA8BB8417B111C800317378 /* InfoViewController.h */,
-				2AA8BB8517B111C800317378 /* InfoViewController.m */,
-				2AA8BB8617B111C800317378 /* InfoViewController.xib */,
+				2AA8BB8417B111C800317378 /* SocialViewController.h */,
+				2AA8BB8517B111C800317378 /* SocialViewController.m */,
+				2AA8BB8617B111C800317378 /* SocialViewController.xib */,
 				2AABDF4517BA13CB00B438A5 /* CaptureViewController.h */,
 				2AABDF4617BA13CB00B438A5 /* CaptureViewController.m */,
 				2AABDF4717BA13CB00B438A5 /* CaptureViewController.xib */,
@@ -1524,7 +1524,7 @@
 				2AA8BB8017B0F96F00317378 /* myvideos_off.png in Resources */,
 				2AA8BB8117B0F96F00317378 /* myvideos_on.png in Resources */,
 				2AA8BB8317B0FA8C00317378 /* backicon.png in Resources */,
-				2AA8BB8817B111C900317378 /* InfoViewController.xib in Resources */,
+				2AA8BB8817B111C900317378 /* SocialViewController.xib in Resources */,
 				2AA8BB8A17B1134500317378 /* linkin.png in Resources */,
 				2AA8BB8C17B114EB00317378 /* map.png in Resources */,
 				2AA8BB8F17B11B2200317378 /* linkin.mp4 in Resources */,
@@ -1633,7 +1633,7 @@
 				2A50535A17AFAB18000BD700 /* HomeDetailViewController.m in Sources */,
 				2AF874E417AFB4670036F959 /* HomeDetailViewCustomCell.m in Sources */,
 				2AA8BB6F17B0D0DD00317378 /* MyVideosCustomCell.m in Sources */,
-				2AA8BB8717B111C900317378 /* InfoViewController.m in Sources */,
+				2AA8BB8717B111C900317378 /* SocialViewController.m in Sources */,
 				2AABDF4817BA13CB00B438A5 /* CaptureViewController.m in Sources */,
 				2AABDF6117BAB70500B438A5 /* MyVideosViewController.m in Sources */,
 			);
@@ -1720,6 +1720,7 @@
 		2AE35C74170020BF000993E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1742,6 +1743,7 @@
 		2AE35C75170020BF000993E6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
