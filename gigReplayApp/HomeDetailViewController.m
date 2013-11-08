@@ -24,6 +24,7 @@
 @end
 
 @implementation HomeDetailViewController
+@synthesize indVideoTitle;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -40,25 +41,38 @@
     [self obtainDataFromURL];
     [self.moviePlayer prepareToPlay];
     [self playMovie];// Do any additional setup after loading the view from its nib.
-    
-    
-
+    processLabels=YES;
+    [self.loadingImage startAnimating];
     
     
 }
 -(void)viewDidAppear:(BOOL)animated{
     
     CGFloat UIScreenBottom=self.view.bounds.size.height-VIDEOPLAYER_UIVIEW_HEIGHT;
-    scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 226, 320, UIScreenBottom)];
+    scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 250, 320, UIScreenBottom)];
     scrollView.contentSize=CGSizeMake(320.0,(self.commentTableVIew.contentSize.height+VIDEO_INFO_UIVIEW_HEIGHT));
     scrollView.bounces=NO;
     [self.view addSubview:scrollView];
     [scrollView addSubview:self.commentUIView];
     [scrollView addSubview:self.commentTableVIew];
-    [self.commentTableVIew setFrame:CGRectMake(0, 225, 320, self.commentTableVIew.contentSize.height)];
+    [self.commentTableVIew setFrame:CGRectMake(0, 180, 320, self.commentTableVIew.contentSize.height)];
 //    NSLog(@"scrollview contentsize %f",scrollView.contentSize.height);
 //    NSLog(@"%f",self.commentTableVIew.contentSize.height);
 //    NSLog(@"%f",self.commentTableVIew.contentSize.width);
+    if(processLabels){
+        self.loadingView.hidden=NO;
+        indVideoTitle.text=self.videoTitle;
+        self.indDate.text=self.videoDate;
+        self.videoUser.text=self.videoUserInfo;
+        //obtain fb_user_id from homeviewcontroller
+        fb_user_id=self.obtainFb_id;
+        NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_id];
+        [self.fb_profile_pic setImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:profilePicURL]]]];
+        processLabels=NO;
+    }
+    else{
+        self.loadingView.hidden=YES;
+    }
 }
 -(void) fetchedData:(NSData*) data{
     
@@ -127,7 +141,8 @@
 }
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.commentArray count];
+	        return [self.commentArray count];
+
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView;
@@ -175,7 +190,9 @@
         [[cell contentView] addSubview:cell.userComment];
         
     }
-    NSDictionary *info=[self.commentArray objectAtIndex:indexPath.row];
+    
+        NSDictionary *info=[self.commentArray objectAtIndex:indexPath.row];
+    
     cell.userName.text=[info objectForKey:@"user_name"];
     
     NSString *text = [self.array objectAtIndex:[indexPath row]];

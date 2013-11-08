@@ -15,7 +15,7 @@
 #define appDelegateObject ((AppDelegate *)[[UIApplication sharedApplication] delegate])
 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate, UIAlertViewDelegate,UIImagePickerControllerDelegate>
 {
 
     BOOL                userexists;

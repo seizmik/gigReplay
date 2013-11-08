@@ -7,8 +7,7 @@
 //
 
 #import "SocialViewController.h"
-#import "HomeViewCustomCell.h"
-#import "HomeDetailViewController.h"
+#import "SocialCustomCell.h"
 #import "UIImageView+WebCache.h"
 
 @interface SocialViewController ()
@@ -16,7 +15,7 @@
 @end
 
 @implementation SocialViewController
-@synthesize liked,videoImage;
+@synthesize videoImage,movieplayer;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -35,7 +34,8 @@
     
     singleTap.numberOfTapsRequired = 1;
     singleTap.numberOfTouchesRequired = 1;
-    [self.moviePlayerView addGestureRecognizer: singleTap];
+    [self obtainDataFromURL];
+   // [self.moviePlayerView addGestureRecognizer: singleTap];
     
     
     
@@ -63,7 +63,7 @@
     
     videoArray=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
     
-   // [self.tableViewRequests reloadData];
+    [self.tableView reloadData];
     
     
 }
@@ -79,24 +79,25 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 {
-    static NSString* CellIdentifier = @"HomeViewCustomCell";
+    static NSString* CellIdentifier = @"SocialCustomCell";
     
     //custom cell initilisation
-    HomeViewCustomCell *cell = (HomeViewCustomCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    SocialCustomCell *cell = (SocialCustomCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil)
     {
         
         NSArray *topLevelObjects;
         
-        topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"HomeViewCustomCell" owner:self options:nil];
+        topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"SocialCustomCell" owner:self options:nil];
         for (id currentObject in topLevelObjects)
         {
             if ([currentObject isKindOfClass:[UITableViewCell class]]){
-                cell = (HomeViewCustomCell *) currentObject;
+                cell = (SocialCustomCell *) currentObject;
                 break;
             }
         }
+       
     }
     
     NSDictionary *info=[videoArray objectAtIndex:indexPath.row];
@@ -104,19 +105,56 @@
     [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                         placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
     cell.username.text=@"GigReplay Presents..";
-    cell.profilePic.image=[UIImage imageNamed:@"new_logo.png"];
-    return cell;
+    cell.profilePicImageView.image=[UIImage imageNamed:@"new_logo.png"];
+   
+    [cell.playButton setTag:indexPath.row];
+    [cell.playButton addTarget:self action:@selector(callAction:) forControlEvents:UIControlEventTouchUpInside];
+   
+            return cell;
 }
+-(void)callAction:(UIButton *)sender
+{
+    int entryNumber = sender.tag;
+    NSDictionary *info=[videoArray objectAtIndex:entryNumber];
+    url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
+    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:url];
+    
+    
+
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(moviePlayBackDidFinish:)
+                                                 name:MPMoviePlayerPlaybackDidFinishNotification
+                                               object:movieplayer];
+    
+    movieplayer.controlStyle = MPMovieControlStyleDefault;
+    movieplayer.shouldAutoplay = YES;
+    
+    
+    [self.view addSubview:movieplayer.view];
+    [movieplayer play];
+    [movieplayer setFullscreen:YES animated:YES];
+    
+}
+- (void) moviePlayBackDidFinish:(NSNotification*)notification {
+    MPMoviePlayerController *player = [notification object];
+    [[NSNotificationCenter defaultCenter]
+     removeObserver:self
+     name:MPMoviePlayerPlaybackDidFinishNotification
+     object:player];
+    
+    if ([player
+         respondsToSelector:@selector(setFullscreen:animated:)])
+    {
+        [player.view removeFromSuperview];
+    }
+}
+
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
-    NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
-    NSString *media_master_id=[info objectForKey:@"master_id"];
-    url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
-    HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
-    [homeDetailVC setVideoURL:url];
-    [homeDetailVC setMedia_id:media_master_id];
-    [self presentViewController:homeDetailVC animated:YES completion:nil];
+
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
@@ -134,11 +172,12 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    return 177;
+    return 600;
 }
 
 
 - (IBAction)playButton:(id)sender {
+    
     avAsset = [AVAsset assetWithURL:[NSURL URLWithString:@"http://www.lipsync.sg/api/test/output.mp4"]];
     avPlayerItem =[[AVPlayerItem alloc]initWithAsset:avAsset];
     avPlayer = [[AVPlayer alloc]initWithPlayerItem:avPlayerItem];
@@ -155,7 +194,7 @@
 
 }
 - (IBAction)likeButton:(id)sender {
-    [liked setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
+    //[liked setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
 }
 
 - (IBAction)commentButton:(id)sender {

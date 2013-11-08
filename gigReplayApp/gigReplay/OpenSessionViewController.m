@@ -32,11 +32,13 @@
 
     //load values obtained from last connection to online database
     [self LoadSessionDetailsFromDB];
+    
     UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
     [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
     self.refreshControl=refresh;
     refresh.tintColor=[UIColor whiteColor];
+ 
     
     self.title=@"Open";
 
@@ -46,7 +48,7 @@
 											 selector:@selector(removeLoadingView:)
 												 name:@"OpenSessionDetailsCompleted"
 											   object:nil];
-    [self loadSettingsButton];
+   // [self loadSettingsButton];
     
     // Do any additional setup after loading the view from its nib.
 }
@@ -62,9 +64,10 @@
         self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
 }
 -(void)updatingTable{
-    
+   
     [self.refreshControl endRefreshing];
-}
+
+    }
 
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -76,14 +79,13 @@
  
 -(void)OpenSessionDetailsFromAPI
 {
-    dispatch_async(kBgQueue, ^{
+    dispatch_async(dispatch_get_main_queue(), ^{
     [apiWrapperObject OpenSessionDetails:appDelegateObject.CurrentUserID WithSession:appDelegateObject.CurrentSession_Code APIIdentifier:API_IDENTIFIER_OPEN_SESSION];
     });
     
-    
 }
 
-//////////////////////////////////TableViewCell OpenSessions Implementation////////////////////////////////////
+////////////////////////////TableViewCell OpenSessions Implementation////////////////////////////
 
 
 
@@ -206,27 +208,24 @@
 -(void)LoadSessionDetailsFromDB
 {
 
-    
-     
     NSString *query=@"select * from OpenSession_Details";
     self.OpenedSessionDetailsHolder=[appDelegateObject.databaseObject readFromDatabaseOpenDetails:query];
     //NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
 
     [openedSessionListTable reloadData];
-    
-}
+   }
 
-- (void)loadSettingsButton
-{
-    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
-    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
-    [settingsButton setImage:image forState:UIControlStateNormal];
-    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-    self.navigationItem.rightBarButtonItem = rightButton;
-    
-}
+//- (void)loadSettingsButton
+//{
+//    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
+//    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
+//    [settingsButton setImage:image forState:UIControlStateNormal];
+//    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+//    self.navigationItem.rightBarButtonItem = rightButton;
+//    
+//}
 
 - (void)goToSettings
 {

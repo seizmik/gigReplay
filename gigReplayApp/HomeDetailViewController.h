@@ -14,6 +14,9 @@
 
 @interface HomeDetailViewController : UIViewController<UITableViewDelegate,UIScrollViewDelegate,ASIHTTPRequestDelegate>{
     UIScrollView *scrollView;
+    NSString *fb_user_id;
+    BOOL processLabels;
+    UIView *loadingView;
 
 }
 @property (strong,nonatomic)MPMoviePlayerController *moviePlayer;
@@ -21,6 +24,10 @@
 @property (strong, nonatomic) IBOutlet UITableView *commentTableVIew;
 @property (strong,nonatomic) NSURL *videoURL;
 @property (strong,nonatomic) NSString *media_id;
+@property (strong,nonatomic) NSString *videoTitle;
+@property (strong,nonatomic) NSString *videoDate;
+@property (strong, nonatomic)NSString *videoUserInfo;
+@property(strong,nonatomic)NSString *obtainFb_id;
 @property (strong,nonatomic) NSMutableArray *commentArray;
 - (IBAction)backToHome:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *commentUIView;
@@ -33,6 +40,14 @@
 - (IBAction)commentPost:(id)sender;
 
 @property (strong, nonatomic) IBOutlet UITextView *theComments;
+@property (strong, nonatomic) IBOutlet UILabel *videoUser;
+@property (strong, nonatomic) IBOutlet UIImageView *fb_profile_pic;
 - (IBAction)commentCancel:(id)sender;
+@property (strong, nonatomic) IBOutlet UILabel *indVideoTitle;
+@property (strong, nonatomic) IBOutlet UILabel *indDate;
+
+@property (strong, nonatomic) IBOutlet UIView *loadingView;
+@property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingImage;
+
 
 @end

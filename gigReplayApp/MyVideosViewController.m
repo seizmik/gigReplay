@@ -113,6 +113,10 @@
     HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
     [homeDetailVC setVideoURL:url];
     [homeDetailVC setMedia_id:media_master_id];
+    [homeDetailVC setObtainFb_id:[info objectForKey:@"fb_user_id"]];
+    [homeDetailVC setVideoUserInfo:[info objectForKey:@"user_name"]];
+    [homeDetailVC setVideoTitle:[info objectForKey:@"title"]];
+    [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
     [self presentViewController:homeDetailVC animated:YES completion:nil];
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     

@@ -56,7 +56,7 @@
 											 selector:@selector(RemoveLoadingView:)
 												 name:@"JoinSearchParsingCompleted"
 											   object:nil];
-    [self loadSettingsButton];
+//    [self loadSettingsButton];
     
 }
 
@@ -249,17 +249,17 @@
 #pragma mark -
 
 
-- (void)loadSettingsButton
-{
-    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
-    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
-    [settingsButton setImage:image forState:UIControlStateNormal];
-    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-    self.navigationItem.rightBarButtonItem = rightButton;
-    
-}
+//- (void)loadSettingsButton
+//{
+//    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
+//    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
+//    [settingsButton setImage:image forState:UIControlStateNormal];
+//    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
+//    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
+//    self.navigationItem.rightBarButtonItem = rightButton;
+//    
+//}
 
 - (void)goToSettings
 {

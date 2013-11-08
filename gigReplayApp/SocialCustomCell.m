@@ -1,20 +1,20 @@
 //
-//  HomeViewCustomCell.m
+//  SocialCustomCell.m
 //  gigReplay
 //
-//  Created by Leon Ng on 29/7/13.
+//  Created by Leon Ng on 30/10/13.
 //  Copyright (c) 2013 Leon Ng. All rights reserved.
 //
 
-#import "HomeViewCustomCell.h"
+#import "SocialCustomCell.h"
 
-@implementation HomeViewCustomCell
-@synthesize imageView,VideoView,videoImageView,imageView1,imageView2,imageView3,playButton,movieplayer,videoTitle;
+@implementation SocialCustomCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
+        // Initialization code
         
             }
     return self;
@@ -26,5 +26,6 @@
 
     // Configure the view for the selected state
 }
+
 
 @end

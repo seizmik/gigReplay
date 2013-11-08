@@ -24,6 +24,7 @@
 @property (strong, nonatomic) IBOutlet UIImageView *profilePic;
 @property (strong, nonatomic) IBOutlet UILabel *username;
 
+@property (strong, nonatomic) IBOutlet UILabel *videoTitle;
 
 
 

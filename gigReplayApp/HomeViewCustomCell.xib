@@ -14,61 +14,22 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="176"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="739">
-                        <rect key="frame" x="11" y="20" width="298" height="136"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sGd-Vc-mJO">
+                        <rect key="frame" x="1" y="1" width="318" height="174"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="298" id="1199"/>
-                        </constraints>
                     </imageView>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4">
-                        <rect key="frame" x="20" y="0.0" width="41" height="41"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="0bm-N1-JAa">
+                        <rect key="frame" x="20" y="114" width="280" height="61"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="41" id="512"/>
-                            <constraint firstAttribute="height" constant="41" id="1220"/>
-                        </constraints>
-                    </imageView>
-                    <label clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="username" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="13">
-                        <rect key="frame" x="68" y="0.0" width="232" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="1242"/>
-                            <constraint firstAttribute="width" constant="232" id="1244"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="25"/>
-                        <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
-                        <color key="highlightedColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                    </label>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="video title of the video , video details" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="184" translatesAutoresizingMaskIntoConstraints="NO" id="1185">
-                        <rect key="frame" x="20" y="111" width="184" height="45"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="184" id="1189"/>
-                            <constraint firstAttribute="height" constant="45" id="1190"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
                     </label>
                 </subviews>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstItem="739" firstAttribute="top" secondItem="1135" secondAttribute="top" constant="20" id="B98-xX-QxD"/>
-                <constraint firstItem="1185" firstAttribute="bottom" secondItem="739" secondAttribute="bottom" id="Dz5-YY-39E"/>
-                <constraint firstItem="13" firstAttribute="top" secondItem="1135" secondAttribute="top" id="LR8-bV-VIq"/>
-                <constraint firstItem="1185" firstAttribute="leading" secondItem="1135" secondAttribute="leading" constant="20" id="ZnM-ef-NNm"/>
-                <constraint firstItem="739" firstAttribute="centerX" secondItem="1135" secondAttribute="centerX" id="fTO-HA-Wiq"/>
-                <constraint firstItem="739" firstAttribute="centerY" secondItem="1135" secondAttribute="centerY" id="kN5-Re-qls"/>
-                <constraint firstItem="4" firstAttribute="leading" secondItem="1135" secondAttribute="leading" constant="20" id="nWu-jq-Mra"/>
-                <constraint firstItem="4" firstAttribute="top" secondItem="1135" secondAttribute="top" id="qGQ-ED-C3D"/>
-                <constraint firstAttribute="trailing" secondItem="13" secondAttribute="trailing" constant="20" id="yag-za-big"/>
-            </constraints>
             <connections>
-                <outlet property="profilePic" destination="4" id="1240"/>
-                <outlet property="username" destination="13" id="1241"/>
-                <outlet property="videoImageView" destination="739" id="1197"/>
+                <outlet property="videoImageView" destination="sGd-Vc-mJO" id="dGJ-MU-Ghy"/>
+                <outlet property="videoTitle" destination="0bm-N1-JAa" id="BgJ-8c-jkn"/>
             </connections>
         </tableViewCell>
     </objects>

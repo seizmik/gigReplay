@@ -119,19 +119,24 @@
         videoImage=[info objectForKey:@"default_thumb"];
         [cell.videoImageView setImageWithURL:[NSURL URLWithString:videoImage]
                             placeholderImage:[UIImage imageNamed:@"placeholder.png"]];
-         cell.username.text=@"GigReplay Presents..";
-        cell.profilePic.image=[UIImage imageNamed:@"new_logo.png"];
+    cell.videoTitle.text=[info objectForKey:@"title"];
+    
     return cell;
     }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     
         NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
+        NSString *videoTitle=[info objectForKey:@"title"];
         NSString *media_master_id=[info objectForKey:@"master_id"];
         url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
         HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
         [homeDetailVC setVideoURL:url];
+        [homeDetailVC setObtainFb_id:[info objectForKey:@"fb_user_id"]];
+        [homeDetailVC setVideoUserInfo:[info objectForKey:@"user_name"]];
         [homeDetailVC setMedia_id:media_master_id];
+        [homeDetailVC setVideoTitle:videoTitle];
+        [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
         [self presentViewController:homeDetailVC animated:YES completion:nil];
         
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -150,7 +155,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-        return 177;
+        return 176;
 }
 -(void)callAction:(UIButton *)sender
 {

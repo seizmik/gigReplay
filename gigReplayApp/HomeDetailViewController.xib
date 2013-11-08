@@ -10,8 +10,14 @@
                 <outlet property="commentPopOver" destination="154" id="158"/>
                 <outlet property="commentTableVIew" destination="84" id="87"/>
                 <outlet property="commentUIView" destination="81" id="83"/>
+                <outlet property="fb_profile_pic" destination="77" id="Zu9-L9-pLI"/>
+                <outlet property="indDate" destination="80" id="bmm-Oi-q4j"/>
+                <outlet property="indVideoTitle" destination="79" id="M4J-9H-sLg"/>
+                <outlet property="loadingImage" destination="oHl-qr-5IN" id="lOn-xg-tXH"/>
+                <outlet property="loadingView" destination="TvM-cO-3DE" id="Sn3-GS-oul"/>
                 <outlet property="moviePlayerView" destination="68" id="69"/>
                 <outlet property="theComments" destination="157" id="161"/>
+                <outlet property="videoUser" destination="78" id="TnG-NO-QRS"/>
                 <outlet property="view" destination="1" id="3"/>
             </connections>
         </placeholder>
@@ -21,11 +27,11 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" id="82">
-                    <rect key="frame" x="0.0" y="246" width="320" height="322"/>
+                    <rect key="frame" x="0.0" y="250" width="320" height="332"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" id="81">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="225"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="187"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="like.png" id="73">
@@ -37,35 +43,35 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="no of likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="76">
-                                    <rect key="frame" x="20" y="195" width="83" height="29"/>
+                                    <rect key="frame" x="20" y="93" width="83" height="29"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="date" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="80">
-                                    <rect key="frame" x="211" y="56" width="83" height="29"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="date/time" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="80">
+                                    <rect key="frame" x="191" y="47" width="109" height="47"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                    <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="Pinterest.png" id="77">
+                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="placeholder.png" id="77">
                                     <rect key="frame" x="20" y="47" width="49" height="38"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="78">
-                                    <rect key="frame" x="100" y="47" width="121" height="38"/>
+                                    <rect key="frame" x="77" y="47" width="121" height="38"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="22"/>
-                                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="22"/>
+                                    <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Video Description Video Description Video Description Video Description Video Description Video Description Video Description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="4" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="79">
-                                    <rect key="frame" x="20" y="102" width="280" height="85"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Video Description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="79">
+                                    <rect key="frame" x="20" y="117" width="280" height="70"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="18"/>
-                                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
+                                    <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="151">
@@ -86,10 +92,11 @@
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         </view>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="84">
-                            <rect key="frame" x="0.0" y="225" width="320" height="97"/>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" id="84">
+                            <rect key="frame" x="0.0" y="187" width="320" height="145"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                            <color key="sectionIndexColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="85"/>
                                 <outlet property="delegate" destination="-1" id="86"/>
@@ -100,17 +107,32 @@
                         <outlet property="delegate" destination="-1" id="88"/>
                     </connections>
                 </scrollView>
+                <view contentMode="scaleToFill" id="TvM-cO-3DE">
+                    <rect key="frame" x="0.0" y="250" width="320" height="327"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fUK-kO-lyA">
+                            <rect key="frame" x="120" y="156" width="100" height="31"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
+                            <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="oHl-qr-5IN">
+                            <rect key="frame" x="151" y="128" width="20" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <color key="color" red="1" green="0.1611334925" blue="0.28094591050000001" alpha="1" colorSpace="calibratedRGB"/>
+                        </activityIndicatorView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
                 <view contentMode="scaleToFill" id="68">
-                    <rect key="frame" x="0.0" y="44" width="320" height="180"/>
+                    <rect key="frame" x="0.0" y="57" width="320" height="180"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.9215686917" green="0.94117653369999998" blue="0.9450981021" alpha="1" colorSpace="deviceRGB"/>
                 </view>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="color.png" id="164">
-                    <rect key="frame" x="0.0" y="224" width="320" height="1"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="70">
-                    <rect key="frame" x="0.0" y="0.0" width="129" height="45"/>
+                    <rect key="frame" x="0.0" y="13" width="129" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <state key="normal">
@@ -125,18 +147,18 @@
                     </connections>
                 </button>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="backicon.png" id="72">
-                    <rect key="frame" x="-7" y="0.0" width="32" height="45"/>
+                    <rect key="frame" x="-7" y="13" width="32" height="45"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="new_logo.png" id="165">
-                    <rect key="frame" x="23" y="7" width="30" height="30"/>
+                    <rect key="frame" x="23" y="20" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="GigReplay" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="166">
-                    <rect key="frame" x="61" y="7" width="210" height="31"/>
+                    <rect key="frame" x="61" y="20" width="210" height="31"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="28"/>
-                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="28"/>
+                    <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
@@ -151,9 +173,9 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="155">
                     <rect key="frame" x="53" y="131" width="71" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="25"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                     <state key="normal" title="Cancel">
-                        <color key="titleColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                        <color key="titleColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -163,9 +185,9 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="156">
                     <rect key="frame" x="197" y="131" width="71" height="44"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="25"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="20"/>
                     <state key="normal" title="Post">
-                        <color key="titleColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                        <color key="titleColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -188,12 +210,11 @@
         </view>
     </objects>
     <resources>
-        <image name="Pinterest.png" width="65" height="65"/>
         <image name="backicon.png" width="50" height="50"/>
-        <image name="color.png" width="64" height="49"/>
         <image name="comment.png" width="128" height="128"/>
         <image name="like.png" width="512" height="512"/>
         <image name="new_logo.png" width="200" height="201"/>
+        <image name="placeholder.png" width="450" height="450"/>
         <image name="share.png" width="48" height="48"/>
     </resources>
 </document>
