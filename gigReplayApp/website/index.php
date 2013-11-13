@@ -320,10 +320,10 @@ if(!isset($_SESSION['User']) && empty($_SESSION['User']))   { ?>
 	
       <div class="individual-video" >
        
-        <img src="<?=$default_thumb ?>" style="width:436px; height:276px;">
+     <a href=<?php echo $append_url?>><img src="<?=$default_thumb ?>" style="width:436px; height:276px;"></a>
         
       <!--  <a class='youtube'  href="<?=$append_url ?>"  > -->
-       <a class='youtube'  href="<?=$media_url ?>"  >
+       <a class='youtube'  href="<?=$media_url_lo ?>"  >
        <div class="playbutton" ><img src="resources/g_logo.png" style="width:40px;height:40px;"></div> 
        </a>
         

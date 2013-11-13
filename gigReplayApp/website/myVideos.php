@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#">
+
 <?php
 
 
@@ -35,15 +35,14 @@ if ($user) {
 
 ?>
 <?php if ($user): ?>
-      <?php $fb_user_id=$user_profile['id'];
-       $fb_user_name=$user_profile['name'];?>
+      <?php $fb_user_id=$user_profile['id'];?>
+      <?php  $fb_user_name=$user_profile['name'];?>
   	
     <?php else: ?>
     
   <? php //place some controls here to login user?>
     <?php endif ?>
-    
-    
+<!-- Select media details of vid -->
 <?php
     
     $getthing = $_GET['vid'];
@@ -110,9 +109,43 @@ if ($user) {
     }
     
     //Set default thumbnail. Append the default_thumbnail number to the string.
+
    // $thumbnail_url = dirname($media_url)."/thumb_".$default_thumb.".png";
     $thumbnail_url= $default_thumb;
+    
+
 ?>
+<!-- Select media details of vid -->
+
+<!-- Edit Title of video -->
+<?php 
+$mediaid=$_POST['mediaid'];
+$form_title=$_POST['title'];
+$submit_title=$_POST['submit'];
+if($submit_title){
+	if($form_title)
+	{
+		$con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
+		if (mysqli_connect_errno($con)) {
+			echo "Failed to onnect to MySQL: " . mysqli_connect_error();
+		} else {
+			$query_title="UPDATE media_master SET title='$form_title' WHERE master_id= '$mediaid'" ;
+			$result = mysqli_query($con, $query_title);
+			header("Location: success.php?success=$mediaid");
+		}
+		
+	}
+	else
+	{
+		echo "Please Enter Valid Text.";
+	}
+
+
+}
+mysqli_close($con);
+?>
+<!-- Edit Title of video -->
+
 <!-- Grab Post data from form and process -->
 <?php 
 $username=$_POST['username'];
@@ -129,7 +162,7 @@ if($submit){
 		} else {
 			$query="INSERT INTO user_comment (user_name,media_id,user_id,comment) VALUES ('$username','$mediaid','$userid','$comment')";
 			$result = mysqli_query($con, $query);
-			header("Location: success2.php?success=$mediaid");
+			header("Location: success.php?success=$mediaid");
 		}
 		
 	}
@@ -144,23 +177,27 @@ mysqli_close($con);
 ?>
 <!--Grab Post data from form and process  -->
 
- <head>
-  <title><?=$title?></title>
 
-<?php include 'header.php'; ?>
+<head>
+<link rel="stylesheet" type="text/css" href="gigreplay.css" />
+<link href="/bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="HTML,CSS,XML,JavaScript">
+<meta name="description" content="GigReplay"
+<meta http-equiv="Expires" CONTENT="0">
+<meta http-equiv="Cache-Control" CONTENT="no-cache">
+<meta http-equiv="Pragma" CONTENT="no-cache">
+<title><?=$title?></title>
+<?php include 'headertest.php'; ?>
 
-  <meta property="og:image" content="<?=$thumbnail_url?>"/>
-  <link rel="shortcut icon" href='/resources/favicon.ico'>
-  <style type="text/css">
-/** {
-border: 1px black solid;
-}*/
-  </style>
+
+ <!-- Required for facebook post image -->
+  <meta property="og:image" content="<?=$default_thumb?>"/>
+
  </head>
 
- <body>
+ <body style="padding-bottom: 100px;">
  
-<?php include 'top_toolbar.php'; ?>
  <script>
   window.fbAsyncInit = function() {
   FB.init({
@@ -219,43 +256,55 @@ border: 1px black solid;
   }(document));
 
 </script>
-   
+ 
+<?php include 'top_toolbar.php'; ?>
 
-    
+
      <div class="row">
       <div class="col-12 col-lg-12">
-       <div class="text-center" style="margin-left:auto; margin-right:auto;">
-        <video id="video_with_controls"  controls autobuffer poster="<?=$thumbnail_url?>"> <source src="<?=$media_url?>" type="video/mp4" />
+       <div class="text-center" >
+        <video id="video_with_controls" width="960px"  controls autobuffer poster="<?=$thumbnail_url?>" > <source src="<?=$media_url?>" type="video/mp4" />
        	Your browser does not support the video tag
         </video>
-        <div class="text-center" style="margin-left:-500px;" >
-       <div class="fb-like" data-href="http://www.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" data-width="200" data-show-faces="false" data-send="false"></div>
-     <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/share.png" width=40px; height=40px;>
- 	 <a href="https://twitter.com/share?url=http%3A%2F%2Fwww.gigreplay.com/watch.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/Twitter.png" width=40px; height=40px;></a>
+       </div>
+      <div class="text-center" style="margin-left:-500px;" >
+       <div class="fb-like" data-href="http://www.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" data-width="200" data-show-faces="false" data-send="false"></div>
+     <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/share.png" width=40px; height=40px;>
+ 	 <a href="https://twitter.com/share?url=http%3A%2F%2Fwww.gigreplay.com/myVideos.php?vid=<?php echo "$getthing";?>" target="_blank"><img src="resources/Twitter.png" width=40px; height=40px;></a>
  	 <img src="resources/youtube.png" width=40px; height=40px;>
  	 <img src="resources/pinterest.png" width=40px; height=40px;>
  	 <img src="resources/wordpress.png" width=40px; height=40px;>
 </a>
 </div>
-       </div>
       </div>
+     </div>
     
+     <div class="row"  >
      
-       <div class="text-center"">
+      <div class="text-center" >
        <h1><?=$title?></h1>
-       <h3><?=$title?></h3>
        <p>Created by <?=$user_name?><br>
        Last modified <?=$last_modified?></p>
-       <div class="text-center" style="margin-top:1.5em;">
-       <p ><strong><?=$views ?></strong> views</p>
-      </div>
-      </div>
-   <!--  Form for comments -->
+     
+     </div>
+     </div>
+     <div >
+     <!-- Form for editing title -->
+      <div class="title-form" style="margin-left:auto; margin-right:auto; width:960px;">
+     <form action="myVideos.php?vid=<?php echo $getthing ?>"  method="POST">
+Title:<br />
+<textarea class="form-control" rows="1" name="title" placeholder="Set title here" method="POST"></textarea><br />
+<input type="hidden" name="mediaid" value="<?php echo "$media_id" ?>"/>
+<input type="submit" class="btn btn-default pull-right" name="submit" value="Set" />
+</form>
+</div>
+<br><br>
+     <!--  Form for comments -->
      
      <div class="comments-form" style="margin-left:auto; margin-right:auto; width:960px;">
      <?php if(!$user){?>
      <?php }else {?>
-     <form action="watch.php?vid=<?php echo $getthing ?>"  method="POST">   
+     <form action="myVideos.php?vid=<?php echo $getthing ?>"  method="POST">   
 Comments:<br />
 <textarea class="form-control" rows="3" name="comments" placeholder="Type comment here" method="POST"></textarea><br />
 <input type="hidden" name="username" value="<?php echo "$fb_user_name"?>"/>
@@ -316,25 +365,12 @@ if(mysqli_num_rows($result2) == 0){?>
 }
 mysqli_close($con);
 }?>
-    
+     </div>
 
-   
-  </div>
  </body>
+ <?php include 'bottom_toolbar.php'; ?>
+
+
+
 </html>
 
-<?php
-    $views++;
-    //Time to increment the number of views. This should be done 5 seconds after the video is played. Need to also find some way to prevent botting.
-    $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
-    if (mysqli_connect_errno($con)) {
-        echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    } else {
-        //Find out if the video has already been created once before
-        $query = "UPDATE media_master SET views=".$views." WHERE master_id=".$getthing;
-        $result = mysqli_query($con, $query);
-    }
-    mysqli_close($con);
-    
-    
-?>
