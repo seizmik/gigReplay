@@ -322,11 +322,12 @@
         double backTime, travelTime, lag, startTime;
         
         //The request to ping the API page
-        NSURL *url = [NSURL URLWithString:GIGREPLAY_API_URL@"get_time.php"];
+        NSURL *url = [NSURL URLWithString:@"http://www.gigreplay.com/api/get_time.php"];
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Will calculate jitter based on 5 pings
-        for (int i=0; i<7; i++) {
+        for (int i=0; i<5; i++) {
+
             //Get the local time
             startTime = [[NSDate date] timeIntervalSince1970];
             //NSLog(@"%f", localTime);
@@ -403,7 +404,7 @@
         //jitter = variance/[lagArray count];
         serverVariance = sqrt(serverVariance/[diffArray count]);
         //serverVariance = serverVariance/[diffArray count];
-        //NSLog(@"%f %f %f %f %i", meanLag, jitter, meanDiffWithServer, serverVariance, [lagArray count]);
+        NSLog(@"%f %f %f %f %i", meanLag, jitter, meanDiffWithServer, serverVariance, [lagArray count]);
     }
     
     if (count == 10) {
