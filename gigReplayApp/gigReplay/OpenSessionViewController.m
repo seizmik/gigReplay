@@ -9,6 +9,7 @@
 #import "OpenSessionViewController.h"
 #import "SettingsViewController.h"
 #import "UIImageView+WebCache.h"
+#import "SDImageCache.h"
 
 @interface OpenSessionViewController ()
 
@@ -53,6 +54,12 @@
     // Do any additional setup after loading the view from its nib.
 }
 -(void)leon{
+    
+    SDImageCache *imageCache = [SDImageCache sharedImageCache];
+    [imageCache clearMemory];
+    [imageCache clearDisk];
+    [imageCache cleanDisk];
+    
     NSLog(@"fetcheddatachagend");
     // connect to online database and retrieve new data when pulled to refresh
     [self performSelector:@selector(updatingTable) withObject:nil afterDelay:3];
@@ -62,10 +69,13 @@
         [formatter setDateFormat:@"MMM d, h:mm a"];
          NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",[formatter stringFromDate:[NSDate date]]];
         self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
+    
+    self.navigationItem.hidesBackButton = YES;
 }
 -(void)updatingTable{
    
     [self.refreshControl endRefreshing];
+    self.navigationItem.hidesBackButton = NO;
 
     }
 
@@ -124,9 +134,9 @@
        
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //           cell.fbProfilePictureView.profileID=fb_user_ID;
-            [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL]];
-           
-//        });
+            //[cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL]];
+    //     });
+    [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL] placeholderImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5] options:SDWebImageCacheMemoryOnly];
 
 //    });
    

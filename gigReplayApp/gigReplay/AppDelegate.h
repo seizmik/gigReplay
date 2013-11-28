@@ -54,4 +54,6 @@
 @property (strong, nonatomic) SyncObject *syncObject;
 @property (strong, nonatomic) UINavigationController *navController;
 
+
+
 @end

@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 #import <FacebookSDK/FacebookSDK.h>
 
+
 @interface SettingsViewController : UIViewController
 
 - (IBAction)facebookLogOut:(id)sender;
 - (IBAction)syncTrial:(UIButton *)sender;
+
+
 - (IBAction)reSync:(UIButton *)sender;
+
+
+
+
 @end

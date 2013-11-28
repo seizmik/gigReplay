@@ -14,5 +14,8 @@
 @property (strong, nonatomic) IBOutlet UILabel *sessionName;
 @property (strong, nonatomic) IBOutlet UILabel *dateTaken;
 @property (strong,nonatomic) IBOutlet UIButton *customButton;
+@property (strong, nonatomic) IBOutlet UIImageView *uploadedTick;
+@property (strong, nonatomic) IBOutlet UIButton *uploadButton;
+
 
 @end

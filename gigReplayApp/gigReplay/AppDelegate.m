@@ -65,7 +65,7 @@
     dbObject = [[ConnectToDatabase alloc] initDB];
     [dbObject checkAndCreateDatabase];
     //Clear out the upload tracker
-    if(![dbObject delFromDatabase:@"DELETE FROM upload_tracker WHERE upload_status=1 OR upload_status=-1"]){
+    if(![dbObject delFromDatabase:@"DELETE FROM upload_tracker WHERE upload_status=-1"]){
         NSLog(@"Error occurred clearing out upload_tracker");
     }
 }
@@ -194,16 +194,16 @@
 -(void)loadApplicationHome
 {
     HomeViewController *home=[[HomeViewController alloc]initWithNibName:@"HomeViewController" bundle:nil];
-    home.title=@"GigReplay";
-    [home.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"gig_tab_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png.png"]];
+    home.title=@"Featured";
+    [home.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"g_logo.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png.png"]];
     
     SocialViewController *socialVC=[[SocialViewController alloc]initWithNibName:@"SocialViewController" bundle:nil];
     socialVC.title=@"Events";
     [socialVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_create_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_create_button_off.png"]];
     
-    MyVideosViewController *myVideosVC=[[MyVideosViewController alloc]initWithNibName:@"MyVideosViewController" bundle:nil];
-    myVideosVC.title=@"myVideos";
-    [myVideosVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];
+    MyVideosViewController *friendVideos=[[MyVideosViewController alloc]initWithNibName:@"MyVideosViewController" bundle:nil];
+    friendVideos.title=@"Friends";
+    [friendVideos.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_join_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_join_button_off.png"]];
     
     CaptureViewController *captureVC=[[CaptureViewController alloc]init];
     UINavigationController *captureNav=[[UINavigationController alloc]initWithRootViewController:captureVC];
@@ -226,28 +226,30 @@
     openSession.title =@"Open";
     [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];
     
-    UploadTab *upload=[[UploadTab alloc]init];
-    UINavigationController *uploadTab=[[UINavigationController alloc]initWithRootViewController:upload];
-    uploadTab.title =@"Upload";
-    [uploadTab.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
+    
     
     ReplaysViewController *gigReplay=[[ReplaysViewController alloc]initWithNibName:@"ReplaysViewController" bundle:nil];
     UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
     gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"gig_tab_on.png" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png"]];
+    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"g_logo.png" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png"]];
+   
+    UploadTab *uploadVC=[[UploadTab alloc]initWithNibName:@"UploadTab" bundle:nil];
+    uploadVC.title=@"myFeeds";
+    [uploadVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
     
     SettingsViewController *settingsVC=[[SettingsViewController alloc]initWithNibName:@"SettingsViewController" bundle:nil];
     settingsVC.title=@"Settings";
-     [settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_upload_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_upload_button_off.png"]];
+     [settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"navigation_settings_button.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"navigation_settings_button.png"]];
     
     tabBarController=[[UITabBarController alloc]init];
     tabBarController.tabBar.tintColor=[UIColor clearColor];
-   // tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
+    tabBarController.tabBar.backgroundImage=[UIImage imageNamed:@"bar.png"];
     tabBarController.tabBar.backgroundColor=[UIColor whiteColor];
-    tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"selectionTab.png"];
+   // tabBarController.tabBar.selectedImageTintColor=[UIColor blackColor];
+    //tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"selectionTab.png"];
     //tabBarController.tabBar.selectionIndicatorImage=[UIImage imageNamed:@"color5.png"];
    
-    NSArray *viewArray=[NSArray arrayWithObjects:home,socialVC,captureNav,myVideosVC,settingsVC,nil];
+    NSArray *viewArray=[NSArray arrayWithObjects:home,friendVideos,captureNav,uploadVC,settingsVC,nil];
     
     //set tab bar controller array
     [tabBarController setViewControllers:viewArray];
@@ -305,7 +307,7 @@
     int count;
     
     //Need to make a retry loop. Only 10 tries allowed before a warning shows up
-    for (count=0; count<10 && (jitter>0.005 || [diffArray count]<5); count++) {
+    for (count=0; count<10 && (jitter>0.015 || [diffArray count]<5); count++) {
         NSLog(@"Sync attempt %i", count);
         //Reset the array. NB: emptying the array is not enough apparently.
         lagArray = nil;
@@ -324,7 +326,7 @@
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
         //Will calculate jitter based on 5 pings
-        for (int i=0; i<25; i++) {
+        for (int i=0; i<7; i++) {
             //Get the local time
             startTime = [[NSDate date] timeIntervalSince1970];
             //NSLog(@"%f", localTime);

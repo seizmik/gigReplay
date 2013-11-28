@@ -58,6 +58,7 @@ int currentTime;
     sceneTitleDisplay.text=appDelegateObject.CurrentSession_Name;
     sceneCodeDisplay.text=appDelegateObject.CurrentSession_Code;
     self.title = appDelegateObject.CurrentSession_Name;
+
     
 }
 
@@ -133,6 +134,8 @@ int currentTime;
 
 - (void)postToGenerateVideo
 {
+    //obtain autoeditvalues from settingsVC
+    
     //Getting the user's email here
     SQLdatabase *sql = [[SQLdatabase alloc] initDatabase];
     NSString *strQuery = @"SELECT * FROM Users";
@@ -142,6 +145,12 @@ int currentTime;
         //Create the form and post it to the API
         NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
+        //AutoEditVaules for Post
+        [request addPostValue:self.cutLengthValue forKey:@"cutlength_value"];
+        [request addPostValue:self.cutVarValue forKey:@"cutVar_value"];
+        NSLog(@"%@ cutlength",self.cutLengthValue);
+        NSLog(@"%@ cutvar",self.cutVarValue);
+
         //Now, add the data. In this case, we only send the user id, email and session number
         [request addPostValue:appDelegateObject.CurrentSessionID forKey:@"session_id"];
         [request addPostValue:appDelegateObject.CurrentSession_Name forKey:@"session_name"];
@@ -228,7 +237,7 @@ int currentTime;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality=UIImagePickerControllerQualityType640x480;
+    cameraUI.videoQuality=UIImagePickerControllerQualityTypeMedium;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -336,7 +345,7 @@ int currentTime;
     //currentPath = [filemgr currentDirectoryPath];
     NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *docsDir = [dirPaths objectAtIndex:0];
-    NSString *newDir = [docsDir stringByAppendingPathComponent:@"LIPSYNC_VIDEO"];
+    NSString *newDir = [docsDir stringByAppendingPathComponent:@"gigReplay_Videos"];
     // NSLog(@"%@",newDir);
     
     NSString *m_strFilepath  = [[NSString alloc]initWithString:newDir];
@@ -415,7 +424,6 @@ int currentTime;
 -(void)flashtoggle{
     if (flashtoggle.on){
         [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOn];
-        
                               
     }
     else {
@@ -544,4 +552,14 @@ int currentTime;
     return randomString;
 }
 
+- (IBAction)cutVarSlider:(UISlider *)sender {
+    self.cutVarValue.text=[NSString stringWithFormat:@"%.0f",[sender value]];
+    
+}
+-(IBAction)cutLengthSlider:(UISlider *)sender{
+    self.cutLengthValue.text=[NSString stringWithFormat:@"%.0f",[sender value]];
+
+    
+    
+}
 @end

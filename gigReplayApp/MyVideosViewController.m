@@ -117,7 +117,11 @@
     [homeDetailVC setVideoUserInfo:[info objectForKey:@"user_name"]];
     [homeDetailVC setVideoTitle:[info objectForKey:@"title"]];
     [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
+    
+    homeDetailVC.modalTransitionStyle=UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:homeDetailVC animated:YES completion:nil];
+    
+    
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     
@@ -133,7 +137,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    return 177;
+    return 220;
 }
 
 

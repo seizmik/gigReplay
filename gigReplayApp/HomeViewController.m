@@ -28,7 +28,7 @@
     }
     return self;
 }
--(void)viewDidAppear:(BOOL)animated{
+-(void)viewWillAppear:(BOOL)animated{
     Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
     [internetReach startNotifier];
     NetworkStatus netStatus = [internetReach currentReachabilityStatus];
@@ -155,7 +155,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-        return 176;
+        return 180;
 }
 -(void)callAction:(UIButton *)sender
 {

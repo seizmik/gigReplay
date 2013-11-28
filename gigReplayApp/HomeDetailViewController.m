@@ -24,7 +24,7 @@
 @end
 
 @implementation HomeDetailViewController
-@synthesize indVideoTitle;
+@synthesize indVideoTitle,loadingView,loadingImage;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -80,6 +80,7 @@
     self.commentArray=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 
     [self.commentTableVIew reloadData];
+    NSLog(@"THIS IS IN COMMENT VIEW %@",self.commentArray);
 }
 
 -(void) obtainDataFromURL{
@@ -216,13 +217,19 @@
 }
 
 - (IBAction)commentPost:(id)sender {
+    if([self.theComments.text isEqualToString:@""]){
+        UIAlertView *alert=[[UIAlertView alloc]initWithTitle:@"Error" message:@"Empty Comment Field" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show ];
+    }
+    else{
     NSURL *url = [NSURL URLWithString:@"http://www.lipsync.sg/api/SocialMediaAPI.php"];
     ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
     [request setPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
     [request setPostValue:self.theComments.text forKey:@"comments"];
     [request setPostValue:self.media_id forKey:@"media_id"];
-    NSString *user_id=[NSString stringWithFormat: @"%d", appDelegateObject.CurrentUserID];
-    [request setPostValue:user_id forKey:@"user_id"];
+    //NSString *user_id=[NSString stringWithFormat: @"%d", appDelegateObject.CurrentUserID];
+    [request setPostValue:fb_user_id forKey:@"user_id"];
+    [request setDidFinishSelector:@selector(requestFinished:)];
     
 //    NSLog(@"currentusername %@",appDelegateObject.CurrentUserName);
 //    NSLog(@"%@",self.theComments.text);
@@ -232,18 +239,25 @@
     [request setDelegate:self];
     [request startAsynchronous];
     
-//get data from web n show in tableview
-   
-    [self performSelector:@selector(obtainDataFromURL) withObject:nil afterDelay:1];
-    NSLog(@"%@",self.commentArray);
+    
     
     //Remove subview from superview after post is completed
     [self.commentPopOver removeFromSuperview];
-
+    }
     
 }
 -(void)requestFinished:(ASIHTTPRequest *)request{
     return   NSLog(@"request success");
+   
+    dispatch_sync(dispatch_get_main_queue(), ^(void){
+        [self.loadingView setNeedsDisplay];
+        [self obtainDataFromURL];
+        NSLog(@"%@",self.commentArray);
+        
+        
+
+    });
+    
 }
 -(void)requestFailed:(ASIHTTPRequest *)request{
     return  NSLog(@"request failed")    ;

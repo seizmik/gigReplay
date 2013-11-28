@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4510" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3742"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="UploadCell" id="2" customClass="UploadCell">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="blue" indentationWidth="10" reuseIdentifier="UploadCell" rowHeight="250" id="2" customClass="UploadCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="250"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2" id="ZWQ-AO-UfQ">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="59"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="249"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3">
-                        <rect key="frame" x="8" y="8" width="80" height="45"/>
+                        <rect key="frame" x="1" y="3" width="318" height="178"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="45" id="57"/>
-                            <constraint firstAttribute="width" constant="80" id="58"/>
+                            <constraint firstAttribute="height" constant="178" id="57"/>
+                            <constraint firstAttribute="width" constant="318" id="58"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" restorationIdentifier="" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="21" userLabel="Session Label">
-                        <rect key="frame" x="96" y="10" width="172" height="21"/>
+                        <rect key="frame" x="36" y="179" width="248" height="39"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="172" id="106"/>
-                            <constraint firstAttribute="height" constant="21" id="111"/>
+                            <constraint firstAttribute="width" constant="248" id="106"/>
+                            <constraint firstAttribute="height" constant="39" id="111"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="20"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                         <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24" userLabel="Date Label">
-                        <rect key="frame" x="96" y="32" width="172" height="21"/>
+                        <rect key="frame" x="36" y="220" width="248" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="40"/>
                         </constraints>
-                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="18"/>
                         <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </label>
                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="71">
-                        <rect key="frame" x="265" y="5" width="50" height="50"/>
+                        <rect key="frame" x="130" y="61" width="61" height="62"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="93"/>
-                            <constraint firstAttribute="height" constant="50" id="102"/>
+                            <constraint firstAttribute="width" constant="61" id="93"/>
+                            <constraint firstAttribute="height" constant="62" id="102"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                         <state key="normal" image="playicon.png">
@@ -59,24 +59,39 @@
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lJx-1c-eNR">
+                        <rect key="frame" x="276" y="207" width="29" height="29"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQi-dc-5Ra">
+                        <rect key="frame" x="261" y="184" width="59" height="30"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
+                        <state key="normal" title="Upload?">
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
                 </subviews>
+                <color key="backgroundColor" red="0.9215686917" green="0.94117653369999998" blue="0.9450981021" alpha="1" colorSpace="deviceRGB"/>
             </tableViewCellContentView>
             <constraints>
                 <constraint firstItem="71" firstAttribute="centerY" secondItem="3" secondAttribute="centerY" id="5Qp-Xg-MDO"/>
-                <constraint firstItem="3" firstAttribute="bottom" secondItem="24" secondAttribute="bottom" id="FOr-JB-4Ad"/>
-                <constraint firstItem="21" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="8" symbolic="YES" id="FWK-hF-NEl"/>
+                <constraint firstItem="3" firstAttribute="bottom" secondItem="24" secondAttribute="bottom" constant="-60" id="FOr-JB-4Ad"/>
+                <constraint firstItem="21" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="-283" id="FWK-hF-NEl"/>
                 <constraint firstItem="21" firstAttribute="trailing" secondItem="24" secondAttribute="trailing" id="L8h-1b-pL0"/>
-                <constraint firstItem="21" firstAttribute="top" secondItem="2" secondAttribute="top" constant="10" id="Pdw-lz-fhZ"/>
-                <constraint firstItem="3" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="8" id="Y2I-fX-nBx"/>
-                <constraint firstItem="71" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" id="mkW-2f-mwT"/>
-                <constraint firstItem="24" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="8" symbolic="YES" id="sQq-hi-K72"/>
-                <constraint firstAttribute="trailing" secondItem="71" secondAttribute="trailing" constant="5" id="voy-Da-Ccv"/>
+                <constraint firstItem="21" firstAttribute="top" secondItem="2" secondAttribute="top" constant="179" id="Pdw-lz-fhZ"/>
+                <constraint firstItem="3" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="1" id="Y2I-fX-nBx"/>
+                <constraint firstItem="71" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" constant="-33.5" id="mkW-2f-mwT"/>
+                <constraint firstItem="24" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="-283" id="sQq-hi-K72"/>
+                <constraint firstAttribute="trailing" secondItem="71" secondAttribute="trailing" constant="129" id="voy-Da-Ccv"/>
             </constraints>
             <connections>
                 <outlet property="customButton" destination="71" id="105"/>
                 <outlet property="dateTaken" destination="24" id="46"/>
                 <outlet property="sessionName" destination="21" id="45"/>
                 <outlet property="thumbnail" destination="3" id="44"/>
+                <outlet property="uploadButton" destination="XQi-dc-5Ra" id="pW4-eh-yoP"/>
+                <outlet property="uploadedTick" destination="lJx-1c-eNR" id="f4Y-en-WPc"/>
             </connections>
         </tableViewCell>
     </objects>

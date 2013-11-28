@@ -14,6 +14,8 @@
 @synthesize sessionName = _sessionName;
 @synthesize dateTaken = _dateTaken;
 @synthesize customButton;
+@synthesize uploadedTick,uploadButton;
+
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

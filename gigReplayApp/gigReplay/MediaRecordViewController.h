@@ -56,4 +56,13 @@
 @property (strong, nonatomic) NSTimer *videoTimer;
 @property BOOL isRecording;
 
+
+//slider
+- (IBAction)cutLengthSlider:(UISlider *)sender;
+@property (strong, nonatomic) IBOutlet UILabel *cutLengthValue;
+- (IBAction)cutVarSlider:(UISlider *)sender;
+@property (strong, nonatomic) IBOutlet UILabel *cutVarValue;
+
+
+
 @end
