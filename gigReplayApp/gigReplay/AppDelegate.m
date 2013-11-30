@@ -426,7 +426,7 @@
             newVariance += diffSquare;
         }
         newJitter = sqrt(newVariance/[newLagArray count]);
-        NSLog(@"The old array had %i data points, but this new array has %i data points", [lagArray count], [newLagArray count]);
+        //NSLog(@"The old array had %i data points, but this new array has %i data points", [lagArray count], [newLagArray count]);
     }
     
     if (count == 10) {

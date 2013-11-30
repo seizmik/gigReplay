@@ -146,8 +146,8 @@ int currentTime;
         NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
         //AutoEditVaules for Post
-        [request addPostValue:self.cutLengthValue forKey:@"cutlength_value"];
-        [request addPostValue:self.cutVarValue forKey:@"cutVar_value"];
+        [request addPostValue:self.cutLengthValue forKey:@"cutLength"];
+        [request addPostValue:self.cutVarValue forKey:@"cutVar"];
         NSLog(@"%@ cutlength",self.cutLengthValue);
         NSLog(@"%@ cutvar",self.cutVarValue);
 

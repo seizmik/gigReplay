@@ -62,7 +62,16 @@
         //return rand(300, 600)/100;
         //Creates the duration for a set number of frames.
         //This should be posted up as part of the options. To be done in the near future.
-        $frames = rand(90, 180);
+        global $cut_length, $cut_var;
+        //If these variables are nil, switch to default
+        if (!empty($cut_length)) {
+            $cut_length = 120;
+        }
+        if (!empty($cut_var)) {
+            $cut_var = 1.5;
+        }
+        $cut_end = $cut_length * $cut_var;
+        $frames = rand($cut_length, $cut_end);
         $time = $frames * (1/30);
         return round($time, 3);
     }
@@ -392,6 +401,8 @@
     $user_id = $_POST['user_id'];
     $user_email = $_POST['user_email'];
     $user_name = $_POST['user_name'];
+    $cut_length = $_POST['cutLength'];
+    $cut_var = $_POST['cutVar'];
     
     $video_array = array();
     
@@ -430,12 +441,24 @@
         //Add end time to the row array, then add row into the video array;
         $row['end_time'] = $this_videos_end_time;
         $video_array[] = $row;
-        
     }
     
+    //Now, we make duplicates of the details into the array
+    //This will allow the system to select these shorter clips more often than not
+    $total_length = $last_end - $first_start;
+    
+    foreach ($video_array as $row) {
+        $multiplier = intval($total_length/$row['media_length']);
+        for ($i=1; $i<$multiplier; $i++) {
+            //$i starts from 1 because the multiplier starts from 1. If it does start from 1, then don't multiply the entry
+            $video_array[] = $row;
+            //This should put multiple entries in the auto editing so that it'll be selected more often
+        }
+    }
+    
+    //Create a temp folder and master folder
     $session_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $session_name)), 'strlen'));
     $user_add_on = implode("_", array_filter(explode(" ", preg_replace("/[^a-zA-Z0-9]+/", " ", $user_name)), 'strlen'));
-    //Create a temp folder and master folder
     $temp_path = "../uploads/temp/".$session_id."-".$session_add_on."/";
     if (!is_dir($temp_path)) {
         mkdir($temp_path);
