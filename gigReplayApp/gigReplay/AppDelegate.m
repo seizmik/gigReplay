@@ -325,8 +325,8 @@
         NSURL *url = [NSURL URLWithString:@"http://www.gigreplay.com/api/get_time.php"];
         //ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
         
-        //Will calculate jitter based on 5 pings
-        for (int i=0; i<5; i++) {
+        //Will calculate jitter based on 7 pings. We will remove a max of 2 outliers.
+        for (int i=0; i<7; i++) {
 
             //Get the local time
             startTime = [[NSDate date] timeIntervalSince1970];
@@ -366,10 +366,8 @@
                 meanServerTime += serverTime - startTime;
                 
                 //Figure out the difference and store it in an array
-                NSNumber *timeLag = [NSNumber numberWithDouble:lag];
-                [lagArray addObject:timeLag];
-                NSNumber *thisTimeRelationship = [NSNumber numberWithDouble:diffWithServer];
-                [diffArray addObject:thisTimeRelationship];
+                [lagArray addObject:[NSNumber numberWithDouble:lag]];
+                [diffArray addObject:[NSNumber numberWithDouble:diffWithServer]];
                 
                 //Debug line
                 //NSLog(@"%@", timeDiff);
@@ -405,6 +403,30 @@
         serverVariance = sqrt(serverVariance/[diffArray count]);
         //serverVariance = serverVariance/[diffArray count];
         NSLog(@"%f %f %f %f %i", meanLag, jitter, meanDiffWithServer, serverVariance, [lagArray count]);
+        
+        //At this point, we take out the outliers from the group
+        NSMutableArray *newLagArray, *newDiffArray;
+        newLagArray = [NSMutableArray array];
+        double newJitter = 0.0, newMeanLag = 0.0, newLag, newVariance = 0.0;
+        for (int i=0; i<[lagArray count]; i++) {
+            newLag = [[lagArray objectAtIndex:i] floatValue];
+            if (newLag>(meanLag-jitter) && newLag<(meanLag+jitter)) {
+                [newLagArray addObject:[NSNumber numberWithDouble:newLag]];
+                newMeanLag += newLag;
+            }
+        }
+        
+        //Now, get the newMeanLag and newJitter
+        newMeanLag = newMeanLag/[newLagArray count];
+        newDiffArray = [NSMutableArray array];
+        for (int k=0; k<[newLagArray count]; k++) {
+            double lag = [[newLagArray objectAtIndex:k] floatValue];
+            double diff = lag - newMeanLag;
+            double diffSquare = diff*diff;
+            newVariance += diffSquare;
+        }
+        newJitter = sqrt(newVariance/[newLagArray count]);
+        NSLog(@"The old array had %i data points, but this new array has %i data points", [lagArray count], [newLagArray count]);
     }
     
     if (count == 10) {
