@@ -48,9 +48,9 @@ extern "C" {
  *  errors. Objects that use the graph directly (such as creating audio units)
  *  should re-initialise the audio units.
  */
-extern NSString * AEAudioControllerSessionInterruptionBeganNotification;
-extern NSString * AEAudioControllerSessionInterruptionEndedNotification;
-extern NSString * AEAudioControllerDidRecreateGraphNotification;
+extern NSString * const AEAudioControllerSessionInterruptionBeganNotification;
+extern NSString * const AEAudioControllerSessionInterruptionEndedNotification;
+extern NSString * const AEAudioControllerDidRecreateGraphNotification;
 
 /*!
  * @enum AEInputMode
@@ -1100,6 +1100,14 @@ NSTimeInterval AEConvertFramesToSeconds(AEAudioController *audioController, long
  *  callbacks are called.
  */
 @property (nonatomic, assign) BOOL muteOutput;
+
+/*!
+ * Access the master output volume
+ *
+ *  Note that this value affects the output of the audio engine; it doesn't modify
+ *  the hardware volume setting.
+ */
+@property (nonatomic, assign) float masterOutputVolume;
 
 /*!
  * Enable audio input from Bluetooth devices

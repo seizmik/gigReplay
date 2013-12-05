@@ -270,4 +270,29 @@
     [self.commentPopOver removeFromSuperview];
 }
 
+- (IBAction)shareButton:(id)sender {
+    UIImage *anImage = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:self.videoImage]]];
+    NSString *videoLink=[NSString stringWithFormat:@"%@ -- ",self.videoURL];
+    NSArray *Items   = [NSArray arrayWithObjects:
+                        videoLink,
+                        anImage, nil];
+
+    
+    
+    UIActivityViewController *acitivityController=[[UIActivityViewController alloc]initWithActivityItems:Items applicationActivities:nil];
+    acitivityController.excludedActivityTypes = [[NSArray alloc] initWithObjects:
+                                        UIActivityTypeCopyToPasteboard,
+                                        UIActivityTypePostToWeibo,
+                                        UIActivityTypeSaveToCameraRoll,
+                                        UIActivityTypeCopyToPasteboard,
+                                        UIActivityTypeAssignToContact,
+                                        UIActivityTypePrint,
+                                        UIActivityTypeAirDrop,
+                                        nil];
+
+    [self presentViewController:acitivityController animated:YES completion:nil];
+}
+
+- (IBAction)likeButton:(id)sender {
+}
 @end

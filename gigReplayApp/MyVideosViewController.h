@@ -17,5 +17,5 @@
     NSArray *myVideosArray;
 }
 @property (strong, nonatomic) IBOutlet UITableView *myVideosTableView;
-@property(strong,nonatomic) NSString *videoImage;
+@property(nonatomic) NSString *videoImage;
 @end

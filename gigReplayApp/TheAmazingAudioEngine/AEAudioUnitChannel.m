@@ -49,7 +49,14 @@ static inline BOOL _checkResult(OSStatus result, const char *operation, const ch
 @implementation AEAudioUnitChannel
 
 - (id)initWithComponentDescription:(AudioComponentDescription)audioComponentDescription
+                       audioController:(AEAudioController*)audioController
+                                 error:(NSError**)error {
+    return [self initWithComponentDescription:audioComponentDescription audioController:audioController  preInitializeBlock:nil error:error];
+}
+
+- (id)initWithComponentDescription:(AudioComponentDescription)audioComponentDescription
                    audioController:(AEAudioController*)audioController
+                preInitializeBlock:(void(^)(AudioUnit audioUnit))block
                              error:(NSError**)error {
     
     if ( !(self = [super init]) ) return nil;
@@ -59,7 +66,7 @@ static inline BOOL _checkResult(OSStatus result, const char *operation, const ch
     _componentDescription = audioComponentDescription;
     _audioGraph = _audioController.audioGraph;
     
-    if ( ![self setup:error] ) {
+    if ( ![self setup:block error:error] ) {
         [self release];
         return nil;
     }
@@ -74,7 +81,7 @@ static inline BOOL _checkResult(OSStatus result, const char *operation, const ch
     return self;
 }
 
-- (BOOL)setup:(NSError**)error {
+- (BOOL)setup:(void(^)(AudioUnit audioUnit))block error:(NSError**)error {
 	OSStatus result;
     if ( !checkResult(result=AUGraphAddNode(_audioGraph, &_componentDescription, &_node), "AUGraphAddNode") ||
          !checkResult(result=AUGraphNodeInfo(_audioGraph, _node, NULL, &_audioUnit), "AUGraphNodeInfo") ) {
@@ -82,6 +89,9 @@ static inline BOOL _checkResult(OSStatus result, const char *operation, const ch
         return NO;
     }
     
+    UInt32 maxFPS = 4096;
+    checkResult(result=AudioUnitSetProperty(_audioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, sizeof(maxFPS)), "kAudioUnitProperty_MaximumFramesPerSlice");
+
     // Try to set the output audio description
     AudioStreamBasicDescription audioDescription = _audioController.audioDescription;
     result = AudioUnitSetProperty(_audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &audioDescription, sizeof(AudioStreamBasicDescription));
@@ -98,31 +108,28 @@ static inline BOOL _checkResult(OSStatus result, const char *operation, const ch
         }
         
         AudioComponentDescription audioConverterDescription = AEAudioComponentDescriptionMake(kAudioUnitManufacturer_Apple, kAudioUnitType_FormatConverter, kAudioUnitSubType_AUConverter);
-        
         if ( !checkResult(result=AUGraphAddNode(_audioGraph, &audioConverterDescription, &_converterNode), "AUGraphAddNode") ||
              !checkResult(result=AUGraphNodeInfo(_audioGraph, _converterNode, NULL, &_converterUnit), "AUGraphNodeInfo") ||
-             !checkResult(result=AUGraphConnectNodeInput(_audioGraph, _node, 0, _converterNode, 0), "AUGraphConnectNodeInput") ||
              !checkResult(result=AudioUnitSetProperty(_converterUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, 0, &defaultAudioDescription, sizeof(AudioStreamBasicDescription)), "AudioUnitSetProperty(kAudioUnitProperty_StreamFormat)") ||
-             !checkResult(result=AudioUnitSetProperty(_converterUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &audioDescription, sizeof(AudioStreamBasicDescription)), "AudioUnitSetProperty(kAudioUnitProperty_StreamFormat)") ) {
+             !checkResult(result=AudioUnitSetProperty(_converterUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Output, 0, &audioDescription, sizeof(AudioStreamBasicDescription)), "AudioUnitSetProperty(kAudioUnitProperty_StreamFormat)") ||
+             !checkResult(result=AudioUnitSetProperty(_converterUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, sizeof(maxFPS)), "kAudioUnitProperty_MaximumFramesPerSlice") ||
+             !checkResult(result=AUGraphConnectNodeInput(_audioGraph, _node, 0, _converterNode, 0), "AUGraphConnectNodeInput") ) {
             
             if ( error ) *error = [NSError errorWithDomain:NSOSStatusErrorDomain code:result userInfo:[NSDictionary dictionaryWithObject:@"Couldn't setup converter audio unit" forKey:NSLocalizedDescriptionKey]];
             return NO;
         }
     }
     
-    // Attempt to set the max frames per slice
-    UInt32 maxFPS = 4096;
-    AudioUnitSetProperty(_audioUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, sizeof(maxFPS));
-    
     checkResult(AUGraphUpdate(_audioGraph, NULL), "AUGraphUpdate");
-    
+
+    if(block) block(_audioUnit);
+
     checkResult(AudioUnitInitialize(_audioUnit), "AudioUnitInitialize");
     
     if ( _converterUnit ) {
         checkResult(AudioUnitInitialize(_converterUnit), "AudioUnitInitialize");
-        AudioUnitSetProperty(_converterUnit, kAudioUnitProperty_MaximumFramesPerSlice, kAudioUnitScope_Global, 0, &maxFPS, sizeof(maxFPS));
     }
-    
+
     return YES;
 }
 
@@ -170,7 +177,7 @@ static OSStatus renderCallback(id                        channel,
     _converterNode = 0;
     _converterUnit = NULL;
     _audioGraph = _audioController.audioGraph;
-    [self setup:NULL];
+    [self setup:nil error:NULL];
 }
 
 @end

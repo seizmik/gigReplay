@@ -26,12 +26,15 @@
 #import "AEPlaythroughChannel.h"
 #import "TPCircularBuffer.h"
 #import "TPCircularBuffer+AudioBufferList.h"
+#import "AEAudioController+Audiobus.h"
 #import "AEAudioController+AudiobusStub.h"
 
 static const int kAudioBufferLength = 16384;
+static const int kAudiobusInputPortConnectedToSelfChanged;
 
 @interface AEPlaythroughChannel () {
     TPCircularBuffer _buffer;
+    BOOL _audiobusConnectedToSelf;
 }
 @property (nonatomic, retain) AEAudioController *audioController;
 @end
@@ -54,8 +57,21 @@ static const int kAudioBufferLength = 16384;
 - (void)dealloc {
     TPCircularBufferCleanup(&_buffer);
     self.audioController = nil;
-    self.inputPort = nil;
     [super dealloc];
+}
+
+-(void)setAudioController:(AEAudioController *)audioController {
+    if ( _audioController ) {
+        [_audioController removeObserver:self forKeyPath:@"audiobusInputPort.connectedToSelf"];
+    }
+    
+    [audioController retain];
+    [_audioController release];
+    _audioController = audioController;
+
+    if ( _audioController ) {
+        [_audioController addObserver:self forKeyPath:@"audiobusInputPort.connectedToSelf" options:0 context:(void*)&kAudiobusInputPortConnectedToSelfChanged];
+    }
 }
 
 static void inputCallback(id                        receiver,
@@ -65,12 +81,8 @@ static void inputCallback(id                        receiver,
                           UInt32                    frames,
                           AudioBufferList          *audio) {
     AEPlaythroughChannel *THIS = receiver;
-    
-    if ( THIS->_inputPort && ABInputPortIsConnected(THIS->_inputPort) ) {
-        // We'll dequeue from the input port when we render
-    } else {
-        TPCircularBufferCopyAudioBufferList(&THIS->_buffer, audio, time, kTPCircularBufferCopyAll, NULL);
-    }
+    if ( THIS->_audiobusConnectedToSelf ) return;
+    TPCircularBufferCopyAudioBufferList(&THIS->_buffer, audio, time, kTPCircularBufferCopyAll, NULL);
 }
 
 -(AEAudioControllerAudioCallback)receiverCallback {
@@ -84,34 +96,30 @@ static OSStatus renderCallback(id                        channel,
                                AudioBufferList          *audio) {
     AEPlaythroughChannel *THIS = channel;
     
-    if ( THIS->_inputPort && ABInputPortIsConnected(THIS->_inputPort) ) {
-        ABInputPortReceiveLive(THIS->_inputPort, audio, frames, NULL);
-    } else {
-        while ( 1 ) {
-            // Discard any buffers with an incompatible format, in the event of a format change
-            AudioBufferList *nextBuffer = TPCircularBufferNextBufferList(&THIS->_buffer, NULL);
-            if ( !nextBuffer ) break;
-            if ( nextBuffer->mNumberBuffers == audio->mNumberBuffers ) break;
-            TPCircularBufferConsumeNextBufferList(&THIS->_buffer);
-        }
-        
-        UInt32 fillCount = TPCircularBufferPeek(&THIS->_buffer, NULL, AEAudioControllerAudioDescription(audioController));
-        if ( fillCount > frames ) {
-            UInt32 skip = fillCount - frames;
-            TPCircularBufferDequeueBufferListFrames(&THIS->_buffer,
-                                                    &skip,
-                                                    NULL,
-                                                    NULL,
-                                                    AEAudioControllerAudioDescription(audioController));
-        }
-        
+    while ( 1 ) {
+        // Discard any buffers with an incompatible format, in the event of a format change
+        AudioBufferList *nextBuffer = TPCircularBufferNextBufferList(&THIS->_buffer, NULL);
+        if ( !nextBuffer ) break;
+        if ( nextBuffer->mNumberBuffers == audio->mNumberBuffers ) break;
+        TPCircularBufferConsumeNextBufferList(&THIS->_buffer);
+    }
+    
+    UInt32 fillCount = TPCircularBufferPeek(&THIS->_buffer, NULL, AEAudioControllerAudioDescription(audioController));
+    if ( fillCount > frames ) {
+        UInt32 skip = fillCount - frames;
         TPCircularBufferDequeueBufferListFrames(&THIS->_buffer,
-                                                &frames,
-                                                audio,
+                                                &skip,
+                                                NULL,
                                                 NULL,
                                                 AEAudioControllerAudioDescription(audioController));
     }
     
+    TPCircularBufferDequeueBufferListFrames(&THIS->_buffer,
+                                            &frames,
+                                            audio,
+                                            NULL,
+                                            AEAudioControllerAudioDescription(audioController));
+
     return noErr;
 }
 
@@ -121,6 +129,14 @@ static OSStatus renderCallback(id                        channel,
 
 -(AudioStreamBasicDescription)audioDescription {
     return _audioController.inputAudioDescription;
+}
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ( context == &kAudiobusInputPortConnectedToSelfChanged ) {
+        _audiobusConnectedToSelf = _audioController.audiobusInputPort
+                                    && [_audioController.audiobusInputPort respondsToSelector:@selector(connectedToSelf)]
+                                    && [_audioController.audiobusInputPort connectedToSelf];
+    }
 }
 
 @end

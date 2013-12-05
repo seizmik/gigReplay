@@ -117,6 +117,8 @@
     [homeDetailVC setVideoUserInfo:[info objectForKey:@"user_name"]];
     [homeDetailVC setVideoTitle:[info objectForKey:@"title"]];
     [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
+    videoImage=[info objectForKey:@"default_thumb"];
+    [homeDetailVC setVideoImage:videoImage];
     
     homeDetailVC.modalTransitionStyle=UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:homeDetailVC animated:YES completion:nil];

@@ -23,10 +23,11 @@
 @property (strong, nonatomic) IBOutlet UIView *moviePlayerView;
 @property (strong, nonatomic) IBOutlet UITableView *commentTableVIew;
 @property (strong,nonatomic) NSURL *videoURL;
+@property (strong,nonatomic)NSString *videoImage;
 @property (strong,nonatomic) NSString *media_id;
 @property (strong,nonatomic) NSString *videoTitle;
 @property (strong,nonatomic) NSString *videoDate;
-@property (strong, nonatomic)NSString *videoUserInfo;
+@property ( strong,nonatomic)NSString *videoUserInfo;
 @property(strong,nonatomic)NSString *obtainFb_id;
 @property (strong,nonatomic) NSMutableArray *commentArray;
 - (IBAction)backToHome:(id)sender;
@@ -48,6 +49,8 @@
 
 @property (strong, nonatomic) IBOutlet UIView *loadingView;
 @property (strong, nonatomic) IBOutlet UIActivityIndicatorView *loadingImage;
+- (IBAction)shareButton:(id)sender;
 
+- (IBAction)likeButton:(id)sender;
 
 @end

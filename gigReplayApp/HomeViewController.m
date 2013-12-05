@@ -125,7 +125,7 @@
     }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    
+    NSLog(@"%d",indexPath.row);
         NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
         NSString *videoTitle=[info objectForKey:@"title"];
         NSString *media_master_id=[info objectForKey:@"master_id"];
@@ -135,7 +135,9 @@
         [homeDetailVC setObtainFb_id:[info objectForKey:@"fb_user_id"]];
         [homeDetailVC setVideoUserInfo:[info objectForKey:@"user_name"]];
         [homeDetailVC setMedia_id:media_master_id];
+        videoImage=[info objectForKey:@"default_thumb"];
         [homeDetailVC setVideoTitle:videoTitle];
+        [homeDetailVC setVideoImage:videoImage];
         [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
         [self presentViewController:homeDetailVC animated:YES completion:nil];
         
