@@ -12,7 +12,6 @@
 #import "ASINetworkQueue.h"
 #import "UploadCell.h"
 #import "SettingsViewController.h"
-#import "UploadTabDetailViewController.h"
 #import "UIImageView+WebCache.h"
 #import <MobileCoreServices/UTCoreTypes.h>
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -460,7 +459,6 @@ if(videoInfo.uploadStatus==0)
     
 }
 -(void)fileHasBeenUploaded{
-    NSIndexPath *indexPath=[self.uploadTable indexPathForSelectedRow];
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=%i WHERE id=%i", 1, videoInfo.entryNumber];
     NSLog(@"%d",videoInfo.entryNumber);
     while (![dbObject updateDatabase:strQuery]) {

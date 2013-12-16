@@ -232,37 +232,6 @@ float currentTime;
     }
 }
 
-#pragma mark
-
-/*
-- (NSError *)setupAudioRecorder {
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *dirPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *docsDir = [dirPaths objectAtIndex:0];
-    
-    //Create a new directory, if one is not there already
-    NSString *newDir = [docsDir stringByAppendingPathComponent:@"GIGREPLAY_AUDIO"];
-    [fileManager createDirectoryAtPath:newDir withIntermediateDirectories:YES attributes:nil error:nil];
-    
-    NSString *soundFileName = [NSString stringWithFormat:@"/GIGREPLAY_AUDIO/%@.m4a", [self generateRandomString]];
-    NSLog(@"Original audio path: %@", soundFileName);
-    NSString *soundFilePath = [docsDir stringByAppendingPathComponent:soundFileName];
-    soundFileURL = [NSURL fileURLWithPath:soundFilePath];
-    
-    NSDictionary *recordSettings = [NSDictionary dictionaryWithObjectsAndKeys:
-                                    [NSNumber numberWithInt:AVAudioQualityHigh], AVEncoderAudioQualityKey,
-                                    [NSNumber numberWithInt:16], AVEncoderBitRateKey,
-                                    [NSNumber numberWithInt: 2], AVNumberOfChannelsKey,
-                                    [NSNumber numberWithFloat:44100.0], AVSampleRateKey, nil];
-    
-    NSError *error = nil;
-    
-    audioRecorder = [[AVAudioRecorder alloc] initWithURL:soundFileURL settings:recordSettings error:&error];
-    audioRecorder.delegate = self;
-    //audioRecorder.meteringEnabled = YES;
-    
-    return error;
-}*/
 
 - (void)timerStartStop
 {

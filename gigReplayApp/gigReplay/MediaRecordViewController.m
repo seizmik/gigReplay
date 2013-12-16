@@ -50,17 +50,27 @@ int currentTime;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:nil action:nil];
     [self loadSettingsButton];
     //Grab the expiration time and start counting down
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(leon:) name:@"setVideoResolutionto720p" object:nil];
+    }
+-(void)leon:(NSNotification *)notification{
+    //    cameraUI = [[UIImagePickerController alloc] init];
+    NSLog(@"yes revecied 720p settings ahhahahaah");
     
 }
+
 
 -(void)viewDidAppear:(BOOL)animated
 {
     sceneTitleDisplay.text=appDelegateObject.CurrentSession_Name;
     sceneCodeDisplay.text=appDelegateObject.CurrentSession_Code;
     self.title = appDelegateObject.CurrentSession_Name;
+   
+    
+
 
     
 }
+
 
 
 - (void)didReceiveMemoryWarning
@@ -106,23 +116,6 @@ int currentTime;
         NSMutableArray *userDetails = [sql readFromDatabaseUsers:strQuery];
         
         if ([userDetails count] == 1) {
-            /*
-            //Create the form and post it to the API
-            NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
-            ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
-            //Now, add the data. In this case, we only send the user id, email and session number
-            [request addPostValue:appDelegateObject.CurrentSessionID forKey:@"session_id"];
-            [request addPostValue:appDelegateObject.CurrentSession_Name forKey:@"session_name"];
-            [request addPostValue:[NSString stringWithFormat:@"%i", appDelegateObject.CurrentUserID] forKey:@"user_id"];
-            NSString *userEmail = [NSString stringWithFormat:@"%@", [[userDetails objectAtIndex:0] objectAtIndex:4]];
-            [request addPostValue:userEmail forKey:@"user_email"];
-            [request addPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
-            [request setRequestMethod:@"POST"];
-            [request setDelegate:self];
-            [request setShouldContinueWhenAppEntersBackground:YES];
-            NSLog(@"%@, %@, %i, %@, %@", appDelegateObject.CurrentSessionID, appDelegateObject.CurrentSession_Name, appDelegateObject.CurrentUserID, userEmail, appDelegateObject.CurrentUserName);
-            [request startAsynchronous];
-            */
             [self postToGenerateVideo];
         } else {
             UIAlertView *generateError = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Unexpected error has occured." delegate:self cancelButtonTitle:@"Continue" otherButtonTitles:nil];
@@ -237,7 +230,8 @@ int currentTime;
     [cameraUI setCameraFlashMode:UIImagePickerControllerCameraFlashModeOff];
     
     //At this point, it should be taken from the options
-    cameraUI.videoQuality=UIImagePickerControllerQualityTypeMedium;
+    
+    cameraUI.videoQuality=UIImagePickerControllerQualityType640x480;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -302,7 +296,7 @@ int currentTime;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
-                                                                      presetName:AVAssetExportPresetPassthrough];
+                                                                      presetName:AVAssetExportPreset640x480];
     exporter.outputURL=videoOutputURL;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;
@@ -338,7 +332,8 @@ int currentTime;
 
 
 
-- (NSURL *)getLocalFilePathToSave   //Calls when recorded video saved to document library
+- (NSURL *)getLocalFilePathToSave
+//Calls when recorded video saved to document library
 {
     NSFileManager *filemgr = [NSFileManager defaultManager];
     //NSString *currentPath;
@@ -367,7 +362,7 @@ int currentTime;
 }
 
 -(void)createOverlay{
-    //Determine size of screen in case of iPhone 5
+    
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;

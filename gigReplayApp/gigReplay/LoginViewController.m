@@ -7,7 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "EmailLoginViewController.h"
 
 
 @interface LoginViewController ()
@@ -29,8 +28,7 @@
 
 -(void)getDeviceID
 {
-//    UIDevice *myDevice = [UIDevice currentDevice];
-//	self.deviceUDID = [myDevice uniqueIdentifier];
+
     UIDevice *myDevice=[UIDevice currentDevice];
     self.deviceUDID = [[myDevice identifierForVendor] UUIDString];
 }
@@ -39,8 +37,8 @@
 {
     [super viewDidLoad];
         [self getDeviceID];
-     self.emailLoginLogin.image=[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5];
     
+    [self playMovie];
     // Do any additional setup after loading the view from its nib.
 }
 
@@ -53,29 +51,12 @@
 
 - (IBAction)fbLoginButton:(id)sender {
     
-   // AppDelegate *appDelegateObject = (AppDelegate *)[UIApplication sharedApplication].delegate;
-   // [appDelegateObject loadApplicationHome];
     [self LoadLoadingViewForFacebookSignUp];
     [self openSessionWithAllowLoginUI:YES];
-    NSLog(@"FB Permissions retrieved");
-    
-}
-
-- (IBAction)emailLoginButton:(id)sender {
-    //Check against database if email exists
-    //If email doesnt exist inform user email acc does not exist
-    //IKf email exists log into home screen.
-    
     
     
 }
 
-- (IBAction)emailSignUp:(id)sender {
-    EmailLoginViewController *signUpVC=[[EmailLoginViewController alloc]initWithNibName:@"EmailLoginViewController" bundle:nil];
-    [self presentViewController:signUpVC animated:YES completion:nil];
-    
-    
-}
 /*
  <------------------FACEBOOK AUTHENTICATION METHODS DEFINED HERE-------------------->
  */
@@ -84,10 +65,10 @@
                       state:(FBSessionState) state
                       error:(NSError *)error
 {
-    NSLog(@"Starting FB Session");
+    
     if (FBSession.activeSession.isOpen)
     {
-        NSLog(@"No error so far");
+        
         [FBRequestConnection
          startForMeWithCompletionHandler:^(FBRequestConnection *connection,
                                            id<FBGraphUser> user,
@@ -169,7 +150,7 @@
             [self InputDetailsToDatabase];
          }];
     }
-    NSLog(@"It skipped a lot of steps");
+   
 }
 
 
@@ -238,7 +219,21 @@
 }
 
 
-
+-(void) playMovie
+{
+    
+    NSString*thePath=[[NSBundle mainBundle] pathForResource:@"Movie" ofType:@"mp4"];
+    NSURL*theurl=[NSURL fileURLWithPath:thePath];
+    moviePlayer=[[MPMoviePlayerController alloc]initWithContentURL:theurl];
+    moviePlayer.controlStyle=MPMovieControlStyleNone;
+    [self.view addSubview:self.movieView];
+    [self.movieView addSubview:moviePlayer.view];
+    [moviePlayer.view setFrame:self.movieView.bounds];
+    [moviePlayer prepareToPlay];
+    [moviePlayer play];
+    moviePlayer.repeatMode=MPMovieRepeatModeOne;
+    
+}
 
 
 @end

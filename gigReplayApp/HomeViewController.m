@@ -50,26 +50,7 @@
     apiWrapperObject=[[ApiObject alloc]init];
     [self SyncUserDetails];
     NSLog(@"%d get from web current user id",appDelegateObject.CurrentUserID);
-
-   // UIImageView *topBar=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 320, 45)];
-   // topBar.image=[UIImage imageNamed:@"scroll bar.png"];
-    //[self.view addSubview:topBar];
-    //[topBar addSubview:refreshButton];
-//    UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
-//    [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
-//    refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
-//    self.refreshControl=refresh;
-//    refresh.tintColor=[UIColor redColor];
 }
-
-
-//-(void)leon{
-//    self.refreshControl.attributedTitle=[[NSAttributedString alloc]initWithString:@"Updating.."];
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"MMM d, h:mm a"];
-//    NSString *lastUpdated = [NSString stringWithFormat:@"Last updated on %@",[formatter stringFromDate:[NSDate date]]];
-//    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:lastUpdated];
-//}
 -(void) fetchFeaturedVideosData:(NSData*) data{
     
     

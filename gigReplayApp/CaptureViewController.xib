@@ -15,20 +15,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_join_button_off.png" translatesAutoresizingMaskIntoConstraints="NO" id="13">
-                    <rect key="frame" x="62" y="372" width="30" height="30"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_join_button_on.png" translatesAutoresizingMaskIntoConstraints="NO" id="13">
+                    <rect key="frame" x="62" y="339" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_create_button_off.png" translatesAutoresizingMaskIntoConstraints="NO" id="12">
-                    <rect key="frame" x="62" y="165" width="30" height="30"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_create_button_on.png" translatesAutoresizingMaskIntoConstraints="NO" id="12">
+                    <rect key="frame" x="62" y="132" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_open_button_off.png" translatesAutoresizingMaskIntoConstraints="NO" id="14">
-                    <rect key="frame" x="62" y="265" width="30" height="30"/>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" image="tab_open_button_on.png" translatesAutoresizingMaskIntoConstraints="NO" id="14">
+                    <rect key="frame" x="62" y="232" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="28">
-                    <rect key="frame" x="0.0" y="230" width="320" height="99"/>
+                    <rect key="frame" x="0.0" y="197" width="320" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
@@ -44,7 +44,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="25">
-                    <rect key="frame" x="0.0" y="131" width="320" height="99"/>
+                    <rect key="frame" x="0.0" y="98" width="320" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
@@ -60,7 +60,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="27">
-                    <rect key="frame" x="0.0" y="337" width="266" height="99"/>
+                    <rect key="frame" x="0.0" y="304" width="266" height="99"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
@@ -76,38 +76,50 @@
                     </connections>
                 </button>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Create" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="18">
-                    <rect key="frame" x="108" y="160" width="114" height="41"/>
+                    <rect key="frame" x="108" y="127" width="114" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="28"/>
-                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                    <color key="textColor" red="0.98823535439999999" green="0.98431378599999997" blue="0.86666673419999996" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Open" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20">
-                    <rect key="frame" x="114" y="260" width="113" height="39"/>
+                    <rect key="frame" x="114" y="227" width="113" height="39"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="28"/>
-                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                    <color key="textColor" red="0.98823535439999999" green="0.98431378599999997" blue="0.86666673419999996" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" fixedFrame="YES" text="Search" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="19">
-                    <rect key="frame" x="114" y="367" width="113" height="39"/>
+                    <rect key="frame" x="114" y="334" width="113" height="39"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="28"/>
-                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                    <color key="textColor" red="0.98823535439999999" green="0.98431378599999997" blue="0.86666673419999996" alpha="1" colorSpace="deviceRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="new_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Rj8-vK-eQY">
+                    <rect key="frame" x="62" y="28" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="GigReplay" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qad-fd-rBC">
+                    <rect key="frame" x="130" y="49" width="81" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.98823535439999999" green="0.98431378599999997" blue="0.86666673419999996" alpha="1" colorSpace="deviceRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="tab_create_button_off.png" width="25" height="26"/>
-        <image name="tab_join_button_off.png" width="34" height="25"/>
-        <image name="tab_open_button_off.png" width="34" height="27"/>
+        <image name="new_logo.png" width="200" height="201"/>
+        <image name="tab_create_button_on.png" width="25" height="26"/>
+        <image name="tab_join_button_on.png" width="50" height="50"/>
+        <image name="tab_open_button_on.png" width="34" height="27"/>
     </resources>
 </document>

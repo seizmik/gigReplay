@@ -15,18 +15,9 @@
 
 @implementation CreateSessionViewController
 @synthesize sceneTitleDisplay, apiWrapperObject, usernameDisplay, loadingView, sceneNameTextField, dateDisplay,start_button, createSceneButton;
-//@synthesize userProfileImage, sceneCodeDisplay;
+
 @synthesize timeDisplay;
 
-//-(void)SyncUserDetails
-//{
-//   
-//
-//    NSMutableArray *UserDetails= [self ReadFromDataBase:@"Users"];
-//    NSArray *details=[UserDetails objectAtIndex:0];
-//    appDelegateObject.CurrentUserName=[details objectAtIndex:0];
-//    [apiWrapperObject postUserDetails:[details objectAtIndex:2]  userEmail:[details objectAtIndex:4] userName:[details objectAtIndex:0] facebookToken:[details objectAtIndex:3] APIIdentifier:API_IDENTIFIER_USER_REG];
-//}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -71,8 +62,7 @@
     // Do any additional setup after loading the view from its nib.
    // [self loadSettingsButton];
     
-    //Create the start button. Hide the button unless there was something in that field already.
-    [self.start_button setBackgroundImage:[UIImage animatedImageNamed:@"start_" duration:4.0] forState:UIControlStateNormal];
+    // Hide the button unless there was something in that field already.
     if ([sceneTitleDisplay.text isEqualToString:@""]) {
         [start_button setHidden:YES];
         [start_button setEnabled:NO];
@@ -145,17 +135,6 @@
     [sceneNameTextField resignFirstResponder];
 }
 
-//- (void)loadSettingsButton
-//{
-//    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
-//    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
-//    [settingsButton setImage:image forState:UIControlStateNormal];
-//    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-//    self.navigationItem.rightBarButtonItem = rightButton;
-//    
-//}
 
 - (void)goToSettings
 {

@@ -117,7 +117,7 @@
     int entryNumber = sender.tag;
     NSDictionary *info=[videoArray objectAtIndex:entryNumber];
     url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
-    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:url];
+    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:@"http://lipsync.sg/api/test/prog_index.m3u8"]];
     
     
 
@@ -178,7 +178,7 @@
 
 - (IBAction)playButton:(id)sender {
     
-    avAsset = [AVAsset assetWithURL:[NSURL URLWithString:@"http://www.lipsync.sg/api/test/output.mp4"]];
+    avAsset = [AVAsset assetWithURL:[NSURL URLWithString:@"http://lipsync.sg/api/test/output.m3u8"]];
     avPlayerItem =[[AVPlayerItem alloc]initWithAsset:avAsset];
     avPlayer = [[AVPlayer alloc]initWithPlayerItem:avPlayerItem];
     avPlayerLayer =[AVPlayerLayer playerLayerWithPlayer:avPlayer];

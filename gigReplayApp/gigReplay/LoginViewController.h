@@ -9,15 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 #import<FacebookSDK/FacebookSDK.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "SQLdatabase.h"
 
 
-@interface LoginViewController : UIViewController<FBLoginViewDelegate,UINavigationControllerDelegate>
+@interface LoginViewController : UIViewController<FBLoginViewDelegate,UINavigationControllerDelegate>{
+    MPMoviePlayerController *moviePlayer;
+}
 
 - (IBAction)fbLoginButton:(id)sender;
-- (IBAction)emailLoginButton:(id)sender;
-- (IBAction)emailSignUp:(id)sender;
-@property (strong, nonatomic) IBOutlet UIImageView *emailLoginLogin;
+
+
 @property (strong,nonatomic) NSString *FB_UserID;
 @property (strong,nonatomic) NSString *FB_AuthorizationToken;
 @property (strong,nonatomic) NSString *Email;
@@ -30,6 +32,7 @@
 @property (strong,nonatomic) NSString *UserName;
 
 -(void)getDeviceID;
+@property (strong, nonatomic) IBOutlet UIView *movieView;
 
 
 @end

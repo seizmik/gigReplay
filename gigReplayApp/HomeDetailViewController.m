@@ -38,16 +38,24 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self obtainLike];
     [self obtainDataFromURL];
     [self.moviePlayer prepareToPlay];
     [self playMovie];// Do any additional setup after loading the view from its nib.
     processLabels=YES;
     [self.loadingImage startAnimating];
-    
-    
-}
+   }
 -(void)viewDidAppear:(BOOL)animated{
+    NSLog(@"LEONISM %@",like)   ;
+    if([like isEqualToString:@"1"]){
     
+        [self.likeButtonImage setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
+    }
+    
+
+  
+
+
     CGFloat UIScreenBottom=self.view.bounds.size.height-VIDEOPLAYER_UIVIEW_HEIGHT;
     scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 250, 320, UIScreenBottom)];
     scrollView.contentSize=CGSizeMake(320.0,(self.commentTableVIew.contentSize.height+VIDEO_INFO_UIVIEW_HEIGHT));
@@ -80,6 +88,7 @@
     self.commentArray=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
 
     [self.commentTableVIew reloadData];
+    
     NSLog(@"THIS IS IN COMMENT VIEW %@",self.commentArray);
 }
 
@@ -89,13 +98,39 @@
     
    // [self fetchedData:data];
     dispatch_async(kBgQueue, ^{
+        
         NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString  stringWithFormat:@"http://www.lipsync.sg/api/commentAPI.php?mediaid=%@",self.media_id]]];
         [self performSelectorOnMainThread:@selector(fetchedData:)
                                withObject:data waitUntilDone:YES];
     });
 
 }
+-(void)obtainLike{
+    dispatch_async(kBgQueue, ^{
+        NSData* data = [NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString  stringWithFormat:@"http://www.lipsync.sg/api/get_like.php?mediaid=%@",self.media_id]]];
+        [self performSelectorOnMainThread:@selector(fetchedLikeData:)
+                               withObject:data waitUntilDone:YES];
+        
+    });
 
+    
+}
+-(void) fetchedLikeData:(NSData*) data{
+    
+    
+    self.likeArray=[NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+    if([self.likeArray count]==0){
+        return ;
+        
+    }else{
+        
+    
+    NSDictionary *info=[self.likeArray objectAtIndex:0];
+    like=[info objectForKey:@"individual_like"];
+    
+    NSLog(@"THIS IS IN Like Array %@",self.likeArray);
+    }
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -294,5 +329,24 @@
 }
 
 - (IBAction)likeButton:(id)sender {
+    int liked=1;
+    [self.likeButtonImage setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
+    NSURL *url = [NSURL URLWithString:@"http://www.lipsync.sg/api/SocialMediaAPI.php"];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+    [request setPostValue:appDelegateObject.CurrentUserName forKey:@"user_name"];
+    [request setPostValue:self.media_id forKey:@"media_id"];
+    //NSString *user_id=[NSString stringWithFormat: @"%d", appDelegateObject.CurrentUserID];
+    [request setPostValue:fb_user_id forKey:@"user_id"];
+    [request setPostValue:[NSString stringWithFormat:@"%d",liked] forKey:@"ind_like"];
+    
+    //    NSLog(@"currentusername %@",appDelegateObject.CurrentUserName);
+    //    NSLog(@"%@",self.theComments.text);
+    //    NSLog(@"%d",self.appDelegateObject.CurrentUserID);
+    
+    [request setRequestMethod:@"POST"];
+    [request setDelegate:self];
+    [request startAsynchronous];
+
+    
 }
 @end

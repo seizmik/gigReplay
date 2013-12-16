@@ -13,6 +13,7 @@
                 <outlet property="fb_profile_pic" destination="77" id="Zu9-L9-pLI"/>
                 <outlet property="indDate" destination="80" id="bmm-Oi-q4j"/>
                 <outlet property="indVideoTitle" destination="79" id="M4J-9H-sLg"/>
+                <outlet property="likeButtonImage" destination="bBk-H7-Koe" id="byN-2p-fUN"/>
                 <outlet property="loadingImage" destination="oHl-qr-5IN" id="lOn-xg-tXH"/>
                 <outlet property="loadingView" destination="TvM-cO-3DE" id="Sn3-GS-oul"/>
                 <outlet property="moviePlayerView" destination="68" id="69"/>

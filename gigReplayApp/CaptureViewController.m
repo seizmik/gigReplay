@@ -27,9 +27,22 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    
+
+}
+-(void)leon:(NSNotification *)notification{
+    //    cameraUI = [[UIImagePickerController alloc] init];
+    NSLog(@"yes revecied 720p settings ahhahahaah");
+    
+
 }
 -(void)viewWillAppear:(BOOL)animated{
     [self.navigationController setNavigationBarHidden:YES];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(leon:)
+												 name:@"SessionCreateParsingCompleted"
+											   object:nil];
 }
 
 

@@ -77,14 +77,7 @@
     [self.refreshControl endRefreshing];
     self.navigationItem.hidesBackButton = NO;
 
-    }
-
-
--(void)viewDidAppear:(BOOL)animated{
-//   [self OpenSessionDetailsFromAPI];
-    
 }
-
 
  
 -(void)OpenSessionDetailsFromAPI
@@ -130,17 +123,8 @@
     //obtain by using a string with the facebook profile pic id
     NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_ID];
 
-//    dispatch_async(kBgQueue, ^{
-       
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//           cell.fbProfilePictureView.profileID=fb_user_ID;
-            //[cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL]];
-    //     });
-    [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL] placeholderImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5] options:SDWebImageCacheMemoryOnly];
 
-//    });
-   
-//    cell.fbProfilePictureView.backgroundColor=[UIColor clearColor];
+    [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL] placeholderImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5] options:SDWebImageCacheMemoryOnly];
    
 
     return cell;
@@ -207,9 +191,7 @@
 
 -(void)showRecorderView{
     mediaObject=[[MediaRecordViewController alloc]init];
-//    [mediaObject setModalTransitionStyle:UIModalTransitionStyleFlipHorizontal  ];
      mediaObject.hidesBottomBarWhenPushed=YES;
-    //[self presentViewController:mediaObject animated:YES completion:nil];
     [self.navigationController pushViewController:mediaObject animated:YES];
    
 }
@@ -223,19 +205,8 @@
     //NSLog(@"%d count of open details",[self.OpenedSessionDetailsHolder count]);
 
     [openedSessionListTable reloadData];
-   }
+}
 
-//- (void)loadSettingsButton
-//{
-//    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
-//    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
-//    [settingsButton setImage:image forState:UIControlStateNormal];
-//    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-//    self.navigationItem.rightBarButtonItem = rightButton;
-//    
-//}
 
 - (void)goToSettings
 {

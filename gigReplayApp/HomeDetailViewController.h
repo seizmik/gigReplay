@@ -17,6 +17,7 @@
     NSString *fb_user_id;
     BOOL processLabels;
     UIView *loadingView;
+    NSString *like;
 
 }
 @property (strong,nonatomic)MPMoviePlayerController *moviePlayer;
@@ -30,6 +31,7 @@
 @property ( strong,nonatomic)NSString *videoUserInfo;
 @property(strong,nonatomic)NSString *obtainFb_id;
 @property (strong,nonatomic) NSMutableArray *commentArray;
+@property (strong,nonatomic)NSMutableArray *likeArray;
 - (IBAction)backToHome:(id)sender;
 @property (strong, nonatomic) IBOutlet UIView *commentUIView;
 @property (strong, nonatomic) IBOutlet UIView *commentPopOver;
@@ -52,5 +54,6 @@
 - (IBAction)shareButton:(id)sender;
 
 - (IBAction)likeButton:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *likeButtonImage;
 
 @end

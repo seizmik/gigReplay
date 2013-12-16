@@ -34,10 +34,22 @@
 {
     [super viewDidLoad];
     self.title=@"Settings";
+    [self.videoResolutionTable setFrame:CGRectMake(80, 220, 194, 175)];
+    videoResolutionValues=[[NSArray alloc] initWithObjects:@"1280*720p",@"960*540p",@"640*480p",@"480*360p",nil];
+    
     
     // Do any additional setup after loading the view from its nib.
     
        }
+
+-(void)viewWillAppear:(BOOL)animated
+
+{
+    
+    
+    [self hideTables];
+    
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -72,11 +84,69 @@
     });}
 }
 
+-(void)hideTables{
+    self.videoResolutionTable.hidden=TRUE;
+}
 
 
 
 
+- (IBAction)videoResButton:(id)sender {
+    self.videoResolutionTable.hidden=FALSE;
+}
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"Cell";
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    cell.textLabel.textColor=[UIColor darkGrayColor];
+    
+    
+        cell.textLabel.text=[videoResolutionValues objectAtIndex:indexPath.row];
+
+    
+    return cell;
+}
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return [videoResolutionValues count];
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if(indexPath.row==0){
+        NSLog(@"720p");
+        [self.videoResButtonOutlet setTitle:@"720p" forState:UIControlStateNormal];
+        
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"SessionCreateParsingCompleted" object:self];
+        NSLog(@"posting notifictcation done");
+        
+
+    }
+    else if(indexPath.row==1){
+        NSLog(@"540p");
+        [self.videoResButtonOutlet setTitle:@"540p" forState:UIControlStateNormal];
+    }
+    else if(indexPath.row==2){
+        NSLog(@"480p");
+        [self.videoResButtonOutlet setTitle:@"480p" forState:UIControlStateNormal];
+    }
+    else if(indexPath.row==3){
+        NSLog(@"360p");
+        [self.videoResButtonOutlet setTitle:@"360p" forState:UIControlStateNormal];
+    }
+        [self hideTables];
+    
+}
 
 
 @end

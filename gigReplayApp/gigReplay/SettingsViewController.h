@@ -10,7 +10,9 @@
 #import <FacebookSDK/FacebookSDK.h>
 
 
-@interface SettingsViewController : UIViewController
+@interface SettingsViewController : UIViewController{
+    NSArray *videoResolutionValues;
+}
 
 - (IBAction)facebookLogOut:(id)sender;
 - (IBAction)syncTrial:(UIButton *)sender;
@@ -18,6 +20,9 @@
 
 - (IBAction)reSync:(UIButton *)sender;
 
+@property (strong, nonatomic) IBOutlet UITableView *videoResolutionTable;
+- (IBAction)videoResButton:(id)sender;
+@property (strong, nonatomic) IBOutlet UIButton *videoResButtonOutlet;
 
 
 

@@ -14,7 +14,6 @@
 #import "SettingsViewController.h"
 #import "OpenSessionViewController.h"
 #import "UploadTab.h"
-#import "ReplaysViewController.h"
 #import "MediaRecordViewController.h"
 #import "AudioViewController.h"
 #import "HomeViewController.h"
@@ -226,12 +225,6 @@
     openSession.title =@"Open";
     [openSession.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tab_open_button_on.png"] withFinishedUnselectedImage:[UIImage imageNamed:@"tab_open_button_off.png"]];
     
-    
-    
-    ReplaysViewController *gigReplay=[[ReplaysViewController alloc]initWithNibName:@"ReplaysViewController" bundle:nil];
-    UINavigationController *gig=[[UINavigationController alloc]initWithRootViewController:gigReplay];
-    gig.title=@"GigReplay";
-    [gig.tabBarItem setFinishedSelectedImage:[UIImage animatedImageNamed:@"g_logo.png" duration:1] withFinishedUnselectedImage:[UIImage imageNamed:@"gig_tab_off.png"]];
    
     UploadTab *uploadVC=[[UploadTab alloc]initWithNibName:@"UploadTab" bundle:nil];
     uploadVC.title=@"myFeeds";
