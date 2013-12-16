@@ -68,11 +68,11 @@
     
 }
 -(void) obtainDataFromURL{
-    dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL:getURL2];
-        [self performSelectorOnMainThread:@selector(fetchFeaturedVideosData:)
-                               withObject:data waitUntilDone:YES];
-    });
+//    dispatch_async(kBgQueue, ^{
+//        NSData* data = [NSData dataWithContentsOfURL:getURL2];
+//        [self performSelectorOnMainThread:@selector(fetchFeaturedVideosData:)
+//                               withObject:data waitUntilDone:YES];
+//    });
 }
 
 

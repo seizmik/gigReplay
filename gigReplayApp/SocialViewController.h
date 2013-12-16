@@ -10,8 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 
-#define getURL2 [NSURL URLWithString: @"http://www.lipsync.sg/api/HomePageFeatured.php"]
-
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
 
 @interface SocialViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
