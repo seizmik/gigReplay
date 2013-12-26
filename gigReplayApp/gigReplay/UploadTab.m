@@ -28,7 +28,7 @@
 
 @implementation UploadTab
 @synthesize uploadTable, uploadArray, dbObject,uploadProgress;
-@synthesize detailsToDelete,movieplayer,uploadVideoFilePath;
+@synthesize detailsToDelete,movieplayer,uploadVideoFilePath,progressIndicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -57,8 +57,6 @@
     lpgr.minimumPressDuration = 0.5; //seconds
     lpgr.delegate = self;
     [self.uploadTable addGestureRecognizer:lpgr];
-   // [self loadSettingsButton];
-    
         
 }
 - (void)viewWillAppear:(BOOL)animated
@@ -96,18 +94,6 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
-    
-    // Configure the cell...
-    UploadObject *fileDetails = [[UploadObject alloc] init];
-    fileDetails = [uploadArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = [NSString stringWithFormat:@"Session Entry: %d_%d", fileDetails.sessionid, fileDetails.entryNumber];
-    */
     
     static NSString* CellIdentifier = @"UploadCell";
 	
@@ -128,8 +114,6 @@
 		}
 	}
 
-    
-//    UploadObject *fileDetails = [[UploadObject alloc] init];
   
     videoInfo = [uploadArray objectAtIndex:indexPath.row];
     NSLog(@"files details %d",videoInfo.userid);
@@ -171,7 +155,7 @@ if(videoInfo.uploadStatus==0)
        // cell.thumbnail.image = [UIImage imageWithContentsOfFile:fileDetails.thumbnailPath];
         [cell.thumbnail setImageWithURL:[NSURL fileURLWithPath:videoInfo.thumbnailPath] placeholderImage:[UIImage imageNamed:@"placeholder" ]];
     } else {
-        cell.thumbnail.image = [UIImage imageNamed:@"audio_thumbnail.png"];
+        [cell.thumbnail setImage:[UIImage imageNamed:@"Audio.png"]];
     }
   // cell.dateTaken.text = [dateFormatter stringFromDate:fileDate];
     cell.dateTaken.text=[myValues objectForKey:@"date"] ;
@@ -224,74 +208,10 @@ if(videoInfo.uploadStatus==0)
 }
 
 
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    
-//      UploadTabDetailViewController *detailViewController = [[UploadTabDetailViewController alloc] initWithNibName:@"UploadTabDetailViewController" bundle:[NSBundle mainBundle]];
-     // ...
-     // Pass the selected object to the new view controller.
-//    UploadObject *fileDetails = [[UploadObject alloc] init];
-//    fileDetails = [uploadArray objectAtIndex:indexPath.row];
-//    videoInfo=[uploadArray objectAtIndex:indexPath.row];
-//    [detailViewController setVideoURL:fileDetails.thumbnailPath];
-//    [detailViewController setVideoPath:fileDetails.filePath];
-//     [self.navigationController pushViewController:detailViewController animated:YES];
-    
-    
-    //Call the upload object to get the fileDetails
-    
-//    
-//    //Remove the data from the table and reload the data
-//    //Status 9 means uploading. I've set this in case the app was closed halfway. When the app loads up again, if checks if there were any that were still uploading when the app crashed, and will change upload status back to 0
-//    [self updateTrackerWithFileDetails:fileDetails toStatus:9];
-    
-//    [self refreshDatabaseObjects];
-//    [tableView reloadData];
-//    
-//    [self uploadThisFile:videoInfo];
     
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
@@ -460,7 +380,6 @@ if(videoInfo.uploadStatus==0)
 }
 -(void)fileHasBeenUploaded{
     NSString *strQuery = [NSString stringWithFormat:@"UPDATE upload_tracker SET upload_status=%i WHERE id=%i", 1, videoInfo.entryNumber];
-    NSLog(@"%d",videoInfo.entryNumber);
     while (![dbObject updateDatabase:strQuery]) {
         NSLog(@"Retrying...");
     }
@@ -471,14 +390,12 @@ if(videoInfo.uploadStatus==0)
 
 - (void)requestStarted:(ASIHTTPRequest *)theRequest {
         NSLog(@"response started new::%@",[theRequest responseString]);
-    //[self showProgress];
-   
+
     
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)theRequest{
     NSLog(@"response finished new ::%@",[theRequest responseString]);
-    //[self hideProgress];
     progressIndicator.hidden = YES;
     [aProgressView removeFromSuperview];
     
@@ -491,7 +408,6 @@ if(videoInfo.uploadStatus==0)
 
 - (void)requestFailed:(ASIHTTPRequest *)theRequest {
     NSLog(@"response Failed new ::%@, Error:%@",[theRequest responseString],[theRequest error]);
-    //[self hideProgress];
     progressIndicator.hidden = YES;
     [aProgressView removeFromSuperview];
     
@@ -508,7 +424,7 @@ if(videoInfo.uploadStatus==0)
 #pragma mark - Delete file methods
 
 - (void)removeFile:(UploadObject *)fileDetails {
-    //NSLog(@"%@", fileDetails.filePath);
+    
     NSURL *fileURL = [NSURL URLWithString:fileDetails.filePath];
     NSError *error;
     NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -577,17 +493,6 @@ if(videoInfo.uploadStatus==0)
     }
 }
 
-- (void)loadSettingsButton
-{
-    UIImage *image = [UIImage imageNamed:@"navigation_settings_button.png"];
-    UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [settingsButton setFrame:CGRectMake(0, 0, 23, 23)];
-    [settingsButton setImage:image forState:UIControlStateNormal];
-    [settingsButton addTarget:self action:@selector(goToSettings) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *rightButton = [[UIBarButtonItem alloc] initWithCustomView:settingsButton];
-    self.navigationItem.rightBarButtonItem = rightButton;
-    
-}
 
 - (void)goToSettings
 {

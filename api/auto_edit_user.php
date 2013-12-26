@@ -72,7 +72,7 @@
         }
         $cut_end = $cut_length * $cut_var;
         $frames = rand($cut_length, $cut_end);
-        $time = $frames * (1/30);
+        $time = $frames * (1/29.97);
         return round($time, 3);
     }
     
@@ -350,8 +350,9 @@
             echo $ss_time, "<br/>";
             echo $duration, "<br/>";
             $temp_out_path = $temp_path."audio_trim".$i.".aac";
-            exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 256k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
-            $outpath_array[] = $temp_out_path;
+           // exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 64k -ac 2 -acodec libvo_aacenc " . $temp_out_path);
+           exec("ffmpeg -i " . $original_path . " -vn -ss ".$ss_time." -t ".$duration." -ab 64k -ac 2 -c:a libfdk_aac -profile:a aac_he " . $temp_out_path);
+	 $outpath_array[] = $temp_out_path;
             $i++;
         }
         //Now, concatenate each audio file, even if there is only 1 file
@@ -369,7 +370,7 @@
         $output_path = $pathinfo['dirname'];
         $output_path .= "/".generate_random_string().".png";
         $seek_to = fftime($time);
-        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -s 320x180 -vframes 1 ".$output_path);
+        exec("ffmpeg -i ".$input_path." -ss ".$seek_to." -f image2 -s 640x360 -vframes 1 ".$output_path);
         
         //Create the URL
         $url_pathinfo = pathinfo($video_url);
@@ -489,8 +490,12 @@
     for ($i = 0; $i < count($trim_cmd_array); $i++) {
         
         $temp_trim_path = $temp_path . "trim".$i.".mpg";
-        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
-        //-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately
+        exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . " -b:v 1500k -maxrate 1500k -bufsize 800k  -s 850x480 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+       
+	 //leon's implementation, changes to original as encoding every so often removes information and loses quality
+	//exec("ffmpeg -i " . $trim_cmd_array[$i]['src'] . "-vcodec libx264 -profile high -q 1 -s 850x480 -threads 0 -an -ss " . $trim_cmd_array[$i]['seek_to'] . " -t " . $trim_cmd_array[$i]['duration'] . " " . $temp_trim_path);
+	
+	//-vf scale is to determine the height proportion. scale=-1:480 fixes height to 480 and adjusts width proportionately 
         $temp_trim_array[] = $temp_trim_path;
     }
     
@@ -579,10 +584,11 @@
     
     //Here's where we combine the video with the audio
     $final_video_path = $master_path . "output_hi.mp4";
-    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -vprofile high -preset slow -b:v 1500k -maxrate 1500k -bufsize 800k -s 960x540 -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 " . $final_video_path);
-    
+    exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -profile:v baseline -level 3.0 -preset slower  -b:v 1500k -maxrate 1500k -bufsize 800k  -vf  curves=vintage  -pix_fmt yuv420p -s 850x480  -b:a 64k -ac 2 -c:a libfdk_aac -profile:a aac_he " . $final_video_path);
+//leon's     
+//exec("ffmpeg -i " . $combined_audio_path . " -i " . $combined_video_path . " -vcodec libx264 -b:v 1500k -maxrate 1500k -bufsize 800k  -vf \"movie=g_overlay.png [watermark]; [in][watermark] overlay=main_w-overlay_w-10:main_h-overlay_h-10 [out]\" -b:a 64k -ac 2 " . $final_video_path);
     $final_video_path_lo = $master_path . "output_lo.mp4";
-    exec("ffmpeg -i $final_video_path -vcodec libx264 -vprofile high -preset slow -b:v 1000k -maxrate 1000k -bufsize 500k -s 640x360 -threads 0 -acodec libvo_aacenc -b:a 128k -ac 2 $final_video_path_lo");
+    exec("ffmpeg -i $final_video_path  -b:v 1000k -maxrate 1000k -bufsize 500k -s 640x360  -b:a 64k -ac 2 $final_video_path_lo");
     
     $final_video_url = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path);
     $final_video_url_lo = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/".basename($final_video_path_lo);
@@ -592,7 +598,7 @@
     //Because all of the thumbnails will have similar naming, ie thumb_X.png, we can then extract it later by using the final video url and tagging on the number.
     $video_length = $last_end - $first_start;
     $thumb_length = $video_length/10;
-    exec("ffmpeg -i ".$final_video_path." -f image2 -s 320x180 -vf fps=fps=1/".$thumb_length." ".$master_path."thumb_%d.png");
+    exec("ffmpeg -i ".$final_video_path." -f image2 -s 640x360 -vf fps=fps=1/".$thumb_length." ".$master_path."thumb_%d.png");
     
     //Update the database
     $con = mysqli_connect("localhost", "default", "thesmosinc", "gigreplay");
@@ -602,15 +608,17 @@
         //Find out if the video has already been created once before
         $query = "SELECT * FROM media_master WHERE session_id=".$session_id." AND user_id=".$user_id;
         $result_master = mysqli_query($con, $query);
-                
-        if (mysqli_num_rows($result_master) == 0) {
-            $query = "INSERT INTO media_master (session_id, user_id, media_url, media_url_lo, start_time) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$final_video_url_lo."',".$first_start.")";
+  $image = "http://www.lipsync.sg/uploads/master/".$session_id."-".$session_add_on."/".$user_id."-".$user_add_on."/thumb_4.png";              
+       if (mysqli_num_rows($result_master) == 0) {
+ 
+            $query = "INSERT INTO media_master (session_id, user_id, media_url, media_url_lo, start_time, default_thumb) VALUES (".$session_id.",".$user_id.",'".$final_video_url."','".$final_video_url_lo."',".$first_start.",'".$image."')";
             mysqli_query($con, $query);
             $entry_id = mysqli_insert_id($con);
         } else {
             $row_master = mysqli_fetch_array($result_master);
             $entry_id = $row_master['master_id'];
-            $query = "UPDATE media_master SET media_url='".$final_video_url."', media_url_lo='".$final_video_url_lo."', start_time=".$first_start." WHERE session_id=".$session_id." AND user_id=".$user_id;
+ 
+            $query = "UPDATE media_master SET media_url='".$final_video_url."', media_url_lo='".$final_video_url_lo."', start_time=".$first_start.",default_thumb='".$image."' WHERE session_id=".$session_id." AND user_id=".$user_id;
             mysqli_query($con, $query);
         }
     }

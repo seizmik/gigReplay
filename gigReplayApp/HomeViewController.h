@@ -14,7 +14,7 @@
 
 
 
-#define getURL2 [NSURL URLWithString: @"http://lipsync.sg/api/HomePageFeatured.php"]
+#define getURL2 [NSURL URLWithString: @"http://www.lipsync.sg/api/HomePageFeatured.php"]
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
 

@@ -19,13 +19,13 @@
     NSArray *videopath;
     UIImage *tempImage;
     UIView * aProgressView ;
-    UIProgressView *progressIndicator;
+//    UIProgressView *progressIndicator;
      MBProgressHUD *aMBProgressHUD;
     UploadObject *videoInfo;
 
 }
 @property (strong,nonatomic) IBOutlet UILabel *progressLabel;
-//@property(strong,nonatomic)IBOutlet  UIProgressView *progressIndicator;
+@property(retain,nonatomic)UIProgressView *progressIndicator;
 
 @property (strong, nonatomic) IBOutlet UITableView *uploadTable;
 @property (strong, nonatomic) NSMutableArray *uploadArray;

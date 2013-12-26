@@ -31,13 +31,14 @@
         exec("ffmpeg -i " . $original_target_path . " " . $low_res_path);
     } else if ($media_type==2) {
         //This command creates the low res video file. I'm not sure why we need it now, but...
-        exec("ffmpeg -i " . $original_target_path . " -s 640x360 " . $low_res_path);
-        
+       // exec("ffmpeg -i " . $original_target_path . " -vprofile high -preset fast -b:v 200k -maxrate 300k -bufsize 160k -s 320x240  " . $low_res_path);
+         exec("ffmpeg -i " . $original_target_path . "  -s 320x240  " . $low_res_path);
         //This command strips the audio from the video
         $audio_only = pathinfo($original_target_path);
         $audio_only_path = $target_path . $audio_only['filename'] . "_audio.aac";
         $file_audio_url = "http://www.lipsync.sg/uploads/original/".$session_id."-".$session_add_on."/".$audio_only['filename'] . "_audio.aac";
-        exec("ffmpeg -i " . $original_target_path . " -ab 512k -ac 2 -acodec libvo_aacenc -vn " . $audio_only_path);
+        //exec("ffmpeg -i " . $original_target_path . " -ab 128k -ac 2 -acodec libvo_aacenc -vn " . $audio_only_path);
+ exec("ffmpeg -i " . $original_target_path . " -ab 64k -ac 2  -vn " . $audio_only_path);
     }
     
     $media_length = calculate_content_length($original_target_path);

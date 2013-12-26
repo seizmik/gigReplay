@@ -35,7 +35,7 @@
     [self LoadSessionDetailsFromDB];
     
     UIRefreshControl *refresh=[[UIRefreshControl alloc]init];
-    [refresh addTarget:self action:@selector(leon) forControlEvents:UIControlEventValueChanged];
+    [refresh addTarget:self action:@selector(getOpenArray) forControlEvents:UIControlEventValueChanged];
     refresh.attributedTitle = [[NSAttributedString alloc] initWithString:@"Pull to Refresh"];
     self.refreshControl=refresh;
     refresh.tintColor=[UIColor whiteColor];
@@ -53,12 +53,8 @@
     
     // Do any additional setup after loading the view from its nib.
 }
--(void)leon{
-    
-    SDImageCache *imageCache = [SDImageCache sharedImageCache];
-    [imageCache clearMemory];
-    [imageCache clearDisk];
-    [imageCache cleanDisk];
+-(void)getOpenArray{
+
     
     NSLog(@"fetcheddatachagend");
     // connect to online database and retrieve new data when pulled to refresh
@@ -113,7 +109,6 @@
 	}
 
     NSArray *Details=[self.OpenedSessionDetailsHolder objectAtIndex:indexPath.row];
-    //NSLog(@"leonism %@",Details);
     cell.SceneName.text=[Details objectAtIndex:5];
     cell.directorName.text=[Details objectAtIndex:6];
     cell.SceneTake.text=[Details objectAtIndex:4];
