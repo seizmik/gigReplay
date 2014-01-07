@@ -231,7 +231,7 @@ int currentTime;
     
     //At this point, it should be taken from the options
     
-    cameraUI.videoQuality=UIImagePickerControllerQualityType640x480;
+    cameraUI.videoQuality=UIImagePickerControllerQualityTypeIFrame960x540;
     cameraUI.delegate = delegate;
     // 3 - Display image picker
     [controller presentViewController:cameraUI animated:YES completion:nil];
@@ -296,7 +296,7 @@ int currentTime;
     AVURLAsset *asset = [AVURLAsset URLAssetWithURL:capturedVideoURL options:nil];
     
     AVAssetExportSession *exporter = [[AVAssetExportSession alloc] initWithAsset:asset
-                                                                      presetName:AVAssetExportPreset640x480];
+                                                                      presetName:AVAssetExportPreset960x540];
     exporter.outputURL=videoOutputURL;
     exporter.outputFileType = AVFileTypeMPEG4;
     exporter.shouldOptimizeForNetworkUse = YES;

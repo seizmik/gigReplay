@@ -68,11 +68,11 @@
     
 }
 -(void) obtainDataFromURL{
-//    dispatch_async(kBgQueue, ^{
-//        NSData* data = [NSData dataWithContentsOfURL:getURL2];
-//        [self performSelectorOnMainThread:@selector(fetchFeaturedVideosData:)
-//                               withObject:data waitUntilDone:YES];
-//    });
+    dispatch_async(kBgQueue, ^{
+        NSData* data = [NSData dataWithContentsOfURL:getURL2];
+        [self performSelectorOnMainThread:@selector(fetchFeaturedVideosData:)
+                               withObject:data waitUntilDone:YES];
+    });
 }
 
 
@@ -117,7 +117,7 @@
     int entryNumber = sender.tag;
     NSDictionary *info=[videoArray objectAtIndex:entryNumber];
     url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
-    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:@"http://lipsync.sg/api/test/prog_index.m3u8"]];
+    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:@"http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/19-Leon_Ng/playlist.m3u8"]];
     
     
 

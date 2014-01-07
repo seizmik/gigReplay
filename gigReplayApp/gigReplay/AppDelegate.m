@@ -99,6 +99,7 @@
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
+
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [FBSession.activeSession handleDidBecomeActive];
@@ -250,8 +251,10 @@
     [self customiseAppearance];
 
     //push stack onto canvas
-    self.window.rootViewController = tabBarController;
     [self.window addSubview:tabBarController.view];
+    //removing tabbarontroller as rootview enables other views to rotate as appropiate.. strange
+    //[self.window setRootViewController:tabBarController];
+    
     [self.window makeKeyAndVisible];
     
 }

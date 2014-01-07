@@ -51,6 +51,7 @@
     [self SyncUserDetails];
     NSLog(@"%d get from web current user id",appDelegateObject.CurrentUserID);
 }
+
 -(void) fetchFeaturedVideosData:(NSData*) data{
     
     
@@ -140,6 +141,7 @@
     
         return 180;
 }
+
 -(void)callAction:(UIButton *)sender
 {
     
@@ -156,15 +158,11 @@
                                                object:movieplayer];
     
     movieplayer.controlStyle = MPMovieControlStyleDefault;
-        movieplayer.shouldAutoplay = YES;
+    movieplayer.shouldAutoplay = YES;
     
     [movieplayer prepareToPlay];
     [movieplayer play];
-  
 
-
-    
-    
 }
 
 //-------------------------------------------MOVIEPLAYER------------------------------------------//
@@ -185,7 +183,7 @@
     [customCell.videoImageView addSubview:movieplayer.view];
     [movieplayer.view setFrame:customCell.videoImageView.bounds];
     
-    [movieplayer setFullscreen:YES animated:YES];
+    
     
     
     

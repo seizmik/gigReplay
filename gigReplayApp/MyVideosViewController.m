@@ -90,7 +90,7 @@
                 break;
             }
         }
-    }
+    }                                                                    
     
     NSDictionary *info=[myVideosArray objectAtIndex:indexPath.row];
     videoImage=[info objectForKey:@"default_thumb"];

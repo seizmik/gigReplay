@@ -11,7 +11,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 
 #define kBgQueue dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)
-
+#define getURL2 [NSURL URLWithString: @"http://www.lipsync.sg/api/HomePageFeatured.php"]
 @interface SocialViewController : UIViewController<UITableViewDataSource,UITableViewDelegate>{
     AVPlayer *avPlayer;
     AVPlayerLayer *avPlayerLayer;
