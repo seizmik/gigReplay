@@ -109,7 +109,7 @@
     
     NSMutableDictionary *info = [myVideosArray objectAtIndex:indexPath.row];
     NSString *media_master_id=[info objectForKey:@"master_id"];
-    url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
+    url=[NSURL URLWithString:[info objectForKey:@"media_hls"]];
     HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
     [homeDetailVC setVideoURL:url];
     [homeDetailVC setMedia_id:media_master_id];
@@ -138,8 +138,13 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(self.interfaceOrientation==UIDeviceOrientationPortrait){
+        return 220;
+    }else{
+        return 250;
+    }
     
-    return 220;
+    
 }
 
 

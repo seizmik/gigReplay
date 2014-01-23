@@ -39,7 +39,6 @@
 		2A49CA4717743817006FBBBC /* play_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA4617743817006FBBBC /* play_button.png */; };
 		2A49CA4917743C21006FBBBC /* like_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A49CA4817743C21006FBBBC /* like_on.png */; };
 		2A50535017AFA735000BD700 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A50534E17AFA735000BD700 /* HomeViewController.m */; };
-		2A50535117AFA735000BD700 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A50534F17AFA735000BD700 /* HomeViewController.xib */; };
 		2A50535517AFA750000BD700 /* HomeViewCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A50535317AFA750000BD700 /* HomeViewCustomCell.m */; };
 		2A50535617AFA750000BD700 /* HomeViewCustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A50535417AFA750000BD700 /* HomeViewCustomCell.xib */; };
 		2A50535A17AFAB18000BD700 /* HomeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A50535817AFAB18000BD700 /* HomeDetailViewController.m */; };
@@ -201,6 +200,7 @@
 		2AD434DD185EE002006162B6 /* icon29pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AD434DC185EE002006162B6 /* icon29pt@2x.png */; };
 		2AD434DF185EE0F5006162B6 /* 320x480.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AD434DE185EE0F5006162B6 /* 320x480.png */; };
 		2AD434E3185EECC8006162B6 /* Audio.png in Resources */ = {isa = PBXBuildFile; fileRef = 2AD434E2185EECC8006162B6 /* Audio.png */; };
+		2AD9D0E1188962FD00B6D5F8 /* HomeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2AD9D0E0188962FD00B6D5F8 /* HomeViewController.xib */; };
 		2ADF8F0417BB4CBC00D3F0E2 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 2ADF8F0317BB4CBC00D3F0E2 /* refresh.png */; };
 		2ADF8F0C17BB6A6E00D3F0E2 /* moon.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2ADF8F0B17BB6A6E00D3F0E2 /* moon.jpg */; };
 		2ADFD0251743E5D200F305D5 /* ReplaysCustomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ADFD0241743E5D200F305D5 /* ReplaysCustomCell.m */; };
@@ -350,7 +350,6 @@
 		2A49CA4817743C21006FBBBC /* like_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = like_on.png; sourceTree = "<group>"; };
 		2A50534D17AFA735000BD700 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		2A50534E17AFA735000BD700 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		2A50534F17AFA735000BD700 /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		2A50535217AFA750000BD700 /* HomeViewCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewCustomCell.h; sourceTree = "<group>"; };
 		2A50535317AFA750000BD700 /* HomeViewCustomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewCustomCell.m; sourceTree = "<group>"; };
 		2A50535417AFA750000BD700 /* HomeViewCustomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewCustomCell.xib; sourceTree = "<group>"; };
@@ -559,6 +558,7 @@
 		2AD434DC185EE002006162B6 /* icon29pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon29pt@2x.png"; sourceTree = "<group>"; };
 		2AD434DE185EE0F5006162B6 /* 320x480.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 320x480.png; sourceTree = "<group>"; };
 		2AD434E2185EECC8006162B6 /* Audio.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Audio.png; sourceTree = "<group>"; };
+		2AD9D0E0188962FD00B6D5F8 /* HomeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HomeViewController.xib; sourceTree = "<group>"; };
 		2ADF8F0317BB4CBC00D3F0E2 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
 		2ADF8F0B17BB6A6E00D3F0E2 /* moon.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = moon.jpg; sourceTree = "<group>"; };
 		2ADFD0231743E5D200F305D5 /* ReplaysCustomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReplaysCustomCell.h; sourceTree = "<group>"; };
@@ -1211,7 +1211,7 @@
 			children = (
 				2A50534D17AFA735000BD700 /* HomeViewController.h */,
 				2A50534E17AFA735000BD700 /* HomeViewController.m */,
-				2A50534F17AFA735000BD700 /* HomeViewController.xib */,
+				2AD9D0E0188962FD00B6D5F8 /* HomeViewController.xib */,
 				2A50535717AFAB18000BD700 /* HomeDetailViewController.h */,
 				2A50535817AFAB18000BD700 /* HomeDetailViewController.m */,
 				2A50535917AFAB18000BD700 /* HomeDetailViewController.xib */,
@@ -1479,6 +1479,7 @@
 				2A6292E01740B31A003E7BDB /* start_21.png in Resources */,
 				2A6292E11740B31A003E7BDB /* start_22.png in Resources */,
 				2A4667B21741F05000CBE21B /* thesmos.rdb in Resources */,
+				2AD9D0E1188962FD00B6D5F8 /* HomeViewController.xib in Resources */,
 				2ADFD0271743E61200F305D5 /* ReplaysCustomCell.xib in Resources */,
 				CE13B91B174A173900514F3F /* navigation.png in Resources */,
 				CE13B91D174A174300514F3F /* navigation@2x.png in Resources */,
@@ -1536,7 +1537,6 @@
 				2A67BC1F17991DF0004B07D8 /* email login.png in Resources */,
 				2A67BC2317992741004B07D8 /* signUpButton.png in Resources */,
 				2A796A2817992B43005D04A0 /* fing.png in Resources */,
-				2A50535117AFA735000BD700 /* HomeViewController.xib in Resources */,
 				2A50535617AFA750000BD700 /* HomeViewCustomCell.xib in Resources */,
 				2A50535B17AFAB18000BD700 /* HomeDetailViewController.xib in Resources */,
 				2AF874E017AFAC1C0036F959 /* scroll bar@2x.png in Resources */,
@@ -1693,7 +1693,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Leon Ng (249486LZ6A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Leon Ng (6T7SSHZZ36)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1708,6 +1708,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1724,7 +1725,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Leon Ng (249486LZ6A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Leon Ng (6T7SSHZZ36)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -1732,6 +1733,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1742,7 +1744,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Leon Ng (249486LZ6A)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Leon Ng (6T7SSHZZ36)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1757,6 +1759,7 @@
 				);
 				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "1E1B21E1-50E2-4D27-9232-4498242677A4";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1767,7 +1770,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Leon Ng (249486LZ6A)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Leon Ng (6T7SSHZZ36)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -1782,6 +1785,7 @@
 				);
 				OTHER_LDFLAGS = "-lsqlite3.0";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "1E1B21E1-50E2-4D27-9232-4498242677A4";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

@@ -12,12 +12,13 @@
 #import "ASIHTTPRequest.h"
 
 
-@interface HomeDetailViewController : UIViewController<UITableViewDelegate,UIScrollViewDelegate,ASIHTTPRequestDelegate>{
+@interface HomeDetailViewController : UIViewController<UITableViewDelegate,UIScrollViewDelegate,UIActionSheetDelegate,ASIHTTPRequestDelegate>{
     UIScrollView *scrollView;
     NSString *fb_user_id;
     BOOL processLabels;
     UIView *loadingView;
     NSString *like;
+    UIActionSheet *moreOptions;
 
 }
 @property (strong,nonatomic)MPMoviePlayerController *moviePlayer;
@@ -55,5 +56,7 @@
 
 - (IBAction)likeButton:(id)sender;
 @property (strong, nonatomic) IBOutlet UIButton *likeButtonImage;
+- (IBAction)moreOptions:(id)sender;
+@property (strong, nonatomic) IBOutlet UIView *reportImage;
 
 @end

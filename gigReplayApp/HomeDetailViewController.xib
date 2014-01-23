@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="12F45" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -14,9 +14,8 @@
                 <outlet property="indDate" destination="80" id="bmm-Oi-q4j"/>
                 <outlet property="indVideoTitle" destination="79" id="M4J-9H-sLg"/>
                 <outlet property="likeButtonImage" destination="bBk-H7-Koe" id="byN-2p-fUN"/>
-                <outlet property="loadingImage" destination="oHl-qr-5IN" id="lOn-xg-tXH"/>
-                <outlet property="loadingView" destination="TvM-cO-3DE" id="Sn3-GS-oul"/>
                 <outlet property="moviePlayerView" destination="68" id="69"/>
+                <outlet property="reportImage" destination="SrQ-Ix-XoK" id="TPp-y4-zlM"/>
                 <outlet property="theComments" destination="157" id="161"/>
                 <outlet property="videoUser" destination="78" id="TnG-NO-QRS"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -27,25 +26,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="TvM-cO-3DE">
-                    <rect key="frame" x="0.0" y="121" width="320" height="327"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fUK-kO-lyA">
-                            <rect key="frame" x="116" y="156" width="100" height="31"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
-                            <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="oHl-qr-5IN">
-                            <rect key="frame" x="150" y="128" width="20" height="20"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="color" red="1" green="0.1611334925" blue="0.28094591050000001" alpha="1" colorSpace="calibratedRGB"/>
-                        </activityIndicatorView>
-                    </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </view>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" id="82">
                     <rect key="frame" x="0.0" y="250" width="320" height="332"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -55,39 +35,39 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="no of likes" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="76">
-                                    <rect key="frame" x="20" y="93" width="83" height="29"/>
+                                    <rect key="frame" x="24" y="47" width="83" height="29"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="date/time" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="80">
-                                    <rect key="frame" x="191" y="47" width="109" height="47"/>
+                                    <rect key="frame" x="191" y="-4" width="109" height="47"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
                                     <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="placeholder.png" id="77">
-                                    <rect key="frame" x="20" y="47" width="49" height="38"/>
+                                    <rect key="frame" x="20" y="1" width="49" height="38"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="78">
-                                    <rect key="frame" x="77" y="47" width="121" height="38"/>
+                                    <rect key="frame" x="77" y="1" width="121" height="38"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="22"/>
                                     <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Video Description" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="79">
-                                    <rect key="frame" x="20" y="117" width="280" height="70"/>
+                                    <rect key="frame" x="20" y="52" width="280" height="70"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
                                     <color key="textColor" red="0.0039215688589999999" green="0.63529413940000001" blue="0.79607850309999995" alpha="1" colorSpace="deviceRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="VOj-ww-3dm">
-                                    <rect key="frame" x="239" y="1" width="61" height="29"/>
+                                    <rect key="frame" x="168" y="130" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="share.png">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -97,7 +77,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="151">
-                                    <rect key="frame" x="135" y="0.0" width="51" height="30"/>
+                                    <rect key="frame" x="122" y="130" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                     <state key="normal" backgroundImage="comment.png">
@@ -112,13 +92,25 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bBk-H7-Koe">
-                                    <rect key="frame" x="20" y="1" width="48" height="29"/>
+                                    <rect key="frame" x="77" y="130" width="30" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <state key="normal" image="like.png">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                     <connections>
                                         <action selector="likeButton:" destination="-1" eventType="touchUpInside" id="BBL-m6-j8C"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="wZX-RO-Me5">
+                                    <rect key="frame" x="206" y="130" width="51" height="30"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="28"/>
+                                    <inset key="contentEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="10"/>
+                                    <state key="normal" title="...">
+                                        <color key="titleColor" red="0.75686281919999998" green="0.15294118230000001" blue="0.1764705926" alpha="1" colorSpace="deviceRGB"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="moreOptions:" destination="-1" eventType="touchUpInside" id="Fn1-ue-5SE"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -135,7 +127,7 @@
                             </connections>
                         </tableView>
                         <view contentMode="scaleToFill" id="UV4-Lg-olh">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="327"/>
+                            <rect key="frame" x="0.0" y="3" width="320" height="327"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" id="DDY-Fl-V33">
@@ -239,6 +231,24 @@
                 </textView>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+        </view>
+        <view contentMode="scaleToFill" id="SrQ-Ix-XoK">
+            <rect key="frame" x="0.0" y="0.0" width="108" height="90"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="new_logo.png" id="Yrm-w9-FiN">
+                    <rect key="frame" x="28" y="10" width="53" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Done!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Fgq-CO-CeE">
+                    <rect key="frame" x="27" y="57" width="54" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="17"/>
+                    <color key="textColor" red="1" green="0.1611334925" blue="0.28094591050000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
         </view>
     </objects>
     <resources>

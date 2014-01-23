@@ -38,6 +38,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self obtainLike];
     [self obtainDataFromURL];
     [self.moviePlayer prepareToPlay];
@@ -45,13 +46,22 @@
     processLabels=YES;
     [self.loadingImage startAnimating];
    }
+
+-(UIDeviceOrientation)onlyProtrait{
+    if(self.interfaceOrientation!=UIDeviceOrientationPortrait){
+        return UIDeviceOrientationPortrait;
+    }
+    else{
+        return UIDeviceOrientationLandscapeLeft;
+    }
+}
 -(void)viewDidAppear:(BOOL)animated{
     NSLog(@"LEONISM %@",like)   ;
     if([like isEqualToString:@"1"]){
     
         [self.likeButtonImage setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
     }
-    
+    [self onlyProtrait];
 
   
 
@@ -141,6 +151,7 @@
     
     self.moviePlayer=  [[MPMoviePlayerController alloc]
                    initWithContentURL:self.videoURL];
+    NSLog(@"%@",self.videoURL);
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackDidFinish:)
@@ -281,17 +292,33 @@
     }
     
 }
--(void)requestFinished:(ASIHTTPRequest *)request{
-    return   NSLog(@"request success");
-   
-    dispatch_sync(dispatch_get_main_queue(), ^(void){
-        [self.loadingView setNeedsDisplay];
-        [self obtainDataFromURL];
-        NSLog(@"%@",self.commentArray);
-        
-        
 
-    });
+-(void)addReportDoneImage{
+    UIImageView *reportView=[[UIImageView alloc]initWithFrame:CGRectMake(100, 250, 100, 100)];
+    reportView.image=[UIImage imageNamed:@"new_logo"];
+    [self.view addSubview:reportView];
+    [UIView animateWithDuration:0.5 delay:1.0 options:0 animations:^{
+        // Animate the alpha value of your imageView from 1.0 to 0.0 here
+        reportView.alpha = 0.0f;
+    } completion:^(BOOL finished) {
+        // Once the animation is completed and the alpha has gone to 0.0, hide the view for good
+        reportView.hidden = YES;
+    }];
+}
+
+
+-(void)requestFinished:(ASIHTTPRequest *)request{
+    int statusCode=[request responseStatusCode];
+    if(statusCode ==200 ){
+        [self addReportDoneImage];
+        NSLog(@"report is suceess!");
+    
+        
+    }else{
+        NSLog(@"request success ");
+    }
+    
+    //return   NSLog(@"request success");
     
 }
 -(void)requestFailed:(ASIHTTPRequest *)request{
@@ -349,4 +376,27 @@
 
     
 }
+- (IBAction)moreOptions:(id)sender {
+    moreOptions=[[UIActionSheet alloc]initWithTitle:@"More Options" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Report Post", nil];
+    
+    [moreOptions showInView:self.view];
+}
+-(void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex == 0 ){
+        NSURL *url = [NSURL URLWithString:@"http://www.lipsync.sg/api/reporting.php"];
+        ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+        [request setPostValue:appDelegateObject.CurrentUserName forKey:@"current_user"];
+        [request setPostValue:self.media_id forKey:@"media_id"];
+        [request setPostValue:self.videoUserInfo forKey:@"video_of_user"];
+        [request setDidFinishSelector:@selector(requestFinished:)];
+        
+        [request setRequestMethod:@"POST"];
+        [request setDelegate:self];
+        [request startAsynchronous];
+
+
+    }
+}
+
 @end

@@ -136,7 +136,7 @@ int currentTime;
     
     if ([userDetails count] == 1) {
         //Create the form and post it to the API
-        NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user.php"];
+        NSURL *postURL = [NSURL URLWithString:GIGREPLAY_API_URL@"auto_edit_user_leon.php"];
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:postURL];
         //AutoEditVaules for Post
         [request addPostValue:self.cutLengthValue forKey:@"cutLength"];
@@ -555,6 +555,7 @@ int currentTime;
     self.cutLengthValue.text=[NSString stringWithFormat:@"%.0f",[sender value]];
 
     
-    
 }
+
+
 @end

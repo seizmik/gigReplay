@@ -107,32 +107,32 @@
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     
     //At this point of time, we should retrieve the last sync and when it was taken to determine if another sync is needed. KIV
-    dbObject = [[ConnectToDatabase alloc] initDB];
-    syncObject = [dbObject syncCheck];
-    
-    //NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
-    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid"); //Sync expires every 2 hours
-    
-    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
-    [internetReach startNotifier];
-    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
-    
-    /*if(!syncObject.expiredSync) {
-        timeRelationship = syncObject.previousTimeRelationship;
-        NSLog(@"Using previous time relationship of %f", timeRelationship);
-    } else */if (netStatus == NotReachable) {
-        [self showSyncAlert];
-    }else if (!stillSynching) {
-        //Only when still synching is NO, another queue will be dispatched
-        dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
-        dispatch_async(syncQueue, ^{
-            //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
-            [self syncWithServer]; //This sets up the time relationship
-            //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
-        });
-    }
-    
-    
+//    dbObject = [[ConnectToDatabase alloc] initDB];
+//    syncObject = [dbObject syncCheck];
+//    
+//    //NSLog(stillSynching ? @"It's still synching" : @"It's not synching");
+//    NSLog(syncObject.expiredSync ? @"Sync is outdated" : @"Sync is still valid"); //Sync expires every 2 hours
+//    
+//    Reachability *internetReach = [[Reachability reachabilityForInternetConnection] init];
+//    [internetReach startNotifier];
+//    NetworkStatus netStatus = [internetReach currentReachabilityStatus];
+//    
+//    /*if(!syncObject.expiredSync) {
+//        timeRelationship = syncObject.previousTimeRelationship;
+//        NSLog(@"Using previous time relationship of %f", timeRelationship);
+//    } else */if (netStatus == NotReachable) {
+//        [self showSyncAlert];
+//    }else if (!stillSynching) {
+//        //Only when still synching is NO, another queue will be dispatched
+//        dispatch_queue_t syncQueue = dispatch_queue_create(NULL, 0);
+//        dispatch_async(syncQueue, ^{
+//            //Set still synching as yes to prevent the GCD from dispatching another queue if the app goes out
+//            [self syncWithServer]; //This sets up the time relationship
+//            //NSLog(@"%f", [[NSDate date] timeIntervalSince1970]);
+//        });
+//    }
+//    
+//    
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -251,9 +251,9 @@
     [self customiseAppearance];
 
     //push stack onto canvas
-    [self.window addSubview:tabBarController.view];
+    //[self.window addSubview:tabBarController.view];
     //removing tabbarontroller as rootview enables other views to rotate as appropiate.. strange
-    //[self.window setRootViewController:tabBarController];
+    [self.window setRootViewController:tabBarController];
     
     [self.window makeKeyAndVisible];
     

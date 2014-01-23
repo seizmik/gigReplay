@@ -39,11 +39,11 @@
     } else {
         [self obtainDataFromURL];
         [self.tableViewRequests reloadData];
+        
     }
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     
 }
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -111,7 +111,7 @@
         NSMutableDictionary *info = [videoArray objectAtIndex:indexPath.row];
         NSString *videoTitle=[info objectForKey:@"title"];
         NSString *media_master_id=[info objectForKey:@"master_id"];
-        url=[NSURL URLWithString:[info objectForKey:@"media_url"]];
+        url=[NSURL URLWithString:[info objectForKey:@"media_hls"]];
         HomeDetailViewController *homeDetailVC=[[HomeDetailViewController alloc]init];
         [homeDetailVC setVideoURL:url];
         [homeDetailVC setObtainFb_id:[info objectForKey:@"fb_user_id"]];
@@ -139,8 +139,15 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
+    if(self.interfaceOrientation==UIDeviceOrientationPortrait){
         return 180;
+    }else{
+        return 250;
+    }
+    
+   
 }
+
 
 -(void)callAction:(UIButton *)sender
 {
@@ -150,7 +157,7 @@
     int entryNumber = sender.tag;
     NSDictionary *this = [[NSDictionary alloc] init];
     this = [videoArray objectAtIndex:entryNumber];
-    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:[this objectForKey:@"media_url"]]];
+    movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:[this objectForKey:@"media_hls"]]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackDidFinish:)
