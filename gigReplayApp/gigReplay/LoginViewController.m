@@ -217,7 +217,9 @@
 
   
 }
-
+-(BOOL)shouldAutorotate{
+    return NO;
+}
 
 -(void) playMovie
 {
