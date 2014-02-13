@@ -38,10 +38,12 @@
     [super viewDidLoad];
         [self getDeviceID];
     
-    [self playMovie];
     // Do any additional setup after loading the view from its nib.
 }
 
+-(void)viewWillAppear:(BOOL)animated{
+    [self playMovie];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -226,14 +228,14 @@
     
     NSString*thePath=[[NSBundle mainBundle] pathForResource:@"Movie" ofType:@"mp4"];
     NSURL*theurl=[NSURL fileURLWithPath:thePath];
-    moviePlayer=[[MPMoviePlayerController alloc]initWithContentURL:theurl];
-    moviePlayer.controlStyle=MPMovieControlStyleNone;
+    self.moviePlayer=[[MPMoviePlayerController alloc]initWithContentURL:theurl];
+    self.moviePlayer.controlStyle=MPMovieControlStyleNone;
     [self.view addSubview:self.movieView];
-    [self.movieView addSubview:moviePlayer.view];
-    [moviePlayer.view setFrame:self.movieView.bounds];
-    [moviePlayer prepareToPlay];
-    [moviePlayer play];
-    moviePlayer.repeatMode=MPMovieRepeatModeOne;
+    [self.movieView addSubview:self.moviePlayer.view];
+    [self.moviePlayer.view setFrame:self.movieView.bounds];
+    [self.moviePlayer prepareToPlay];
+    [self.moviePlayer play];
+    self.moviePlayer.repeatMode=MPMovieRepeatModeOne;
     
 }
 

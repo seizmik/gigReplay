@@ -39,33 +39,24 @@
 {
     [super viewDidLoad];
     
+    
     [self obtainLike];
     [self obtainDataFromURL];
     [self.moviePlayer prepareToPlay];
     [self playMovie];// Do any additional setup after loading the view from its nib.
     processLabels=YES;
     [self.loadingImage startAnimating];
-   }
+    
+    }
 
--(UIDeviceOrientation)onlyProtrait{
-    if(self.interfaceOrientation!=UIDeviceOrientationPortrait){
-        return UIDeviceOrientationPortrait;
-    }
-    else{
-        return UIDeviceOrientationLandscapeLeft;
-    }
-}
 -(void)viewDidAppear:(BOOL)animated{
+    [self preferredInterfaceOrientationForPresentation];
     NSLog(@"LEONISM %@",like)   ;
     if([like isEqualToString:@"1"]){
     
         [self.likeButtonImage setImage:[UIImage imageNamed:@"like_on.png"] forState:UIControlStateNormal];
     }
-    [self onlyProtrait];
-
-  
-
-
+   
     CGFloat UIScreenBottom=self.view.bounds.size.height-VIDEOPLAYER_UIVIEW_HEIGHT;
     scrollView=[[UIScrollView alloc]initWithFrame:CGRectMake(0, 250, 320, UIScreenBottom)];
     scrollView.contentSize=CGSizeMake(320.0,(self.commentTableVIew.contentSize.height+VIDEO_INFO_UIVIEW_HEIGHT));
@@ -398,5 +389,12 @@
 
     }
 }
+-(BOOL)shouldAutorotate{
+    return NO;
+}
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return UIInterfaceOrientationPortrait;
+}
+
 
 @end

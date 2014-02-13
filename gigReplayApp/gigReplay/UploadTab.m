@@ -84,6 +84,20 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     // Return the number of rows in the section.
     // Usually the number of items in your array (the one that holds your list)
+    UILabel *message=[[UILabel alloc]initWithFrame:CGRectMake(50, 200, 220, 50)];
+    message.text=@"NO VIDEOS FOR UPLOAD!";
+    
+    [self.view addSubview:message];
+    message.hidden=YES;
+    if([uploadArray count]==0){
+        NSLog(@"NO VIDEOS FOR UPLOAD");
+        message.hidden=NO;
+    }
+    else if([uploadArray count]>0){
+        message.hidden=YES;
+        
+    }
+  
     return [uploadArray count];
 }
 
@@ -276,35 +290,37 @@ if(videoInfo.uploadStatus==0)
 //    NSLog(@"Upload Check Reply: %@", yesNoReply);
 //    if ([yesNoReply isEqualToString:@"UPLOAD"]){
         //Commence upload of file
-        NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload_one.php"];
-        
+        NSURL *uploadURL = [NSURL URLWithString:GIGREPLAY_API_URL@"upload.php"];
+    
+    
         ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:uploadURL];
     
         [request setData:fileToUpload withFileName:uploadFileName andContentType:uploadFileType forKey:@"uploadedfile"];
         //Now add the metadata
+    
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.userid] forKey:@"user_id"];
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.sessionid] forKey:@"session_id"];
         [request addPostValue:[NSString stringWithFormat:@"%@", fileDetails.sessionName] forKey:@"session_name"];
         [request addPostValue:[NSString stringWithFormat:@"%f", fileDetails.startTime] forKey:@"start_time"];
         [request addPostValue:[NSString stringWithFormat:@"%i", fileDetails.contentType] forKey:@"content_type"];
+    
         
                 
         NSLog(@"%@", fileDetails.sessionName);
-        
+        NSLog(@"%@",uploadFileName);
         [request setRequestMethod:@"POST"];
         [request setDelegate:self];
         [request setUploadProgressDelegate:self];
         [request setDidStartSelector:@selector(requestStarted:)];
         [request setDidFinishSelector:@selector(requestFinished:)];
         [request setDidFailSelector:@selector(requestFailed:)];
-        [request setTimeOutSeconds:50000];
-        [request startAsynchronous];
+    
         progressIndicator.hidden=NO;
         [self progressIndicatorView:fileDetails];
     
         //This will allow the request to continue even upon entering the background
         [request setShouldContinueWhenAppEntersBackground:YES];
-    
+        [request startAsynchronous];
         //The following block will run the background
         
     
@@ -389,20 +405,31 @@ if(videoInfo.uploadStatus==0)
 }
 
 - (void)requestStarted:(ASIHTTPRequest *)theRequest {
-        NSLog(@"response started new::%@",[theRequest responseString]);
+        NSLog(@"request started ");
 
     
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)theRequest{
-    NSLog(@"response finished new ::%@",[theRequest responseString]);
+    NSLog(@"response :%@",[theRequest responseString]);
     progressIndicator.hidden = YES;
     [aProgressView removeFromSuperview];
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:@"Video upload to server successfully!"  delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+    NSLog(@"%d",theRequest.responseStatusCode);
+    if([theRequest.responseString isEqualToString:@"Upload Success!"]){
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:[theRequest responseString]  delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
     [alert show];
     [self fileHasBeenUploaded];
-    
+        
+    }
+    else if([theRequest.responseString isEqualToString:@"Request Error"]){
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[theRequest responseString]  delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+    [alert show];
+        
+    }else{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Failed" message:@"Unexpected Error" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles: nil];
+    [alert show];
+
+    }
 }
 
 
@@ -568,4 +595,7 @@ if(videoInfo.uploadStatus==0)
 }
 
 
+- (IBAction)backButton:(id)sender {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

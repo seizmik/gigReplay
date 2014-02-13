@@ -95,7 +95,7 @@
 	CustomCell *cell = (CustomCell *) [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
 	if (cell == nil)
 	{
-		
+        
 		NSArray *topLevelObjects;
 		
 		topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"CustomCell" owner:self options:nil];
@@ -115,13 +115,12 @@
      fb_user_ID=[Details objectAtIndex:11];
     [cell.dateLabel setTransform:CGAffineTransformMakeRotation(-M_PI/2)];
     cell.dateLabel.text=[Details objectAtIndex:3];
-    //obtain by using a string with the facebook profile pic id
+        //obtain by using a string with the facebook profile pic id
     NSString *profilePicURL = [NSString stringWithFormat:@"http://graph.facebook.com/%@/picture?width=77&height=66", fb_user_ID];
 
-
+    
     [cell.facebookimageview setImageWithURL:[NSURL URLWithString:profilePicURL] placeholderImage:[UIImage animatedImageNamed:@"tab_generate_button_on_" duration:1.5] options:SDWebImageCacheMemoryOnly];
    
-
     return cell;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

@@ -93,8 +93,10 @@ int currentTime;
 }
 
 - (IBAction)uploadButtonPressed:(UIButton *)sender {
-    UploadTab *uploadVC = [[UploadTab alloc] init];
-    [self.navigationController pushViewController:uploadVC animated:YES];
+    UploadTab *uploadVC = [[UploadTab alloc] initWithNibName:@"UploadOther" bundle:nil];
+    
+    //[self.navigationController pushViewController:uploadVC animated:YES];
+    [self presentViewController:uploadVC animated:YES completion:Nil];
     
     
 }
@@ -556,6 +558,11 @@ int currentTime;
 
     
 }
+- (BOOL)shouldAutorotate {
+    return NO;
+}
 
-
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return UIInterfaceOrientationPortrait;
+}
 @end

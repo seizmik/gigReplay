@@ -37,6 +37,7 @@
 
 - (void)uploadThisFile:(UploadObject *)fileDetails;
 @property (strong, nonatomic) IBOutlet UIProgressView *uploadProgress;
+- (IBAction)backButton:(id)sender;
 
 
 

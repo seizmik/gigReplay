@@ -46,6 +46,7 @@
 		2A5CFDF817CB4DA4002C2BC5 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDF617CB4DA3002C2BC5 /* icon.png */; };
 		2A5CFDFA17CB5113002C2BC5 /* g_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDF917CB5113002C2BC5 /* g_logo.png */; };
 		2A5CFDFC17D821DF002C2BC5 /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A5CFDFB17D821DF002C2BC5 /* icon@2x.png */; };
+		2A600DEA1897A9F900C84CC7 /* UploadOther.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2A600DE91897A9F900C84CC7 /* UploadOther.xib */; };
 		2A6292C21740B052003E7BDB /* start_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B61740B052003E7BDB /* start_1.png */; };
 		2A6292C31740B052003E7BDB /* start_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B71740B052003E7BDB /* start_6.png */; };
 		2A6292C41740B052003E7BDB /* start_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 2A6292B81740B052003E7BDB /* start_5.png */; };
@@ -362,6 +363,7 @@
 		2A5CFDF617CB4DA3002C2BC5 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		2A5CFDF917CB5113002C2BC5 /* g_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = g_logo.png; sourceTree = "<group>"; };
 		2A5CFDFB17D821DF002C2BC5 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		2A600DE91897A9F900C84CC7 /* UploadOther.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UploadOther.xib; sourceTree = "<group>"; };
 		2A6292B61740B052003E7BDB /* start_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_1.png; sourceTree = "<group>"; };
 		2A6292B71740B052003E7BDB /* start_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_6.png; sourceTree = "<group>"; };
 		2A6292B81740B052003E7BDB /* start_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = start_5.png; sourceTree = "<group>"; };
@@ -1267,6 +1269,7 @@
 				CE48572E171FA92A00837B88 /* SettingsViewController.xib */,
 				CE48570C171FA7EB00837B88 /* UploadTab.h */,
 				CE48570D171FA7EB00837B88 /* UploadTab.m */,
+				2A600DE91897A9F900C84CC7 /* UploadOther.xib */,
 				CE48570E171FA7EB00837B88 /* UploadTab.xib */,
 				2AD2DC1A170C28D400E00478 /* TableViewCells */,
 			);
@@ -1573,6 +1576,7 @@
 				2AFCAD1A17C219EC0010D5C9 /* gig_tab_on.png in Resources */,
 				2AFCAD1E17C21D8F0010D5C9 /* capture_off.png in Resources */,
 				2A5CFDF817CB4DA4002C2BC5 /* icon.png in Resources */,
+				2A600DEA1897A9F900C84CC7 /* UploadOther.xib in Resources */,
 				2A5CFDFA17CB5113002C2BC5 /* g_logo.png in Resources */,
 				2A5CFDFC17D821DF002C2BC5 /* icon@2x.png in Resources */,
 			);

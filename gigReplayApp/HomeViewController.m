@@ -49,7 +49,7 @@
     [super viewDidLoad];
     apiWrapperObject=[[ApiObject alloc]init];
     [self SyncUserDetails];
-    NSLog(@"%d get from web current user id",appDelegateObject.CurrentUserID);
+    
 }
 
 -(void) fetchFeaturedVideosData:(NSData*) data{
@@ -122,6 +122,7 @@
         [homeDetailVC setVideoImage:videoImage];
         [homeDetailVC setVideoDate:[info objectForKey:@"date_modified"]];
         [self presentViewController:homeDetailVC animated:YES completion:nil];
+        
         
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     

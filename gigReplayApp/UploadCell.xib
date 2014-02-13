@@ -15,19 +15,14 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3">
-                        <rect key="frame" x="1" y="3" width="318" height="178"/>
+                        <rect key="frame" x="1" y="0.0" width="318" height="181"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="178" id="57"/>
-                            <constraint firstAttribute="width" constant="318" id="58"/>
-                        </constraints>
                     </imageView>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" restorationIdentifier="" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="21" userLabel="Session Label">
                         <rect key="frame" x="36" y="179" width="248" height="39"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="248" id="106"/>
-                            <constraint firstAttribute="height" constant="39" id="111"/>
+                            <constraint firstAttribute="height" constant="39" id="ybS-gS-N4o"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
                         <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
@@ -36,9 +31,6 @@
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="24" userLabel="Date Label">
                         <rect key="frame" x="36" y="220" width="248" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="21" id="40"/>
-                        </constraints>
                         <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="18"/>
                         <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
                         <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -47,8 +39,7 @@
                         <rect key="frame" x="130" y="61" width="61" height="62"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="61" id="93"/>
-                            <constraint firstAttribute="height" constant="62" id="102"/>
+                            <constraint firstAttribute="width" constant="61" id="Rng-sU-vHj"/>
                         </constraints>
                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                         <state key="normal" image="playicon.png">
@@ -59,12 +50,16 @@
                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </state>
                     </button>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lJx-1c-eNR">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lJx-1c-eNR">
                         <rect key="frame" x="276" y="207" width="29" height="29"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="29" id="VeZ-89-xK5"/>
+                            <constraint firstAttribute="width" constant="29" id="dKD-4U-K4y"/>
+                        </constraints>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQi-dc-5Ra">
-                        <rect key="frame" x="261" y="184" width="59" height="30"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XQi-dc-5Ra">
+                        <rect key="frame" x="260" y="184" width="60" height="30"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="14"/>
                         <state key="normal" title="Upload?">
@@ -73,18 +68,28 @@
                     </button>
                 </subviews>
                 <color key="backgroundColor" red="0.9215686917" green="0.94117653369999998" blue="0.9450981021" alpha="1" colorSpace="deviceRGB"/>
+                <constraints>
+                    <constraint firstItem="21" firstAttribute="leading" secondItem="ZWQ-AO-UfQ" secondAttribute="leading" constant="36" id="4lz-4n-8jG"/>
+                    <constraint firstItem="24" firstAttribute="top" secondItem="21" secondAttribute="bottom" constant="2" id="5TA-Qn-o2m"/>
+                    <constraint firstItem="lJx-1c-eNR" firstAttribute="centerX" secondItem="XQi-dc-5Ra" secondAttribute="centerX" id="ESR-0a-JPX"/>
+                    <constraint firstAttribute="bottom" secondItem="lJx-1c-eNR" secondAttribute="bottom" constant="13" id="FCr-pZ-hvQ"/>
+                    <constraint firstItem="71" firstAttribute="top" secondItem="ZWQ-AO-UfQ" secondAttribute="top" constant="61" id="FqR-J7-RRE"/>
+                    <constraint firstItem="3" firstAttribute="centerX" secondItem="ZWQ-AO-UfQ" secondAttribute="centerX" id="GN9-xH-j7B"/>
+                    <constraint firstAttribute="trailing" secondItem="lJx-1c-eNR" secondAttribute="trailing" constant="15" id="I1H-nW-619"/>
+                    <constraint firstItem="24" firstAttribute="top" secondItem="XQi-dc-5Ra" secondAttribute="bottom" constant="6" id="OYg-77-0Ju"/>
+                    <constraint firstItem="lJx-1c-eNR" firstAttribute="top" secondItem="3" secondAttribute="bottom" constant="26" id="Pin-Oj-HeL"/>
+                    <constraint firstItem="XQi-dc-5Ra" firstAttribute="top" secondItem="3" secondAttribute="bottom" constant="3" id="QQf-VW-ESN"/>
+                    <constraint firstItem="71" firstAttribute="centerX" secondItem="3" secondAttribute="centerX" id="YSi-0i-bOh"/>
+                    <constraint firstItem="24" firstAttribute="leading" secondItem="21" secondAttribute="leading" id="crD-Mc-t2F"/>
+                    <constraint firstItem="24" firstAttribute="trailing" secondItem="21" secondAttribute="trailing" id="dRa-XD-aJC"/>
+                    <constraint firstItem="21" firstAttribute="top" secondItem="71" secondAttribute="bottom" constant="56" id="hHY-YY-Mld"/>
+                    <constraint firstItem="71" firstAttribute="centerX" secondItem="21" secondAttribute="centerX" id="hjB-FI-Enp"/>
+                    <constraint firstAttribute="bottom" secondItem="24" secondAttribute="bottom" constant="8" id="lsB-uX-4Ff"/>
+                    <constraint firstItem="3" firstAttribute="top" secondItem="ZWQ-AO-UfQ" secondAttribute="top" id="p8Z-ks-1jm"/>
+                    <constraint firstItem="3" firstAttribute="leading" secondItem="ZWQ-AO-UfQ" secondAttribute="leading" constant="1" id="t4c-m9-A6z"/>
+                    <constraint firstAttribute="trailing" secondItem="XQi-dc-5Ra" secondAttribute="trailing" id="uoZ-RT-b3x"/>
+                </constraints>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstItem="71" firstAttribute="centerY" secondItem="3" secondAttribute="centerY" id="5Qp-Xg-MDO"/>
-                <constraint firstItem="3" firstAttribute="bottom" secondItem="24" secondAttribute="bottom" constant="-60" id="FOr-JB-4Ad"/>
-                <constraint firstItem="21" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="-283" id="FWK-hF-NEl"/>
-                <constraint firstItem="21" firstAttribute="trailing" secondItem="24" secondAttribute="trailing" id="L8h-1b-pL0"/>
-                <constraint firstItem="21" firstAttribute="top" secondItem="2" secondAttribute="top" constant="179" id="Pdw-lz-fhZ"/>
-                <constraint firstItem="3" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="1" id="Y2I-fX-nBx"/>
-                <constraint firstItem="71" firstAttribute="centerY" secondItem="2" secondAttribute="centerY" constant="-33.5" id="mkW-2f-mwT"/>
-                <constraint firstItem="24" firstAttribute="leading" secondItem="3" secondAttribute="trailing" constant="-283" id="sQq-hi-K72"/>
-                <constraint firstAttribute="trailing" secondItem="71" secondAttribute="trailing" constant="129" id="voy-Da-Ccv"/>
-            </constraints>
             <connections>
                 <outlet property="customButton" destination="71" id="105"/>
                 <outlet property="dateTaken" destination="24" id="46"/>

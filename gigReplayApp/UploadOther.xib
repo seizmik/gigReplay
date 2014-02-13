@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="UploadTab">
+            <connections>
+                <outlet property="uploadTable" destination="te6-52-CtG" id="u0w-fo-wHb"/>
+                <outlet property="view" destination="TJI-Tk-fcB" id="5d4-ax-Ldz"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="TJI-Tk-fcB">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="te6-52-CtG">
+                    <rect key="frame" x="0.0" y="66" width="320" height="502"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="yLx-Rw-ocT"/>
+                        <outlet property="delegate" destination="-1" id="LfA-Fm-Zu1"/>
+                    </connections>
+                </tableView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5H2-Z5-bkw">
+                    <rect key="frame" x="7" y="20" width="129" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="129" id="MBa-8t-kxn"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                    <state key="normal">
+                        <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="backicon.png" translatesAutoresizingMaskIntoConstraints="NO" id="BEG-Ui-v5R">
+                    <rect key="frame" x="0.0" y="20" width="32" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="new_logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Eoa-qG-MuT">
+                    <rect key="frame" x="30" y="27" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="Vro-41-L9V"/>
+                        <constraint firstAttribute="width" constant="30" id="pwu-Ca-v7v"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="GigReplay" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XrQ-Gf-bQb">
+                    <rect key="frame" x="68" y="27" width="210" height="31"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="28"/>
+                    <color key="textColor" red="0.38431376220000002" green="0.36078432199999999" blue="0.31372550129999999" alpha="1" colorSpace="deviceRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PMP-DW-7nb">
+                    <rect key="frame" x="7" y="20" width="103" height="45"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="103" id="qsq-oR-IjJ"/>
+                    </constraints>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="backButton:" destination="-1" eventType="touchUpInside" id="9fm-FF-Iqo"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="XrQ-Gf-bQb" firstAttribute="centerY" secondItem="Eoa-qG-MuT" secondAttribute="centerY" id="6Az-tv-dXr"/>
+                <constraint firstItem="PMP-DW-7nb" firstAttribute="baseline" secondItem="5H2-Z5-bkw" secondAttribute="baseline" id="7jL-ZX-jHl"/>
+                <constraint firstItem="Eoa-qG-MuT" firstAttribute="top" secondItem="XrQ-Gf-bQb" secondAttribute="top" id="C98-Mq-CFS"/>
+                <constraint firstAttribute="bottom" secondItem="te6-52-CtG" secondAttribute="bottom" id="FXm-Wg-zQm"/>
+                <constraint firstAttribute="trailing" secondItem="XrQ-Gf-bQb" secondAttribute="trailing" constant="42" id="Faz-Id-ecE"/>
+                <constraint firstItem="te6-52-CtG" firstAttribute="top" secondItem="XrQ-Gf-bQb" secondAttribute="bottom" constant="8" symbolic="YES" id="IwF-Su-erU"/>
+                <constraint firstItem="5H2-Z5-bkw" firstAttribute="top" secondItem="PMP-DW-7nb" secondAttribute="top" id="LwQ-iu-zPI"/>
+                <constraint firstItem="PMP-DW-7nb" firstAttribute="leading" secondItem="TJI-Tk-fcB" secondAttribute="leading" constant="7" id="OSp-Q9-IdR"/>
+                <constraint firstItem="te6-52-CtG" firstAttribute="top" secondItem="BEG-Ui-v5R" secondAttribute="bottom" constant="1" id="PJE-gl-egE"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="top" secondItem="TJI-Tk-fcB" secondAttribute="top" constant="20" symbolic="YES" id="Q3P-hc-SdZ"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="centerY" secondItem="Eoa-qG-MuT" secondAttribute="centerY" id="QOT-BN-Pgl"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="bottom" secondItem="PMP-DW-7nb" secondAttribute="bottom" id="VFS-p9-pkJ"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="top" secondItem="PMP-DW-7nb" secondAttribute="top" id="Zx3-Er-x3u"/>
+                <constraint firstItem="PMP-DW-7nb" firstAttribute="leading" secondItem="5H2-Z5-bkw" secondAttribute="leading" id="apy-mY-ZfR"/>
+                <constraint firstItem="Eoa-qG-MuT" firstAttribute="leading" secondItem="TJI-Tk-fcB" secondAttribute="leading" constant="30" id="djH-3s-p1O"/>
+                <constraint firstItem="XrQ-Gf-bQb" firstAttribute="leading" secondItem="BEG-Ui-v5R" secondAttribute="trailing" constant="36" id="fie-rr-BaP"/>
+                <constraint firstItem="XrQ-Gf-bQb" firstAttribute="leading" secondItem="Eoa-qG-MuT" secondAttribute="trailing" constant="8" symbolic="YES" id="j0p-U3-Ngf"/>
+                <constraint firstItem="5H2-Z5-bkw" firstAttribute="bottom" secondItem="PMP-DW-7nb" secondAttribute="bottom" id="nE1-AA-Xdl"/>
+                <constraint firstAttribute="trailing" secondItem="te6-52-CtG" secondAttribute="trailing" id="nab-95-6gR"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="leading" secondItem="te6-52-CtG" secondAttribute="leading" id="oVc-UC-Xy9"/>
+                <constraint firstItem="BEG-Ui-v5R" firstAttribute="leading" secondItem="TJI-Tk-fcB" secondAttribute="leading" id="ywQ-vU-Fo9"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="backicon.png" width="50" height="50"/>
+        <image name="new_logo.png" width="200" height="201"/>
+    </resources>
+</document>

@@ -119,9 +119,7 @@
     url=[NSURL URLWithString:[info objectForKey:@"media_url_lo"]];
     movieplayer=  [[MPMoviePlayerController alloc]initWithContentURL:[NSURL URLWithString:@"http://www.lipsync.sg/uploads/master/301-Maricelle_Sunday_Morning_II/19-Leon_Ng/playlist.m3u8"]];
     
-    
 
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(moviePlayBackDidFinish:)
                                                  name:MPMoviePlayerPlaybackDidFinishNotification

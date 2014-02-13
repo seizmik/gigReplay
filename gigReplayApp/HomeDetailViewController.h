@@ -21,6 +21,7 @@
     UIActionSheet *moreOptions;
 
 }
+
 @property (strong,nonatomic)MPMoviePlayerController *moviePlayer;
 @property (strong, nonatomic) IBOutlet UIView *moviePlayerView;
 @property (strong, nonatomic) IBOutlet UITableView *commentTableVIew;

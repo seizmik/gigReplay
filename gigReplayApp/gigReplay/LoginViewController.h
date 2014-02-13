@@ -14,12 +14,12 @@
 
 
 @interface LoginViewController : UIViewController<FBLoginViewDelegate,UINavigationControllerDelegate>{
-    MPMoviePlayerController *moviePlayer;
+    
 }
 
 - (IBAction)fbLoginButton:(id)sender;
 
-
+@property(strong,nonatomic)MPMoviePlayerController *moviePlayer;
 @property (strong,nonatomic) NSString *FB_UserID;
 @property (strong,nonatomic) NSString *FB_AuthorizationToken;
 @property (strong,nonatomic) NSString *Email;
@@ -32,6 +32,7 @@
 @property (strong,nonatomic) NSString *UserName;
 
 -(void)getDeviceID;
+-(void)playMovie;
 @property (strong, nonatomic) IBOutlet UIView *movieView;
 
 
